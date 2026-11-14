@@ -486,7 +486,8 @@ function toonContact() {
   if (SITE.whatsapp) regel("WhatsApp", SITE.whatsappTekst, "https://wa.me/" + SITE.whatsapp);
   if (SITE.instagram) regel("Instagram", "@" + SITE.instagram, "https://www.instagram.com/" + SITE.instagram + "/");
   if (SITE.email) regel("E-mail", SITE.email, "mailto:" + SITE.email);
-  if (SITE.plaats) regel("Ophalen", SITE.plaats + ", of verzenden tegen verzendkosten");
+  if (SITE.plaats) regel("Ophalen", "In " + SITE.plaats);
+  regel("Verzenden", "Kan ook, tegen verzendkosten");
 }
 
 /* Staat er in het beheer geen tekst of foto bij Over mij, dan gebruikt de site deze. */
