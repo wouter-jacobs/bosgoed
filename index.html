@@ -467,20 +467,30 @@ function toonContact() {
     else dd.textContent = tekst;
     dl.append(dt, dd);
   };
-  if (SITE.whatsapp) regel("WhatsApp", "+" + SITE.whatsapp, "https://wa.me/" + SITE.whatsapp);
+  if (SITE.whatsapp) regel("WhatsApp", SITE.whatsappTekst, "https://wa.me/" + SITE.whatsapp);
   if (SITE.instagram) regel("Instagram", "@" + SITE.instagram, "https://www.instagram.com/" + SITE.instagram + "/");
   if (SITE.email) regel("E-mail", SITE.email, "mailto:" + SITE.email);
   if (SITE.plaats) regel("Ophalen", SITE.plaats + ", of verzenden tegen verzendkosten");
 }
 
+/* Staat er in het beheer geen tekst of foto bij Over mij, dan gebruikt de site deze. */
+const OVER_TEKST = "Ik ben Nienke en ik woon in Zeerijp. Wat ik maak, maak ik voor iemand: een plank met jullie naam, een kist bij een geboorte, een bord voor het dorpshuis. Geen voorraad uit een fabriek, maar stuk voor stuk bedacht en gemaakt bij ons thuis.\n\nJe komt mijn werk ook tegen in het dorp: in mijn kraampje langs de weg en in dorpshuis Ons Huis.";
+const OVER_FOTO = "fotos/nienke.jpg";
+
 function toonOver() {
-  document.getElementById("over-tekst").textContent = SITE.over_tekst || "";
-  if (SITE.over_foto) {
-    const img = document.createElement("img");
-    img.src = SITE.over_foto.replace(/^\//, "");
-    img.alt = "Portret van Nienke";
-    img.onload = () => document.getElementById("portret").replaceChildren(img);
-  }
+  document.getElementById("over-tekst").textContent = SITE.over_tekst || OVER_TEKST;
+  const img = document.createElement("img");
+  img.src = (SITE.over_foto || OVER_FOTO).replace(/^\//, "");
+  img.alt = "Portret van Nienke";
+  img.onload = () => document.getElementById("portret").replaceChildren(img);
+}
+
+/* Maakt van 06-nummers en nummers met spaties of + een internationaal nummer voor WhatsApp. */
+function whatsappNummer(invoer) {
+  let n = String(invoer || "").replace(/\D/g, "");
+  if (n.startsWith("00")) n = n.slice(2);
+  else if (n.startsWith("0")) n = "31" + n.slice(1);
+  return n;
 }
 
 async function laad(pad) {
@@ -498,6 +508,8 @@ async function start() {
   }
   if (!Array.isArray(WERK)) WERK = WERK.producten || [];
   WERK = WERK.filter(s => s && s.titel);
+  SITE.whatsappTekst = SITE.whatsapp || "";
+  SITE.whatsapp = whatsappNummer(SITE.whatsapp);
   document.querySelectorAll("[data-naam]").forEach(el => el.textContent = SITE.naam);
   document.title = SITE.naam + " – houtwerk uit de lasersnijder";
   document.getElementById("voet").textContent = "© " + new Date().getFullYear() + " " + SITE.naam + ", " + SITE.plaats;

@@ -79,7 +79,7 @@ content:
         type: string
       - name: whatsapp
         label: WhatsApp-nummer
-        description: "Met landcode, zonder + of 0. Bijvoorbeeld 31612345678. Leeg laten = niet tonen"
+        description: "Bijvoorbeeld 0612345678. Leeg laten = niet tonen"
         type: string
       - name: instagram
         label: Instagram-naam
