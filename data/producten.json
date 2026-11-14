@@ -2,60 +2,80 @@
   "producten": [
     {
       "titel": "Gegraveerde plank",
-      "soort": "Wonen",
+      "soort": [
+        "Wonen"
+      ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (7).jpg",
       "tekst": "Plank met jullie naam, een datum of een eigen tekst. Ook met een logo, bijvoorbeeld voor een dorpshuis of vereniging."
     },
     {
       "titel": "Dienblad",
-      "soort": "Wonen",
+      "soort": [
+        "Wonen"
+      ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (9).jpg",
       "tekst": "Houten dienblad met een naam, tekst of tekening erin gegraveerd."
     },
     {
       "titel": "Geboortekist",
-      "soort": "Geboorte ",
+      "soort": [
+        "Geboorte "
+      ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (2).jpg",
       "tekst": "Houten kist met de naam en geboortedatum, om de eerste herinneringen in te bewaren."
     },
     {
       "titel": "Flesopener",
-      "soort": "Cadeaus",
+      "soort": [
+        "Cadeaus"
+      ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (4).jpg",
       "tekst": "Houten flesopener met een eigen naam of tekst. Leuk als cadeau of bedankje."
     },
     {
       "titel": "Vlaggenlijn",
-      "soort": "Feest",
+      "soort": [
+        "Feest"
+      ],
       "foto": "/fotos/Sjabloon_Afbeelding_website.jpg",
       "tekst": "Houten vlaggenlijn met een naam of tekst, voor een verjaardag, geboorte of feest."
     },
     {
       "titel": "Sleutelhangers",
-      "soort": "Cadeaus",
+      "soort": [
+        "Cadeaus"
+      ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (1).jpg",
       "tekst": "Kleine hangers met een naam, datum of figuurtje. Leuk als bedankje."
     },
     {
       "titel": "Naambord voor de voordeur",
-      "soort": "Wonen",
+      "soort": [
+        "Wonen"
+      ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (5).jpg",
       "tekst": "Bord met jullie naam voor bij de voordeur. Elke naam en elk lettertype is mogelijk."
     },
     {
       "titel": "Kersttruitjes met naam",
-      "soort": "Kerst",
+      "soort": [
+        "Kerst"
+      ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (8).jpg",
       "tekst": "Hangers in de vorm van een kersttrui, met een eigen naam erin gegraveerd. Voor in de boom of aan een cadeau."
     },
     {
       "titel": "Ontbijtplankjes",
-      "soort": "Cadeaus",
+      "soort": [
+        "Cadeaus"
+      ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (3).jpg"
     },
     {
       "titel": "Familiebord",
-      "soort": "Cadeaus",
+      "soort": [
+        "Cadeaus"
+      ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (6).jpg",
       "tekst": "Familieopstelling in standaard"
     }

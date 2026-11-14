@@ -382,9 +382,16 @@ const filter = document.getElementById("filter");
 const groot = document.getElementById("groot");
 let gekozen = "Alles";
 
+/* Een product kan in één of in meerdere categorieën staan. */
+function soortenVan(stuk) {
+  const s = stuk.soort;
+  const lijst = Array.isArray(s) ? s : (s ? [s] : []);
+  return lijst.map(x => String(x).trim()).filter(Boolean);
+}
+
 function toonWerk() {
   lijst.innerHTML = "";
-  const zichtbaar = WERK.filter(s => gekozen === "Alles" || (s.soort || "").trim() === gekozen);
+  const zichtbaar = WERK.filter(s => gekozen === "Alles" || soortenVan(s).includes(gekozen));
   if (!zichtbaar.length) {
     lijst.innerHTML = '<li class="leeg">Hier staat nog geen werk. Kies een andere soort.</li>';
     return;
@@ -416,7 +423,7 @@ function toonWerk() {
 }
 
 function toonFilter() {
-  const soorten = ["Alles", ...new Set(WERK.map(s => (s.soort || "").trim()).filter(Boolean))];
+  const soorten = ["Alles", ...new Set(WERK.flatMap(soortenVan))];
   filter.innerHTML = "";
   for (const soort of soorten) {
     const b = document.createElement("button");

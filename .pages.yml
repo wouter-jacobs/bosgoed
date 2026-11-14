@@ -15,19 +15,20 @@ content:
         list:
           collapsible:
             collapsed: true
-            summary: "{titel} ({soort})"
+            summary: "{titel}"
         fields:
           - name: titel
             label: Naam van het product
             type: string
             required: true
           - name: soort
-            label: Categorie
-            description: "Kies een categorie. Een nieuwe categorie maak je eerst aan onder Categorieën in het menu."
+            label: Categorieën
+            description: "Kies een of meer categorieën. Een nieuwe categorie maak je eerst aan onder Categorieën in het menu."
             type: reference
             required: true
             options:
               collection: categorieen
+              multiple: true
               search: "naam"
               value: "{naam}"
               label: "{naam}"
