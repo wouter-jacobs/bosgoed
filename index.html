@@ -135,7 +135,17 @@
     .over, .erf { grid-template-columns: 1fr; gap: 1.5rem; }
     .over .portret { max-width: 240px; }
     .erf img { max-width: 240px; }
-    .kop nav { gap: 1rem; flex-wrap: wrap; }
+    .kop { padding-block: 1rem .5rem; gap: .5rem; }
+    .kop nav { gap: 1.25rem; flex-wrap: nowrap; width: 100%; overflow-x: auto; white-space: nowrap; font-size: .98rem; padding-bottom: .4rem; scrollbar-width: none; }
+    .kop nav::-webkit-scrollbar { display: none; }
+    .hero h1 { font-size: clamp(2.1rem, 9.5vw, 2.8rem); }
+    .hero p { font-size: 1.05rem; }
+    .vlek { max-width: 300px; margin-inline: auto; }
+    .werk { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem .9rem; }
+    .stuk { padding: .4rem .4rem .7rem; border-width: 2px; box-shadow: 3px 4px 0 rgba(44,58,42,.2); }
+    .stuk strong { font-size: 1rem; margin-top: .5rem; }
+    .prijs { font-size: .85rem; }
+    .knoppen .knop { padding: .7rem 1.1rem; }
     .contact dl { grid-template-columns: 1fr; gap: 0; }
     .contact dd { margin-bottom: .9rem; }
     .merk { font-size: 1.25rem; }
