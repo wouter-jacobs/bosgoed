@@ -49,6 +49,12 @@
       "titel": "Ontbijtplankjes",
       "soort": "Cadeaus",
       "foto": "/fotos/Sjabloon_Afbeelding_website (3).jpg"
+    },
+    {
+      "titel": "Overig ",
+      "soort": "Cadeaus",
+      "foto": "/fotos/Sjabloon_Afbeelding_website (6).jpg",
+      "tekst": "Familieopstelling in standaard"
     }
   ]
 }
