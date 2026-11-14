@@ -24,9 +24,14 @@ content:
             required: true
           - name: soort
             label: Categorie
-            description: "Typ een bestaande categorie precies over (bijvoorbeeld Kerst, Wonen of Cadeaus), of typ een nieuwe naam om een nieuwe categorie te maken."
-            type: string
+            description: "Kies een categorie. Een nieuwe categorie maak je eerst aan onder Categorieën in het menu."
+            type: reference
             required: true
+            options:
+              collection: categorieen
+              search: "naam"
+              value: "{naam}"
+              label: "{naam}"
           - name: foto
             label: Foto
             type: image
@@ -37,6 +42,24 @@ content:
           - name: tekst
             label: Omschrijving
             type: text
+
+  - name: categorieen
+    label: Categorieën
+    type: collection
+    path: data/categorieen
+    format: json
+    filename: "{primary}.json"
+    view:
+      fields: [naam]
+      primary: naam
+      sort: naam
+      order: asc
+    fields:
+      - name: naam
+        label: Naam van de categorie
+        description: "Deze naam komt als filterknop op de site zodra er een product in staat."
+        type: string
+        required: true
 
   - name: site
     label: Naam en contact
