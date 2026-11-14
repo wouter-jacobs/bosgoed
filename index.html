@@ -528,7 +528,8 @@ async function start() {
   SITE.whatsapp = whatsappNummer(SITE.whatsapp);
   document.querySelectorAll("[data-naam]").forEach(el => el.textContent = SITE.naam);
   document.title = SITE.naam + " – houtwerk uit de lasersnijder";
-  document.getElementById("voet").textContent = "© " + new Date().getFullYear() + " " + SITE.naam + ", " + SITE.plaats;
+  document.getElementById("voet").textContent = "© " + new Date().getFullYear() + " " + SITE.naam + ", " + SITE.plaats
+    + (SITE.kvk ? " · KVK " + String(SITE.kvk).trim() : "");
   toonFilter();
   toonWerk();
   toonContact();

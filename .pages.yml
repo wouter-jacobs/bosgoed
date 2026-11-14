@@ -68,6 +68,10 @@ content:
       - name: plaats
         label: Plaats
         type: string
+      - name: kvk
+        label: KVK-nummer
+        description: "Verschijnt onderaan de pagina. Leeg laten = niet tonen"
+        type: string
       - name: over_foto
         label: Foto bij Over mij
         type: image
