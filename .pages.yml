@@ -1,0 +1,56 @@
+media:
+  input: fotos
+  output: /fotos
+
+content:
+  - name: producten
+    label: Producten
+    type: file
+    path: data/producten.json
+    format: json
+    list: true
+    fields:
+      - name: titel
+        label: Naam van het product
+        type: string
+        required: true
+      - name: soort
+        label: Categorie
+        description: "Typ een bestaande categorie precies over (bijvoorbeeld Kerst, Wonen of Cadeaus), of typ een nieuwe naam om een nieuwe categorie te maken."
+        type: string
+        required: true
+      - name: foto
+        label: Foto
+        type: image
+      - name: materiaal
+        label: Materiaal
+        description: "Bijvoorbeeld: Berken multiplex, 3 mm"
+        type: string
+      - name: tekst
+        label: Omschrijving
+        type: text
+
+  - name: site
+    label: Naam en contact
+    type: file
+    path: data/site.json
+    format: json
+    fields:
+      - name: naam
+        label: Naam
+        type: string
+      - name: plaats
+        label: Plaats
+        type: string
+      - name: email
+        label: E-mailadres
+        description: "Leeg laten = niet tonen"
+        type: string
+      - name: whatsapp
+        label: WhatsApp-nummer
+        description: "Met landcode, zonder + of 0. Bijvoorbeeld 31612345678. Leeg laten = niet tonen"
+        type: string
+      - name: instagram
+        label: Instagram-naam
+        description: "Zonder @"
+        type: string

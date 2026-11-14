@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bosgoed – houtwerk uit de lasersnijder</title>
+<meta name="description" content="Bosgoed uit Zeerijp maakt naamhangers, gegraveerde planken en cadeaus met de lasersnijder. Bekijk wat er kan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --grond: #edf0e4;      /* licht, groenig wit */
+    --blad: #b4c3a0;       /* het groen uit het logo */
+    --blad-diep: #8fa27c;
+    --bos: #2c3a2a;        /* tekst */
+    --berken: #e8cfa0;
+    --berken-licht: #f3e3c2;
+    --schroei: #4a2c17;    /* geschroeide snijrand */
+    --laser: #e5392f;
+    --display: "Josefin Sans", system-ui, sans-serif;
+    --tekst: "Karla", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: var(--tekst); font-size: 1.0625rem; line-height: 1.6; color: var(--bos); background: var(--grond); }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--laser); outline-offset: 3px; }
+  .wrap { width: min(1120px, 100% - 2.5rem); margin-inline: auto; }
+
+  .kop { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-block: 1.5rem; flex-wrap: wrap; }
+  .merk { font-family: var(--display); font-weight: 300; font-size: 1.5rem; letter-spacing: .32em; text-transform: uppercase; text-decoration: none; }
+  .kop nav { display: flex; gap: 1.5rem; }
+  .kop nav a { text-decoration: none; border-bottom: 2px solid transparent; padding-block: .2rem; }
+  .kop nav a:hover { border-color: var(--blad-diep); }
+
+  .hero { display: grid; grid-template-columns: 1.05fr .95fr; gap: 3rem; align-items: center; padding-block: 2.5rem 5rem; }
+  .hero h1 { font-family: var(--display); font-weight: 300; font-size: clamp(2.5rem, 6vw, 4.6rem); line-height: 1.05; letter-spacing: -.01em; margin: 0 0 1.5rem; }
+  .hero p { max-width: 33rem; margin: 0 0 2rem; font-size: 1.15rem; }
+  .knoppen { display: flex; gap: .9rem; flex-wrap: wrap; }
+  .knop { display: inline-block; padding: .8rem 1.4rem; font-weight: 600; text-decoration: none; background: var(--bos); color: var(--grond); border: 2px solid var(--bos); border-radius: 999px; }
+  .knop:hover { background: #3d4f3a; }
+  .knop.stil { background: transparent; color: var(--bos); }
+  .knop.stil:hover { background: rgba(44,58,42,.08); }
+  .vlek { background: var(--blad); padding: clamp(1.5rem, 5vw, 3.5rem); border-radius: 58% 42% 47% 53% / 50% 46% 54% 50%; }
+  .plaat { width: 100%; height: auto; display: block; transform: rotate(-3deg); filter: drop-shadow(5px 7px 0 rgba(44,58,42,.22)); }
+  .snijlijn { stroke-dasharray: 1; stroke-dashoffset: 1; animation: snij 4.5s .4s ease-in-out forwards; }
+  .punt { offset-rotate: 0deg; offset-distance: 0%; animation: loop 4.5s .4s ease-in-out forwards, doof .4s 4.9s forwards; }
+  @keyframes snij { to { stroke-dashoffset: 0; } }
+  @keyframes loop { to { offset-distance: 100%; } }
+  @keyframes doof { to { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .snijlijn { animation: none; stroke-dashoffset: 0; }
+    .punt { animation: none; opacity: 0; }
+    .stuk { transition: none !important; }
+  }
+
+  section { padding-block: 4rem; }
+  h2 { font-family: var(--display); font-weight: 300; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; margin: 0 0 .75rem; }
+  .intro { max-width: 40rem; margin: 0 0 2rem; }
+
+  .filter { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2.25rem; }
+  .filter button { font: inherit; font-weight: 500; cursor: pointer; padding: .4rem 1rem; color: var(--bos); background: transparent; border: 2px solid var(--blad-diep); border-radius: 999px; }
+  .filter button:hover { background: var(--blad); }
+  .filter button[aria-pressed="true"] { background: var(--bos); color: var(--grond); border-color: var(--bos); }
+
+  .werk { display: grid; grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)); gap: 2rem 1.75rem; list-style: none; padding: 0; margin: 0; }
+  .stuk {
+    display: block; width: 100%; padding: .7rem .7rem 1rem; text-align: left; font: inherit; cursor: pointer; color: var(--schroei);
+    background: var(--berken) repeating-linear-gradient(92deg, transparent 0 13px, rgba(120,80,30,.07) 13px 15px, transparent 15px 31px, rgba(120,80,30,.05) 31px 32px);
+    border: 3px solid var(--schroei); border-radius: 8px; box-shadow: 4px 5px 0 rgba(44,58,42,.2); transition: transform .18s ease;
+  }
+  .werk li:nth-child(3n+1) .stuk { transform: rotate(-1.1deg); }
+  .werk li:nth-child(3n+2) .stuk { transform: rotate(.8deg); }
+  .werk li:nth-child(3n) .stuk { transform: rotate(-.4deg); }
+  .werk li .stuk:hover, .werk li .stuk:focus-visible { transform: rotate(0) translateY(-4px); }
+  .beeld { aspect-ratio: 4 / 3; background: var(--blad); border-radius: 4px; overflow: hidden; display: block; }
+  .beeld img, .beeld svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .stuk strong { display: block; margin-top: .75rem; font-size: 1.15rem; font-weight: 600; line-height: 1.25; }
+  .stuk span.mat { display: block; font-size: .95rem; opacity: .8; }
+  .leeg { padding: 2rem; border: 2px dashed var(--blad-diep); border-radius: 8px; }
+
+  #mogelijkheden { background: var(--blad); }
+  .kan { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2.5rem; }
+  .kan h3 { font-size: 1.3rem; font-weight: 600; margin: 0 0 .4rem; }
+  .kan p { margin: 0; }
+  .materialen { display: flex; flex-wrap: wrap; gap: .6rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
+  .materialen li { padding: .35rem .9rem; border-radius: 4px; font-weight: 500; color: var(--schroei); border: 2px solid var(--schroei); }
+
+  .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem 3rem; align-items: start; }
+  .contact .intro { margin-bottom: 0; }
+  .contact dl { display: grid; grid-template-columns: max-content 1fr; gap: .6rem 1.5rem; margin: .5rem 0 0; font-size: 1.15rem; }
+  .contact dt { font-weight: 600; }
+  .contact dd { margin: 0; overflow-wrap: anywhere; }
+  .contact a { text-decoration-color: var(--blad-diep); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+  footer { padding-block: 2.5rem; font-size: .95rem; border-top: 1px solid var(--blad); }
+
+  dialog { width: min(760px, 100% - 2rem); padding: 0; color: var(--schroei); background: var(--berken); border: 3px solid var(--schroei); border-radius: 10px; }
+  dialog::backdrop { background: rgba(44,58,42,.75); }
+  dialog .beeld { border-radius: 0; }
+  dialog .tekst { padding: 1.25rem 1.5rem 1.5rem; }
+  dialog h3 { font-family: var(--display); font-weight: 400; font-size: 1.8rem; line-height: 1.1; margin: 0 0 .25rem; }
+  dialog p { margin: .5rem 0 0; }
+  dialog .sluit { margin-top: 1.25rem; font: inherit; font-weight: 600; cursor: pointer; padding: .55rem 1.2rem; color: var(--berken); background: var(--schroei); border: 0; border-radius: 999px; }
+
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; gap: 2rem; padding-block: 1rem 3rem; }
+    section { padding-block: 3rem; }
+    .contact { grid-template-columns: 1fr; }
+    .contact dl { grid-template-columns: 1fr; gap: 0; }
+    .contact dd { margin-bottom: .9rem; }
+    .merk { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap kop">
+  <a class="merk" href="#top" data-naam>Bosgoed</a>
+  <nav aria-label="Hoofdmenu">
+    <a href="#werk">Werk</a>
+    <a href="#mogelijkheden">Wat kan er</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <h1>Hout met een naam, een tekst of een eigen idee</h1>
+      <p>Bosgoed is van Nienke uit Zeerijp. Met de lasersnijder maak ik naamhangers, gegraveerde planken en cadeaus van hout. Hier zie je wat er allemaal kan.</p>
+      <div class="knoppen">
+        <a class="knop" href="#werk">Bekijk het werk</a>
+        <a class="knop stil" href="#contact">Neem contact op</a>
+      </div>
+    </div>
+    <div class="vlek"><svg class="plaat" viewBox="0 0 400 300" role="img" aria-label="Een plaat multiplex waar de laser een ster uit snijdt">
+      <rect x="6" y="6" width="388" height="288" rx="6" fill="#e8cfa0" stroke="#4a2c17" stroke-width="4"/>
+      <g stroke="#b9975f" stroke-width="1" opacity=".5">
+        <path d="M6 60 C120 50 260 75 394 58M6 130 C140 142 250 118 394 134M6 205 C110 195 280 218 394 200M6 262 C150 270 240 252 394 266" fill="none"/>
+      </g>
+      <!-- al uitgesneden vormen: je kijkt op de tafel -->
+      <g fill="#8fa27c" stroke="#4a2c17" stroke-width="3">
+        <circle cx="78" cy="78" r="38"/>
+        <path d="M54 190h70v22h14v26h-14v22H54v-22H40v-26h14z"/>
+        <path d="M300 205c0-22 30-22 30-2 0-20 30-20 30 2 0 24-30 40-30 40s-30-16-30-40z"/>
+      </g>
+      <circle cx="78" cy="78" r="14" fill="#e8cfa0" stroke="#4a2c17" stroke-width="3"/>
+      <!-- de ster die nu gesneden wordt -->
+      <path class="snijlijn" pathLength="1" fill="none" stroke="#4a2c17" stroke-width="3.5" stroke-linejoin="round"
+        d="M230 40l22 46 50 7-36 35 9 50-45-24-45 24 9-50-36-35 50-7z"/>
+      <circle class="punt" r="6" fill="#ff3b30" style="offset-path: path('M230 40l22 46 50 7-36 35 9 50-45-24-45 24 9-50-36-35 50-7z')"/>
+    </svg></div>
+  </div>
+
+  <section id="werk">
+    <div class="wrap">
+      <h2>Werk</h2>
+      <p class="intro">Een greep uit wat ik gemaakt heb. Klik op een werkstuk voor meer uitleg.</p>
+      <div class="filter" id="filter" role="group" aria-label="Filter op soort werk"></div>
+      <ul class="werk" id="werklijst"></ul>
+    </div>
+  </section>
+
+  <section id="mogelijkheden">
+    <div class="wrap">
+      <h2>Wat kan er</h2>
+      <p class="intro">De laser snijdt en graveert heel precies. Daardoor kan bijna elke tekening, naam of foto op of uit het materiaal.</p>
+      <div class="kan">
+        <div>
+          <h3>Snijden</h3>
+          <p>Vormen, letters en puzzelstukjes worden strak uit de plaat gesneden, ook met fijne details.</p>
+        </div>
+        <div>
+          <h3>Graveren</h3>
+          <p>Teksten, logo’s, tekeningen en zelfs foto’s worden in het oppervlak gebrand.</p>
+        </div>
+        <div>
+          <h3>In elkaar zetten</h3>
+          <p>Met vingerverbindingen en laagjes ontstaan doosjes, lampjes en andere werkstukken met diepte.</p>
+        </div>
+      </div>
+      <ul class="materialen" aria-label="Materialen">
+        <li style="background:#e8cfa0">Berken multiplex</li>
+        <li style="background:#c9a876">MDF</li>
+        <li style="background:#d9b98c">Populier</li>
+        <li style="background:#b9d7e4">Acryl</li>
+        <li style="background:#b98a5e">Leer</li>
+        <li style="background:#d8cdbd">Karton</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="contact" id="contact">
+        <div>
+        <h2>Contact</h2>
+        <p class="intro">Dit is geen webshop. Zie je iets leuks of heb je zelf een idee? Stuur een bericht, dan kijken we samen wat er kan. Bosgoed verkoopt aan huis in Zeerijp en via Instagram, naast het houtwerk ook eieren, zeep, thee en groente uit eigen tuin.</p>
+        </div>
+        <dl id="contactlijst"></dl>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span id="voet"></span>
+</footer>
+
+<dialog id="groot" aria-labelledby="groot-titel">
+  <span class="beeld" id="groot-beeld"></span>
+  <div class="tekst">
+    <h3 id="groot-titel"></h3>
+    <span class="mat" id="groot-mat"></span>
+    <p id="groot-tekst"></p>
+    <button class="sluit" type="button" id="groot-sluit">Sluiten</button>
+  </div>
+</dialog>
+
+<script>
+/* De inhoud staat in twee losse bestanden:
+   data/producten.json  – de werkstukken
+   data/site.json       – naam en contactgegevens
+   Nienke past die aan via Pages CMS; hier hoeft niets te veranderen. */
+let SITE = {};
+let WERK = [];
+
+const H = 'fill="#e8cfa0" stroke="#4a2c17" stroke-width="3" stroke-linejoin="round"';
+const G = 'fill="none" stroke="#4a2c17" stroke-width="2" stroke-linecap="round"';
+const TEKENINGEN = {
+  blanco: `<rect x="40" y="30" width="120" height="90" rx="8" ${H}/>
+    <g ${G}><path d="M100 98V62M100 80c-16 0-22-10-22-20 14 0 22 8 22 20zM100 72c0-12 8-20 20-20 0 12-8 20-20 20z"/></g>`,
+  trui: `<path d="M72 30h56l34 26-14 22-14-10v56H66V68l-14 10-14-22z" ${H}/>
+    <circle cx="100" cy="24" r="5" fill="none" stroke="#4a2c17" stroke-width="3"/>
+    <g ${G}><path d="M66 78l8-8 8 8 8-8 8 8 8-8 8 8 8-8 8 8M70 112h60"/><path d="M86 30c4 10 24 10 28 0"/></g>
+    <text x="100" y="102" text-anchor="middle" font-family="Josefin Sans, sans-serif" font-size="15" letter-spacing="2" fill="#4a2c17">NAAM</text>`,
+  plank: `<circle cx="100" cy="75" r="60" fill="#c99a5b" stroke="#4a2c17" stroke-width="3"/>
+    <g ${G}><path d="M74 78V54l26-22 26 22v24z"/><rect x="92" y="54" width="16" height="14"/><path d="M100 54v14M92 61h16"/></g>
+    <text x="100" y="104" text-anchor="middle" font-family="Josefin Sans, sans-serif" font-size="15" letter-spacing="2" fill="#4a2c17">EIGEN TEKST</text>`,
+  onderzetter: `<circle cx="100" cy="75" r="52" ${H}/><g ${G}><circle cx="100" cy="75" r="40"/><circle cx="100" cy="75" r="14"/>
+    <path d="M100 35v80M60 75h80M72 47l56 56M128 47l-56 56"/></g>`,
+  naambord: `<rect x="22" y="42" width="156" height="66" rx="10" ${H}/>
+    <text x="100" y="88" text-anchor="middle" font-family="Josefin Sans, sans-serif" font-size="30" letter-spacing="3" fill="#4a2c17">WELKOM</text>
+    <circle cx="36" cy="56" r="3" fill="#4a2c17"/><circle cx="164" cy="56" r="3" fill="#4a2c17"/>`,
+  doosje: `<path d="M40 58h15v-10h15v10h15v-10h15v10h15v-10h15v10h15v-10h15v10h5v62H40z" ${H}/>
+    <g ${G}><path d="M40 72h120"/><path d="M100 84c0-10 14-10 14 0 0 9-14 18-14 18s-14-9-14-18c0-10 14-10 14 0z"/></g>`,
+  puzzel: `<rect x="35" y="22" width="130" height="106" rx="4" ${H}/>
+    <g ${G}><path d="M100 22v18c-12-6-12 22 0 16v38c12-6 12 22 0 16v18"/><path d="M35 75h22c-6-12 22-12 16 0h54c-6 12 22 12 16 0h22"/></g>`,
+  hanger: `<circle cx="100" cy="28" r="12" fill="none" stroke="#c9c9c9" stroke-width="4"/>
+    <path d="M70 46h60a10 10 0 0 1 10 10v58a10 10 0 0 1-10 10H70a10 10 0 0 1-10-10V56a10 10 0 0 1 10-10z" ${H}/>
+    <circle cx="100" cy="58" r="5" fill="#b4c3a0" stroke="#4a2c17" stroke-width="2"/>
+    <path d="M100 86c0-12 17-12 17 0 0 11-17 22-17 22s-17-11-17-22c0-12 17-12 17 0z" fill="#4a2c17"/>`,
+  ster: `<path d="M100 14l17 37 40 5-29 28 7 40-35-19-35 19 7-40-29-28 40-5z" ${H}/>
+    <g fill="#b4c3a0" stroke="#4a2c17" stroke-width="2"><circle cx="100" cy="78" r="12"/><circle cx="100" cy="34" r="4"/>
+    <path d="M100 52l5 10h-10zM76 70l10 4-8 6zM124 70l-10 4 8 6zM86 104l8-8 2 10zM114 104l-8-8-2 10z"/></g>`,
+  huisje: `<path d="M56 130V66l44-42 44 42v64z" ${H}/>
+    <g fill="#f6c453" stroke="#4a2c17" stroke-width="2"><rect x="70" y="76" width="20" height="22"/><rect x="110" y="76" width="20" height="22"/>
+    <path d="M92 130v-22a8 8 0 0 1 16 0v22z"/><circle cx="100" cy="52" r="8"/></g>`,
+  topper: `<path d="M70 86v48M130 86v48" stroke="#4a2c17" stroke-width="4"/>
+    <path d="M30 40h140l-10 25 10 25H30l10-25z" ${H}/>
+    <text x="100" y="76" text-anchor="middle" font-family="Josefin Sans, sans-serif" font-size="26" letter-spacing="3" fill="#4a2c17">HOERA</text>`
+};
+
+function tekening(naam) {
+  const inhoud = TEKENINGEN[naam] || TEKENINGEN.blanco;
+  return `<svg viewBox="0 0 200 150" aria-hidden="true">${inhoud}</svg>`;
+}
+
+function vulBeeld(el, stuk) {
+  el.innerHTML = "";
+  if (stuk.foto) {
+    const img = document.createElement("img");
+    img.src = stuk.foto.replace(/^\//, "");   // zonder schuine streep vooraan werkt het ook in een submap
+    img.alt = stuk.titel;
+    img.loading = "lazy";
+    img.onerror = () => { el.innerHTML = tekening(stuk.tekening); };
+    el.append(img);
+  } else {
+    el.innerHTML = tekening(stuk.tekening);
+  }
+}
+
+const lijst = document.getElementById("werklijst");
+const filter = document.getElementById("filter");
+const groot = document.getElementById("groot");
+let gekozen = "Alles";
+
+function toonWerk() {
+  lijst.innerHTML = "";
+  const zichtbaar = WERK.filter(s => gekozen === "Alles" || (s.soort || "").trim() === gekozen);
+  if (!zichtbaar.length) {
+    lijst.innerHTML = '<li class="leeg">Hier staat nog geen werk. Kies een andere soort.</li>';
+    return;
+  }
+  for (const stuk of zichtbaar) {
+    const li = document.createElement("li");
+    const knop = document.createElement("button");
+    knop.type = "button";
+    knop.className = "stuk";
+    const beeld = document.createElement("span");
+    beeld.className = "beeld";
+    vulBeeld(beeld, stuk);
+    const titel = document.createElement("strong");
+    titel.textContent = stuk.titel;
+    const mat = document.createElement("span");
+    mat.className = "mat";
+    mat.textContent = stuk.materiaal || "";
+    knop.append(beeld, titel, mat);
+    knop.addEventListener("click", () => openGroot(stuk));
+    li.append(knop);
+    lijst.append(li);
+  }
+}
+
+function toonFilter() {
+  const soorten = ["Alles", ...new Set(WERK.map(s => (s.soort || "").trim()).filter(Boolean))];
+  filter.innerHTML = "";
+  for (const soort of soorten) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = soort;
+    b.setAttribute("aria-pressed", String(soort === gekozen));
+    b.addEventListener("click", () => { gekozen = soort; toonFilter(); toonWerk(); });
+    filter.append(b);
+  }
+}
+
+function openGroot(stuk) {
+  vulBeeld(document.getElementById("groot-beeld"), stuk);
+  document.getElementById("groot-titel").textContent = stuk.titel;
+  document.getElementById("groot-mat").textContent = stuk.materiaal || "";
+  document.getElementById("groot-tekst").textContent = stuk.tekst || "";
+  if (groot.showModal) groot.showModal(); else groot.setAttribute("open", "");
+}
+document.getElementById("groot-sluit").addEventListener("click", () => groot.close());
+groot.addEventListener("click", e => { if (e.target === groot) groot.close(); });
+
+function toonContact() {
+  const dl = document.getElementById("contactlijst");
+  const regel = (kop, tekst, href) => {
+    const dt = document.createElement("dt"); dt.textContent = kop;
+    const dd = document.createElement("dd");
+    if (href) { const a = document.createElement("a"); a.href = href; a.textContent = tekst; dd.append(a); }
+    else dd.textContent = tekst;
+    dl.append(dt, dd);
+  };
+  if (SITE.email) regel("E-mail", SITE.email, "mailto:" + SITE.email);
+  if (SITE.whatsapp) regel("WhatsApp", "+" + SITE.whatsapp, "https://wa.me/" + SITE.whatsapp);
+  if (SITE.instagram) regel("Instagram", "@" + SITE.instagram, "https://www.instagram.com/" + SITE.instagram + "/");
+  if (SITE.plaats) regel("Plaats", SITE.plaats);
+}
+
+async function laad(pad) {
+  const antwoord = await fetch(pad, { cache: "no-cache" });
+  if (!antwoord.ok) throw new Error(pad);
+  return antwoord.json();
+}
+
+async function start() {
+  try {
+    [SITE, WERK] = await Promise.all([laad("data/site.json"), laad("data/producten.json")]);
+  } catch (fout) {
+    lijst.innerHTML = '<li class="leeg">De werkstukken konden niet geladen worden. Ververs de pagina om het opnieuw te proberen.</li>';
+    return;
+  }
+  WERK = WERK.filter(s => s && s.titel);
+  document.querySelectorAll("[data-naam]").forEach(el => el.textContent = SITE.naam);
+  document.title = SITE.naam + " – houtwerk uit de lasersnijder";
+  document.getElementById("voet").textContent = "© " + new Date().getFullYear() + " " + SITE.naam + ", " + SITE.plaats;
+  toonFilter();
+  toonWerk();
+  toonContact();
+}
+start();
+</script>
+</body>
+</html>
