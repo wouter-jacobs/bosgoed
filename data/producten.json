@@ -3,74 +3,42 @@
     {
       "titel": "Gegraveerde plank",
       "soort": "Wonen",
-      "prijs": "",
-      "tekst": "Plank met jullie naam, een datum of een eigen tekst. Ook met een logo, bijvoorbeeld voor een dorpshuis of vereniging.",
-      "foto": "",
-      "tekening": "plank"
+      "tekst": "Plank met jullie naam, een datum of een eigen tekst. Ook met een logo, bijvoorbeeld voor een dorpshuis of vereniging."
     },
     {
       "titel": "Dienblad",
       "soort": "Wonen",
-      "prijs": "",
-      "tekst": "Houten dienblad met een naam, tekst of tekening erin gegraveerd.",
-      "foto": "",
-      "tekening": "dienblad"
+      "tekst": "Houten dienblad met een naam, tekst of tekening erin gegraveerd."
     },
     {
       "titel": "Geboortekist",
       "soort": "Cadeaus",
-      "prijs": "",
-      "tekst": "Houten kist met de naam en geboortedatum, om de eerste herinneringen in te bewaren.",
-      "foto": "",
-      "tekening": "kist"
+      "tekst": "Houten kist met de naam en geboortedatum, om de eerste herinneringen in te bewaren."
     },
     {
       "titel": "Flesopener",
       "soort": "Cadeaus",
-      "prijs": "",
-      "tekst": "Houten flesopener met een eigen naam of tekst. Leuk als cadeau of bedankje.",
-      "foto": "",
-      "tekening": "flesopener"
+      "tekst": "Houten flesopener met een eigen naam of tekst. Leuk als cadeau of bedankje."
     },
     {
       "titel": "Vlaggenlijn",
       "soort": "Feest",
-      "prijs": "",
-      "tekst": "Houten vlaggenlijn met een naam of tekst, voor een verjaardag, geboorte of feest.",
-      "foto": "",
-      "tekening": "vlaggenlijn"
+      "tekst": "Houten vlaggenlijn met een naam of tekst, voor een verjaardag, geboorte of feest."
     },
     {
       "titel": "Sleutelhangers",
       "soort": "Cadeaus",
-      "prijs": "",
-      "tekst": "Kleine hangers met een naam, datum of figuurtje. Leuk als bedankje.",
-      "foto": "",
-      "tekening": "hanger"
+      "tekst": "Kleine hangers met een naam, datum of figuurtje. Leuk als bedankje."
     },
     {
       "titel": "Naambord voor de voordeur",
       "soort": "Wonen",
-      "prijs": "",
-      "tekst": "Bord met jullie naam voor bij de voordeur. Elke naam en elk lettertype is mogelijk.",
-      "foto": "",
-      "tekening": "naambord"
+      "tekst": "Bord met jullie naam voor bij de voordeur. Elke naam en elk lettertype is mogelijk."
     },
     {
       "titel": "Kersttruitjes met naam",
       "soort": "Kerst",
-      "prijs": "",
-      "tekst": "Hangers in de vorm van een kersttrui, met een eigen naam erin gegraveerd. Voor in de boom of aan een cadeau.",
-      "foto": "",
-      "tekening": "trui"
-    },
-    {
-      "titel": "Kerststerren",
-      "soort": "Kerst",
-      "prijs": "",
-      "tekst": "Sterren voor in de boom of voor het raam, met fijn uitgesneden patronen.",
-      "foto": "",
-      "tekening": "ster"
+      "tekst": "Hangers in de vorm van een kersttrui, met een eigen naam erin gegraveerd. Voor in de boom of aan een cadeau."
     }
   ]
 }
