@@ -48,12 +48,7 @@ content:
     type: collection
     path: data/categorieen
     format: json
-    filename: "{primary}.json"
-    view:
-      fields: [naam]
-      primary: naam
-      sort: naam
-      order: asc
+    filename: "{fields.naam}.json"
     fields:
       - name: naam
         label: Naam van de categorie
@@ -85,3 +80,4 @@ content:
         label: Instagram-naam
         description: "Zonder @"
         type: string
+
