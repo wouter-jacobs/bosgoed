@@ -366,6 +366,7 @@ async function start() {
     lijst.innerHTML = '<li class="leeg">De werkstukken konden niet geladen worden. Ververs de pagina om het opnieuw te proberen.</li>';
     return;
   }
+  if (!Array.isArray(WERK)) WERK = WERK.producten || [];
   WERK = WERK.filter(s => s && s.titel);
   document.querySelectorAll("[data-naam]").forEach(el => el.textContent = SITE.naam);
   document.title = SITE.naam + " – houtwerk uit de lasersnijder";

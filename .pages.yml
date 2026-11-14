@@ -8,27 +8,35 @@ content:
     type: file
     path: data/producten.json
     format: json
-    list: true
     fields:
-      - name: titel
-        label: Naam van het product
-        type: string
-        required: true
-      - name: soort
-        label: Categorie
-        description: "Typ een bestaande categorie precies over (bijvoorbeeld Kerst, Wonen of Cadeaus), of typ een nieuwe naam om een nieuwe categorie te maken."
-        type: string
-        required: true
-      - name: foto
-        label: Foto
-        type: image
-      - name: materiaal
-        label: Materiaal
-        description: "Bijvoorbeeld: Berken multiplex, 3 mm"
-        type: string
-      - name: tekst
-        label: Omschrijving
-        type: text
+      - name: producten
+        label: Producten
+        description: "Klik op een product om het te openen. Nieuwe producten voeg je onderaan toe."
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{titel} ({soort})"
+        fields:
+          - name: titel
+            label: Naam van het product
+            type: string
+            required: true
+          - name: soort
+            label: Categorie
+            description: "Typ een bestaande categorie precies over (bijvoorbeeld Kerst, Wonen of Cadeaus), of typ een nieuwe naam om een nieuwe categorie te maken."
+            type: string
+            required: true
+          - name: foto
+            label: Foto
+            type: image
+          - name: materiaal
+            label: Materiaal
+            description: "Bijvoorbeeld: Berken multiplex, 3 mm"
+            type: string
+          - name: tekst
+            label: Omschrijving
+            type: text
 
   - name: site
     label: Naam en contact
