@@ -95,9 +95,9 @@
   .over .portret svg { width: 45%; height: auto; }
   .over p { max-width: 36rem; margin: 0 0 1rem; white-space: pre-line; }
 
-  .erf { border: 2px solid var(--blad-diep); border-radius: 12px; padding: clamp(1.5rem, 4vw, 2.5rem); display: grid; grid-template-columns: 1.2fr .8fr; gap: 1.5rem 3rem; align-items: center; }
-  .erf h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
-  .erf p { margin: 0; max-width: 34rem; }
+  .erf { display: grid; grid-template-columns: .7fr 1.3fr; gap: 2rem 3.5rem; align-items: center; }
+  .erf img { width: 100%; max-width: 340px; height: auto; display: block; justify-self: center; mix-blend-mode: multiply; }
+  .erf p { margin: 0 0 1.5rem; max-width: 34rem; }
   .erf ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
   .erf li { padding: .35rem 1rem; background: var(--blad); border-radius: 999px; font-weight: 500; }
 
@@ -105,8 +105,6 @@
   .kan { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2.5rem; }
   .kan h3 { font-size: 1.3rem; font-weight: 600; margin: 0 0 .4rem; }
   .kan p { margin: 0; }
-  .materialen { display: flex; flex-wrap: wrap; gap: .6rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
-  .materialen li { padding: .35rem .9rem; border-radius: 4px; font-weight: 500; color: var(--schroei); border: 2px solid var(--schroei); }
 
   .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem 3rem; align-items: start; }
   .contact .intro { margin-bottom: 0; }
@@ -135,6 +133,7 @@
     .contact { grid-template-columns: 1fr; }
     .over, .erf { grid-template-columns: 1fr; gap: 1.5rem; }
     .over .portret { max-width: 240px; }
+    .erf img { max-width: 240px; }
     .kop nav { gap: 1rem; flex-wrap: wrap; }
     .contact dl { grid-template-columns: 1fr; gap: 0; }
     .contact dd { margin-bottom: .9rem; }
@@ -150,6 +149,7 @@
     <a href="#werk">Werk</a>
     <a href="#zo-werkt-het">Zo werkt het</a>
     <a href="#over">Over mij</a>
+    <a href="#kraampje">Kraampje</a>
     <a href="#contact">Contact</a>
   </nav>
 </header>
@@ -158,7 +158,7 @@
   <div class="wrap hero">
     <div>
       <h1>Hout met een naam, een tekst of een eigen idee</h1>
-      <p>Ik ben Nienke en ik maak in Zeerijp gegraveerde planken en cadeaus van hout. Elk stuk maak ik voor iemand: met jullie naam, een datum of een tekst die je zelf bedenkt.</p>
+      <p>Ik ben Nienke en ik maak in Zeerijp gegraveerde planken, dienbladen en cadeaus van hout. Elk stuk maak ik voor iemand: met jullie naam, een datum of een tekst die je zelf bedenkt.</p>
       <div class="knoppen">
         <a class="knop" href="#werk">Bekijk het werk</a>
         <a class="knop stil" href="#contact">Stuur een bericht</a>
@@ -231,10 +231,6 @@
           <p>Een geboorte, verjaardag, bruiloft of bedankje: ik maak het passend bij het moment en de persoon.</p>
         </div>
       </div>
-      <ul class="materialen" aria-label="Materialen">
-        <li style="background:#e8cfa0">Berken multiplex</li>
-        <li style="background:#c99a5b">Massief hout en planken</li>
-      </ul>
     </div>
   </section>
 
@@ -252,17 +248,19 @@
 
   <section>
     <div class="wrap">
-      <div class="erf">
+      <div class="erf" id="kraampje">
+        <img src="beeld/kraampje.jpg" alt="Tekening van het houten kraampje van Bosgoed, met planken vol producten en bakken met planten ervoor" width="733" height="1100" loading="lazy">
         <div>
-          <h2>Eerlijk spul uit tuin, bos en erf</h2>
-          <p>Bosgoed is meer dan hout. Aan huis in Zeerijp verkoop ik ook wat tuin en erf opleveren. Wat er is, wisselt met het seizoen; op Instagram zie je wat er nu ligt.</p>
+          <h2>Het kraampje langs de weg</h2>
+          <p>Van de lente tot de herfst staat mijn kraampje langs de weg in Zeerijp. Daar vind je wat de tuin oplevert, en natuurlijk de houten producten van Bosgoed. Wat er ligt, wisselt met het seizoen; op Instagram zie je wat er nu is.</p>
+          <ul aria-label="In het kraampje">
+            <li>Eieren</li>
+            <li>Zeep</li>
+            <li>Thee</li>
+            <li>Groente</li>
+            <li>Houtwerk</li>
+          </ul>
         </div>
-        <ul aria-label="Ook van Bosgoed">
-          <li>Eieren</li>
-          <li>Zeep</li>
-          <li>Thee</li>
-          <li>Groente</li>
-        </ul>
       </div>
     </div>
   </section>
@@ -310,6 +308,18 @@ let WERK = [];
 const H = 'fill="#e8cfa0" stroke="#4a2c17" stroke-width="3" stroke-linejoin="round"';
 const G = 'fill="none" stroke="#4a2c17" stroke-width="2" stroke-linecap="round"';
 const TEKENINGEN = {
+  dienblad: `<rect x="24" y="42" width="152" height="74" rx="10" ${H}/>
+    <g fill="#b4c3a0" stroke="#4a2c17" stroke-width="2"><rect x="34" y="68" width="10" height="22" rx="5"/><rect x="156" y="68" width="10" height="22" rx="5"/></g>
+    <text x="100" y="86" text-anchor="middle" font-family="Josefin Sans, sans-serif" font-size="15" letter-spacing="2" fill="#4a2c17">EIGEN TEKST</text>`,
+  flesopener: `<path d="M84 20h32a14 14 0 0 1 14 14v84a14 14 0 0 1-14 14H84a14 14 0 0 1-14-14V34a14 14 0 0 1 14-14z" ${H}/>
+    <path d="M86 36h28v14a14 14 0 0 1-28 0z" fill="#b4c3a0" stroke="#4a2c17" stroke-width="2"/>
+    <text x="100" y="98" text-anchor="middle" font-family="Josefin Sans, sans-serif" font-size="13" letter-spacing="2" fill="#4a2c17">PROOST</text>`,
+  vlaggenlijn: `<path d="M12 34c50 22 126 22 176 0" fill="none" stroke="#4a2c17" stroke-width="2"/>
+    <g ${H}><path d="M22 40l28 9-22 30z"/><path d="M58 51l30 4-15 34z"/><path d="M112 55l30-4-15 38z"/><path d="M150 49l28-9-6 39z"/></g>`,
+  kist: `<path d="M34 54h132v70H34z" ${H}/>
+    <g ${G}><path d="M34 76h132M34 100h132"/></g>
+    <path d="M78 54c0-22 44-22 44 0" fill="none" stroke="#4a2c17" stroke-width="3"/>
+    <text x="100" y="94" text-anchor="middle" font-family="Josefin Sans, sans-serif" font-size="15" letter-spacing="2" fill="#4a2c17">NAAM</text>`,
   blanco: `<rect x="40" y="30" width="120" height="90" rx="8" ${H}/>
     <g ${G}><path d="M100 98V62M100 80c-16 0-22-10-22-20 14 0 22 8 22 20zM100 72c0-12 8-20 20-20 0 12-8 20-20 20z"/></g>`,
   trui: `<path d="M72 30h56l34 26-14 22-14-10v56H66V68l-14 10-14-22z" ${H}/>
@@ -319,28 +329,16 @@ const TEKENINGEN = {
   plank: `<circle cx="100" cy="75" r="60" fill="#c99a5b" stroke="#4a2c17" stroke-width="3"/>
     <g ${G}><path d="M74 78V54l26-22 26 22v24z"/><rect x="92" y="54" width="16" height="14"/><path d="M100 54v14M92 61h16"/></g>
     <text x="100" y="104" text-anchor="middle" font-family="Josefin Sans, sans-serif" font-size="15" letter-spacing="2" fill="#4a2c17">EIGEN TEKST</text>`,
-  onderzetter: `<circle cx="100" cy="75" r="52" ${H}/><g ${G}><circle cx="100" cy="75" r="40"/><circle cx="100" cy="75" r="14"/>
-    <path d="M100 35v80M60 75h80M72 47l56 56M128 47l-56 56"/></g>`,
   naambord: `<rect x="22" y="42" width="156" height="66" rx="10" ${H}/>
     <text x="100" y="88" text-anchor="middle" font-family="Josefin Sans, sans-serif" font-size="30" letter-spacing="3" fill="#4a2c17">WELKOM</text>
     <circle cx="36" cy="56" r="3" fill="#4a2c17"/><circle cx="164" cy="56" r="3" fill="#4a2c17"/>`,
-  doosje: `<path d="M40 58h15v-10h15v10h15v-10h15v10h15v-10h15v10h15v-10h15v10h5v62H40z" ${H}/>
-    <g ${G}><path d="M40 72h120"/><path d="M100 84c0-10 14-10 14 0 0 9-14 18-14 18s-14-9-14-18c0-10 14-10 14 0z"/></g>`,
-  puzzel: `<rect x="35" y="22" width="130" height="106" rx="4" ${H}/>
-    <g ${G}><path d="M100 22v18c-12-6-12 22 0 16v38c12-6 12 22 0 16v18"/><path d="M35 75h22c-6-12 22-12 16 0h54c-6 12 22 12 16 0h22"/></g>`,
   hanger: `<circle cx="100" cy="28" r="12" fill="none" stroke="#c9c9c9" stroke-width="4"/>
     <path d="M70 46h60a10 10 0 0 1 10 10v58a10 10 0 0 1-10 10H70a10 10 0 0 1-10-10V56a10 10 0 0 1 10-10z" ${H}/>
     <circle cx="100" cy="58" r="5" fill="#b4c3a0" stroke="#4a2c17" stroke-width="2"/>
     <path d="M100 86c0-12 17-12 17 0 0 11-17 22-17 22s-17-11-17-22c0-12 17-12 17 0z" fill="#4a2c17"/>`,
   ster: `<path d="M100 14l17 37 40 5-29 28 7 40-35-19-35 19 7-40-29-28 40-5z" ${H}/>
     <g fill="#b4c3a0" stroke="#4a2c17" stroke-width="2"><circle cx="100" cy="78" r="12"/><circle cx="100" cy="34" r="4"/>
-    <path d="M100 52l5 10h-10zM76 70l10 4-8 6zM124 70l-10 4 8 6zM86 104l8-8 2 10zM114 104l-8-8-2 10z"/></g>`,
-  huisje: `<path d="M56 130V66l44-42 44 42v64z" ${H}/>
-    <g fill="#f6c453" stroke="#4a2c17" stroke-width="2"><rect x="70" y="76" width="20" height="22"/><rect x="110" y="76" width="20" height="22"/>
-    <path d="M92 130v-22a8 8 0 0 1 16 0v22z"/><circle cx="100" cy="52" r="8"/></g>`,
-  topper: `<path d="M70 86v48M130 86v48" stroke="#4a2c17" stroke-width="4"/>
-    <path d="M30 40h140l-10 25 10 25H30l10-25z" ${H}/>
-    <text x="100" y="76" text-anchor="middle" font-family="Josefin Sans, sans-serif" font-size="26" letter-spacing="3" fill="#4a2c17">HOERA</text>`
+    <path d="M100 52l5 10h-10zM76 70l10 4-8 6zM124 70l-10 4 8 6zM86 104l8-8 2 10zM114 104l-8-8-2 10z"/></g>`
 };
 
 function tekening(naam) {
