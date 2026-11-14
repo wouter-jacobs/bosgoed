@@ -13,6 +13,7 @@
     --grond: #edf0e4;      /* licht, groenig wit */
     --blad: #b4c3a0;       /* het groen uit het logo */
     --blad-diep: #8fa27c;
+    --band: #dbe4cb;       /* afwisselende achtergrond per hoofdstuk */
     --bos: #2c3a2a;        /* tekst */
     --berken: #e8cfa0;
     --berken-licht: #f3e3c2;
@@ -101,7 +102,7 @@
   .erf ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
   .erf li { padding: .35rem 1rem; background: var(--blad); border-radius: 999px; font-weight: 500; }
 
-  #mogelijkheden { background: var(--blad); }
+  main > section:nth-of-type(odd) { background: var(--band); }
   .kan { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2.5rem; }
   .kan h3 { font-size: 1.3rem; font-weight: 600; margin: 0 0 .4rem; }
   .kan p { margin: 0; }
@@ -255,8 +256,8 @@
           <p>Van de lente tot de herfst staat mijn kraampje langs de weg in Zeerijp. Daar vind je wat de tuin oplevert, en natuurlijk de houten producten van Bosgoed. Wat er ligt, wisselt met het seizoen; op Instagram zie je wat er nu is.</p>
           <ul aria-label="In het kraampje">
             <li>Eieren</li>
-            <li>Zeep</li>
-            <li>Thee</li>
+            <li>Plantjes</li>
+            <li>Jam</li>
             <li>Groente</li>
             <li>Houtwerk</li>
           </ul>
@@ -341,6 +342,22 @@ const TEKENINGEN = {
     <path d="M100 52l5 10h-10zM76 70l10 4-8 6zM124 70l-10 4 8 6zM86 104l8-8 2 10zM114 104l-8-8-2 10z"/></g>`
 };
 
+/* Zolang een product geen foto heeft, kiest de site een tekening op basis
+   van woorden in de productnaam. Geen passend woord = het neutrale plankje. */
+const TREFWOORDEN = [
+  ["dienblad", "dienblad"], ["flesopener", "flesopener"], ["opener", "flesopener"],
+  ["vlag", "vlaggenlijn"], ["slinger", "vlaggenlijn"], ["kist", "kist"], ["krat", "kist"],
+  ["sleutel", "hanger"], ["hanger", "hanger"], ["naambord", "naambord"], ["bord", "naambord"],
+  ["trui", "trui"], ["ster", "ster"], ["plank", "plank"]
+];
+
+function kiesTekening(stuk) {
+  if (stuk.tekening && TEKENINGEN[stuk.tekening]) return stuk.tekening;
+  const titel = (stuk.titel || "").toLowerCase();
+  const gevonden = TREFWOORDEN.find(([woord]) => titel.includes(woord));
+  return gevonden ? gevonden[1] : "blanco";
+}
+
 function tekening(naam) {
   const inhoud = TEKENINGEN[naam] || TEKENINGEN.blanco;
   return `<svg viewBox="0 0 200 150" aria-hidden="true">${inhoud}</svg>`;
@@ -353,10 +370,10 @@ function vulBeeld(el, stuk) {
     img.src = stuk.foto.replace(/^\//, "");   // zonder schuine streep vooraan werkt het ook in een submap
     img.alt = stuk.titel;
     img.loading = "lazy";
-    img.onerror = () => { el.innerHTML = tekening(stuk.tekening); };
+    img.onerror = () => { el.innerHTML = tekening(kiesTekening(stuk)); };
     el.append(img);
   } else {
-    el.innerHTML = tekening(stuk.tekening);
+    el.innerHTML = tekening(kiesTekening(stuk));
   }
 }
 
