@@ -81,6 +81,26 @@
   .stuk span.mat { display: block; font-size: .95rem; opacity: .8; }
   .leeg { padding: 2rem; border: 2px dashed var(--blad-diep); border-radius: 8px; }
 
+  .prijs { display: inline-block; margin-top: .5rem; padding: .1rem .6rem; font-size: .95rem; font-weight: 600; color: var(--berken-licht); background: var(--schroei); border-radius: 999px; }
+
+  .stappen { list-style: none; counter-reset: stap; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 2.5rem; }
+  .stappen li { counter-increment: stap; }
+  .stappen li::before { content: counter(stap); display: grid; place-items: center; width: 2.6rem; height: 2.6rem; margin-bottom: .9rem; font-family: var(--display); font-size: 1.4rem; line-height: 1; padding-top: .15em; background: var(--blad); border-radius: 55% 45% 50% 50% / 50% 55% 45% 50%; }
+  .stappen h3 { font-size: 1.3rem; font-weight: 600; margin: 0 0 .4rem; }
+  .stappen p { margin: 0; }
+
+  .over { display: grid; grid-template-columns: .8fr 1.2fr; gap: 3rem; align-items: center; }
+  .over .portret { aspect-ratio: 1; background: var(--blad); border-radius: 58% 42% 47% 53% / 50% 46% 54% 50%; overflow: hidden; display: grid; place-items: center; max-width: 380px; width: 100%; }
+  .over .portret img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .over .portret svg { width: 45%; height: auto; }
+  .over p { max-width: 36rem; margin: 0 0 1rem; white-space: pre-line; }
+
+  .erf { border: 2px solid var(--blad-diep); border-radius: 12px; padding: clamp(1.5rem, 4vw, 2.5rem); display: grid; grid-template-columns: 1.2fr .8fr; gap: 1.5rem 3rem; align-items: center; }
+  .erf h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+  .erf p { margin: 0; max-width: 34rem; }
+  .erf ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+  .erf li { padding: .35rem 1rem; background: var(--blad); border-radius: 999px; font-weight: 500; }
+
   #mogelijkheden { background: var(--blad); }
   .kan { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2.5rem; }
   .kan h3 { font-size: 1.3rem; font-weight: 600; margin: 0 0 .4rem; }
@@ -90,6 +110,7 @@
 
   .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem 3rem; align-items: start; }
   .contact .intro { margin-bottom: 0; }
+  .contact .knoppen { margin: .5rem 0 1.5rem; }
   .contact dl { display: grid; grid-template-columns: max-content 1fr; gap: .6rem 1.5rem; margin: .5rem 0 0; font-size: 1.15rem; }
   .contact dt { font-weight: 600; }
   .contact dd { margin: 0; overflow-wrap: anywhere; }
@@ -103,12 +124,18 @@
   dialog .tekst { padding: 1.25rem 1.5rem 1.5rem; }
   dialog h3 { font-family: var(--display); font-weight: 400; font-size: 1.8rem; line-height: 1.1; margin: 0 0 .25rem; }
   dialog p { margin: .5rem 0 0; }
+  dialog .acties { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-top: 1.25rem; }
+  dialog .vraag { font-weight: 600; padding: .55rem 1.2rem; color: var(--berken); background: var(--schroei); border-radius: 999px; text-decoration: none; }
+  dialog .acties .sluit { margin-top: 0; color: var(--schroei); background: transparent; border: 2px solid var(--schroei); }
   dialog .sluit { margin-top: 1.25rem; font: inherit; font-weight: 600; cursor: pointer; padding: .55rem 1.2rem; color: var(--berken); background: var(--schroei); border: 0; border-radius: 999px; }
 
   @media (max-width: 760px) {
     .hero { grid-template-columns: 1fr; gap: 2rem; padding-block: 1rem 3rem; }
     section { padding-block: 3rem; }
     .contact { grid-template-columns: 1fr; }
+    .over, .erf { grid-template-columns: 1fr; gap: 1.5rem; }
+    .over .portret { max-width: 240px; }
+    .kop nav { gap: 1rem; flex-wrap: wrap; }
     .contact dl { grid-template-columns: 1fr; gap: 0; }
     .contact dd { margin-bottom: .9rem; }
     .merk { font-size: 1.25rem; }
@@ -121,7 +148,8 @@
   <a class="merk" href="#top" data-naam>Bosgoed</a>
   <nav aria-label="Hoofdmenu">
     <a href="#werk">Werk</a>
-    <a href="#mogelijkheden">Wat kan er</a>
+    <a href="#zo-werkt-het">Zo werkt het</a>
+    <a href="#over">Over mij</a>
     <a href="#contact">Contact</a>
   </nav>
 </header>
@@ -130,10 +158,10 @@
   <div class="wrap hero">
     <div>
       <h1>Hout met een naam, een tekst of een eigen idee</h1>
-      <p>Bosgoed is van Nienke uit Zeerijp. Met de lasersnijder maak ik naamhangers, gegraveerde planken en cadeaus van hout. Hier zie je wat er allemaal kan.</p>
+      <p>Ik ben Nienke en ik maak in Zeerijp gegraveerde planken en cadeaus van hout. Elk stuk maak ik voor iemand: met jullie naam, een datum of een tekst die je zelf bedenkt.</p>
       <div class="knoppen">
         <a class="knop" href="#werk">Bekijk het werk</a>
-        <a class="knop stil" href="#contact">Neem contact op</a>
+        <a class="knop stil" href="#contact">Stuur een bericht</a>
       </div>
     </div>
     <div class="vlek"><svg class="plaat" viewBox="0 0 400 300" role="img" aria-label="Een plaat multiplex waar de laser een ster uit snijdt">
@@ -158,38 +186,84 @@
   <section id="werk">
     <div class="wrap">
       <h2>Werk</h2>
-      <p class="intro">Een greep uit wat ik gemaakt heb. Klik op een werkstuk voor meer uitleg.</p>
+      <p class="intro">Een greep uit wat ik gemaakt heb. Alles kan ook met een andere naam, tekst of maat. Klik op een werkstuk voor meer uitleg.</p>
       <div class="filter" id="filter" role="group" aria-label="Filter op soort werk"></div>
       <ul class="werk" id="werklijst"></ul>
+    </div>
+  </section>
+
+  <section id="zo-werkt-het">
+    <div class="wrap">
+      <h2>Zo werkt het</h2>
+      <p class="intro">Dit is geen webshop. Alles maak ik op aanvraag, dus we stemmen het samen even af.</p>
+      <ol class="stappen">
+        <li>
+          <h3>Stuur een bericht</h3>
+          <p>Vertel via WhatsApp of Instagram wat je zoekt: iets van deze site, of een eigen idee. Een foto of schets helpt.</p>
+        </li>
+        <li>
+          <h3>Ik denk met je mee</h3>
+          <p>Je krijgt van mij een voorstel met de tekst, de maat en de prijs. Pas als jij het goed vindt, ga ik aan de slag.</p>
+        </li>
+        <li>
+          <h3>Binnen een paar dagen klaar</h3>
+          <p>Je haalt het op in Zeerijp, of ik stuur het naar je op tegen verzendkosten.</p>
+        </li>
+      </ol>
     </div>
   </section>
 
   <section id="mogelijkheden">
     <div class="wrap">
       <h2>Wat kan er</h2>
-      <p class="intro">De laser snijdt en graveert heel precies. Daardoor kan bijna elke tekening, naam of foto op of uit het materiaal.</p>
+      <p class="intro">De laser snijdt en graveert heel precies. Daardoor kan bijna elke naam, tekst of tekening op of uit het hout.</p>
       <div class="kan">
         <div>
-          <h3>Snijden</h3>
-          <p>Vormen, letters en puzzelstukjes worden strak uit de plaat gesneden, ook met fijne details.</p>
-        </div>
-        <div>
           <h3>Graveren</h3>
-          <p>Teksten, logo’s, tekeningen en zelfs foto’s worden in het oppervlak gebrand.</p>
+          <p>Namen, datums, teksten en logo’s worden in het hout gebrand, bijvoorbeeld op een plank of bord.</p>
         </div>
         <div>
-          <h3>In elkaar zetten</h3>
-          <p>Met vingerverbindingen en laagjes ontstaan doosjes, lampjes en andere werkstukken met diepte.</p>
+          <h3>Snijden</h3>
+          <p>Vormen, letters en hangers worden strak uit de plaat gesneden, ook met fijne details.</p>
+        </div>
+        <div>
+          <h3>Voor elke gelegenheid</h3>
+          <p>Een geboorte, verjaardag, bruiloft of bedankje: ik maak het passend bij het moment en de persoon.</p>
         </div>
       </div>
       <ul class="materialen" aria-label="Materialen">
         <li style="background:#e8cfa0">Berken multiplex</li>
-        <li style="background:#c9a876">MDF</li>
-        <li style="background:#d9b98c">Populier</li>
-        <li style="background:#b9d7e4">Acryl</li>
-        <li style="background:#b98a5e">Leer</li>
-        <li style="background:#d8cdbd">Karton</li>
+        <li style="background:#c99a5b">Massief hout en planken</li>
       </ul>
+    </div>
+  </section>
+
+  <section id="over">
+    <div class="wrap over">
+      <div class="portret" id="portret">
+        <svg viewBox="0 0 100 100" aria-hidden="true" fill="none" stroke="#2c3a2a" stroke-width="3" stroke-linecap="round"><path d="M50 88V40M50 62c-22 0-30-14-30-28 19 0 30 11 30 28zM50 50c0-17 11-28 28-28 0 17-11 28-28 28z"/></svg>
+      </div>
+      <div>
+        <h2>Over mij</h2>
+        <p id="over-tekst"></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="erf">
+        <div>
+          <h2>Eerlijk spul uit tuin, bos en erf</h2>
+          <p>Bosgoed is meer dan hout. Aan huis in Zeerijp verkoop ik ook wat tuin en erf opleveren. Wat er is, wisselt met het seizoen; op Instagram zie je wat er nu ligt.</p>
+        </div>
+        <ul aria-label="Ook van Bosgoed">
+          <li>Eieren</li>
+          <li>Zeep</li>
+          <li>Thee</li>
+          <li>Groente</li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -198,7 +272,8 @@
       <div class="contact" id="contact">
         <div>
         <h2>Contact</h2>
-        <p class="intro">Dit is geen webshop. Zie je iets leuks of heb je zelf een idee? Stuur een bericht, dan kijken we samen wat er kan. Bosgoed verkoopt aan huis in Zeerijp en via Instagram, naast het houtwerk ook eieren, zeep, thee en groente uit eigen tuin.</p>
+        <p class="intro">Zie je iets leuks of heb je zelf een idee? Stuur een bericht, dan kijken we samen wat er kan. Ik reageer meestal dezelfde dag.</p>
+        <div class="knoppen" id="contactknoppen"></div>
         </div>
         <dl id="contactlijst"></dl>
       </div>
@@ -215,8 +290,12 @@
   <div class="tekst">
     <h3 id="groot-titel"></h3>
     <span class="mat" id="groot-mat"></span>
+    <span class="prijs" id="groot-prijs" hidden></span>
     <p id="groot-tekst"></p>
-    <button class="sluit" type="button" id="groot-sluit">Sluiten</button>
+    <div class="acties">
+      <a class="vraag" id="groot-vraag" href="#contact">Vraag hiernaar</a>
+      <button class="sluit" type="button" id="groot-sluit">Sluiten</button>
+    </div>
   </div>
 </dialog>
 
@@ -309,6 +388,12 @@ function toonWerk() {
     mat.className = "mat";
     mat.textContent = stuk.materiaal || "";
     knop.append(beeld, titel, mat);
+    if (stuk.prijs) {
+      const prijs = document.createElement("span");
+      prijs.className = "prijs";
+      prijs.textContent = stuk.prijs;
+      knop.append(prijs);
+    }
     knop.addEventListener("click", () => openGroot(stuk));
     li.append(knop);
     lijst.append(li);
@@ -333,12 +418,32 @@ function openGroot(stuk) {
   document.getElementById("groot-titel").textContent = stuk.titel;
   document.getElementById("groot-mat").textContent = stuk.materiaal || "";
   document.getElementById("groot-tekst").textContent = stuk.tekst || "";
+  const prijs = document.getElementById("groot-prijs");
+  prijs.textContent = stuk.prijs || "";
+  prijs.hidden = !stuk.prijs;
+  const vraag = document.getElementById("groot-vraag");
+  const bericht = "Hoi Nienke, ik heb een vraag over: " + stuk.titel;
+  if (SITE.whatsapp) vraag.href = "https://wa.me/" + SITE.whatsapp + "?text=" + encodeURIComponent(bericht);
+  else if (SITE.instagram) vraag.href = "https://www.instagram.com/" + SITE.instagram + "/";
+  else vraag.href = "#contact";
   if (groot.showModal) groot.showModal(); else groot.setAttribute("open", "");
 }
 document.getElementById("groot-sluit").addEventListener("click", () => groot.close());
 groot.addEventListener("click", e => { if (e.target === groot) groot.close(); });
+document.getElementById("groot-vraag").addEventListener("click", () => groot.close());
 
 function toonContact() {
+  const knoppen = document.getElementById("contactknoppen");
+  const knop = (tekst, href, stil) => {
+    const a = document.createElement("a");
+    a.className = "knop" + (stil ? " stil" : "");
+    a.href = href;
+    a.textContent = tekst;
+    knoppen.append(a);
+  };
+  if (SITE.whatsapp) knop("Stuur een WhatsApp", "https://wa.me/" + SITE.whatsapp);
+  if (SITE.instagram) knop("Bericht via Instagram", "https://www.instagram.com/" + SITE.instagram + "/", Boolean(SITE.whatsapp));
+
   const dl = document.getElementById("contactlijst");
   const regel = (kop, tekst, href) => {
     const dt = document.createElement("dt"); dt.textContent = kop;
@@ -347,10 +452,20 @@ function toonContact() {
     else dd.textContent = tekst;
     dl.append(dt, dd);
   };
-  if (SITE.email) regel("E-mail", SITE.email, "mailto:" + SITE.email);
   if (SITE.whatsapp) regel("WhatsApp", "+" + SITE.whatsapp, "https://wa.me/" + SITE.whatsapp);
   if (SITE.instagram) regel("Instagram", "@" + SITE.instagram, "https://www.instagram.com/" + SITE.instagram + "/");
-  if (SITE.plaats) regel("Plaats", SITE.plaats);
+  if (SITE.email) regel("E-mail", SITE.email, "mailto:" + SITE.email);
+  if (SITE.plaats) regel("Ophalen", SITE.plaats + ", of verzenden tegen verzendkosten");
+}
+
+function toonOver() {
+  document.getElementById("over-tekst").textContent = SITE.over_tekst || "";
+  if (SITE.over_foto) {
+    const img = document.createElement("img");
+    img.src = SITE.over_foto.replace(/^\//, "");
+    img.alt = "Nienke van " + SITE.naam;
+    img.onload = () => document.getElementById("portret").replaceChildren(img);
+  }
 }
 
 async function laad(pad) {
@@ -374,6 +489,7 @@ async function start() {
   toonFilter();
   toonWerk();
   toonContact();
+  toonOver();
 }
 start();
 </script>
