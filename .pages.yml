@@ -11,7 +11,6 @@ content:
     fields:
       - name: producten
         label: Producten
-        description: "Klik op een product om het te openen. Nieuwe producten voeg je onderaan toe."
         type: object
         list:
           collapsible:
