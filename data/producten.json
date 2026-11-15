@@ -6,6 +6,7 @@
         "Wonen"
       ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (7).jpg",
+      "prijs": "vanaf € 15,-",
       "tekst": "Plank met jullie naam, een datum of een eigen tekst. Ook met een logo, bijvoorbeeld voor een dorpshuis of vereniging."
     },
     {
@@ -30,6 +31,7 @@
         "Cadeaus"
       ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (4).jpg",
+      "prijs": "vanaf € 5,-",
       "tekst": "Houten flesopener met een eigen naam of tekst. Leuk als cadeau of bedankje."
     },
     {
@@ -47,6 +49,7 @@
         "Cadeaus"
       ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (1).jpg",
+      "prijs": "vanaf € 3,-",
       "tekst": "Kleine hangers met een naam, datum of figuurtje. Leuk als bedankje."
     },
     {
