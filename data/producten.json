@@ -15,6 +15,7 @@
         "Wonen"
       ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (9).jpg",
+      "prijs": "vanaf € 7,50",
       "tekst": "Houten dienblad met een naam, tekst of tekening erin gegraveerd."
     },
     {
@@ -23,6 +24,7 @@
         "Geboorte"
       ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (2).jpg",
+      "prijs": "vanaf € 30,-",
       "tekst": "Houten kist met de naam en geboortedatum, om de eerste herinneringen in te bewaren."
     },
     {
@@ -41,6 +43,7 @@
         "Geboorte"
       ],
       "foto": "/fotos/Sjabloon_Afbeelding_website.jpg",
+      "prijs": "vanaf € 10,-",
       "tekst": "Houten vlaggenlijn met een naam of tekst, voor een verjaardag, geboorte of feest."
     },
     {
@@ -59,6 +62,7 @@
         "Cadeaus"
       ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (5).jpg",
+      "prijs": "vanaf € 20,-",
       "tekst": "Bord met jullie naam voor bij de voordeur. Elke naam en elk lettertype is mogelijk."
     },
     {
@@ -67,6 +71,7 @@
         "Kerst"
       ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (8).jpg",
+      "prijs": "vanaf € 5,-",
       "tekst": "Hangers in de vorm van een kersttrui, met een eigen naam erin gegraveerd. Voor in de boom of aan een cadeau."
     },
     {
@@ -75,7 +80,8 @@
         "Cadeaus",
         "Geboorte"
       ],
-      "foto": "/fotos/Sjabloon_Afbeelding_website (3).jpg"
+      "foto": "/fotos/Sjabloon_Afbeelding_website (3).jpg",
+      "prijs": "vanaf € 15,-"
     },
     {
       "titel": "Familiebord",
@@ -83,6 +89,7 @@
         "Cadeaus"
       ],
       "foto": "/fotos/Sjabloon_Afbeelding_website (6).jpg",
+      "prijs": "vanaf € 20,-",
       "tekst": "Familieopstelling in standaard"
     }
   ]
