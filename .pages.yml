@@ -32,9 +32,6 @@ content:
               search: "naam"
               value: "{naam}"
               label: "{naam}"
-          - name: foto
-            label: Foto
-            type: image
           - name: prijs
             label: Prijs
             description: "Bijvoorbeeld: vanaf € 5. Leeg laten = niet tonen"
@@ -42,6 +39,30 @@ content:
           - name: tekst
             label: Omschrijving
             type: text
+
+  - name: galerij
+    label: Inspiratie (foto's)
+    type: file
+    path: data/galerij.json
+    format: json
+    fields:
+      - name: fotos
+        label: Foto's
+        description: "Deze foto's staan in de galerij bij Inspiratie, in deze volgorde. Sleep om te verplaatsen. Liggende foto's van 1600 × 1200 pixels werken het best."
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{onderschrift}"
+        fields:
+          - name: foto
+            label: Foto
+            type: image
+            required: true
+          - name: onderschrift
+            label: Onderschrift
+            description: "Korte tekst onder de foto, bijvoorbeeld de naam van het product. Mag leeg blijven."
+            type: string
 
   - name: categorieen
     label: Categorieën

@@ -82,6 +82,26 @@
   .stuk span.mat { display: block; font-size: .95rem; opacity: .8; }
   .leeg { padding: 2rem; border: 2px dashed var(--blad-diep); border-radius: 8px; }
 
+  .galerij { position: relative; }
+  .spoor { display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding: .25rem .25rem 1.25rem; margin: 0 -.25rem; list-style: none; scrollbar-width: thin; scrollbar-color: var(--blad-diep) transparent; }
+  .spoor li { flex: 0 0 min(440px, 82%); scroll-snap-align: start; }
+  .spoor button { display: block; width: 100%; padding: 0; font: inherit; text-align: left; cursor: zoom-in; color: inherit; background: none; border: 0; }
+  .spoor .foto { display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 10px; background: var(--blad); box-shadow: 4px 5px 0 rgba(44,58,42,.18); }
+  .spoor img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s ease; }
+  .spoor button:hover img, .spoor button:focus-visible img { transform: scale(1.03); }
+  .spoor .onderschrift { display: block; margin-top: .6rem; font-weight: 500; }
+  .pijlen { display: flex; gap: .6rem; justify-content: flex-end; margin-top: -.25rem; }
+  .pijl { width: 2.9rem; height: 2.9rem; display: grid; place-items: center; font: inherit; font-size: 1.3rem; line-height: 1; cursor: pointer; color: var(--grond); background: var(--bos); border: 0; border-radius: 50%; }
+  .pijl:disabled { opacity: .3; cursor: default; }
+
+  #lichtbak { width: min(1000px, 100% - 1.5rem); background: var(--bos); color: var(--grond); border-color: var(--bos); }
+  #lichtbak img { display: block; width: 100%; max-height: 72vh; object-fit: contain; background: #1f2a1e; }
+  #lichtbak .balk { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1rem; padding: 1rem 1.25rem; }
+  #lichtbak .balk p { margin: 0 auto 0 0; font-weight: 500; }
+  #lichtbak .pijl { color: var(--bos); background: var(--grond); }
+  #lichtbak .vraag { color: var(--bos); background: var(--blad); }
+  #lichtbak .sluit { margin-top: 0; color: var(--grond); background: transparent; border: 2px solid var(--grond); }
+
   .prijs { display: inline-block; margin-top: .5rem; padding: .1rem .6rem; font-size: .95rem; font-weight: 600; color: var(--berken-licht); background: var(--schroei); border-radius: 999px; }
 
   .stappen { list-style: none; counter-reset: stap; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 2.5rem; }
@@ -157,6 +177,7 @@
   <a class="merk" href="#top" data-naam>Bosgoed</a>
   <nav aria-label="Hoofdmenu">
     <a href="#werk">Werk</a>
+    <a href="#inspiratie">Inspiratie</a>
     <a href="#zo-werkt-het">Zo werkt het</a>
     <a href="#over">Over mij</a>
     <a href="#kraampje">Kraampje</a>
@@ -199,6 +220,20 @@
       <p class="intro">Een greep uit wat ik gemaakt heb. Alles kan ook met een andere naam, tekst of maat. Klik op een werkstuk voor meer uitleg.</p>
       <div class="filter" id="filter" role="group" aria-label="Filter op soort werk"></div>
       <ul class="werk" id="werklijst"></ul>
+    </div>
+  </section>
+
+  <section id="inspiratie" hidden>
+    <div class="wrap">
+      <h2>Inspiratie</h2>
+      <p class="intro">Een kijkje in wat ik eerder heb gemaakt. Zie je iets wat je aanspreekt? Stuur me een bericht, dan maak ik iets in dezelfde stijl voor jou.</p>
+      <div class="galerij">
+        <ul class="spoor" id="spoor" aria-label="Foto's van eerder werk"></ul>
+        <div class="pijlen">
+          <button class="pijl" type="button" id="terug" aria-label="Vorige foto's">&#8592;</button>
+          <button class="pijl" type="button" id="verder" aria-label="Volgende foto's">&#8594;</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -307,17 +342,39 @@
   </div>
 </dialog>
 
+<dialog id="lichtbak" aria-label="Foto vergroot">
+  <img id="lichtbak-foto" alt="">
+  <div class="balk">
+    <p id="lichtbak-tekst"></p>
+    <button class="pijl" type="button" id="lichtbak-terug" aria-label="Vorige foto">&#8592;</button>
+    <button class="pijl" type="button" id="lichtbak-verder" aria-label="Volgende foto">&#8594;</button>
+    <a class="vraag" id="lichtbak-vraag" href="#contact">Vraag hiernaar</a>
+    <button class="sluit" type="button" id="lichtbak-sluit">Sluiten</button>
+  </div>
+</dialog>
+
 <script>
-/* De inhoud staat in twee losse bestanden:
+/* De inhoud staat in losse bestanden:
+   data/galerij.json    – de foto's bij Inspiratie
    data/producten.json  – de werkstukken
    data/site.json       – naam en contactgegevens
    Nienke past die aan via Pages CMS; hier hoeft niets te veranderen. */
 let SITE = {};
 let WERK = [];
+let GALERIJ = [];
 
 const H = 'fill="#e8cfa0" stroke="#4a2c17" stroke-width="3" stroke-linejoin="round"';
 const G = 'fill="none" stroke="#4a2c17" stroke-width="2" stroke-linecap="round"';
 const TEKENINGEN = {
+  huis: `<path d="M50 128V68l50-44 50 44v60z" ${H}/>
+    <g fill="#b4c3a0" stroke="#4a2c17" stroke-width="2"><rect x="66" y="78" width="22" height="22"/><rect x="112" y="78" width="22" height="22"/><path d="M90 128v-24a10 10 0 0 1 20 0v24z"/></g>`,
+  cadeau: `<rect x="44" y="62" width="112" height="66" rx="4" ${H}/>
+    <rect x="38" y="46" width="124" height="20" rx="4" ${H}/>
+    <g fill="#b4c3a0" stroke="#4a2c17" stroke-width="2"><rect x="92" y="46" width="16" height="82"/></g>
+    <g ${G}><path d="M100 46c-6-18-30-20-30-8 0 8 18 8 30 8zM100 46c6-18 30-20 30-8 0 8-18 8-30 8z"/></g>`,
+  geboorte: `<path d="M72 30h56l26 22-12 16-10-8v62H68V60l-10 8-12-16z" ${H}/>
+    <g ${G}><path d="M86 30c4 10 24 10 28 0"/></g>
+    <path d="M100 104c0-12 16-12 16 0 0 10-16 20-16 20s-16-10-16-20c0-12 16-12 16 0z" fill="#b4c3a0" stroke="#4a2c17" stroke-width="2"/>`,
   dienblad: `<rect x="24" y="42" width="152" height="74" rx="10" ${H}/>
     <g fill="#b4c3a0" stroke="#4a2c17" stroke-width="2"><rect x="34" y="68" width="10" height="22" rx="5"/><rect x="156" y="68" width="10" height="22" rx="5"/></g>
     <text x="100" y="86" text-anchor="middle" font-family="Josefin Sans, sans-serif" font-size="12" letter-spacing="1" fill="#4a2c17">EIGEN TEKST</text>`,
@@ -360,11 +417,22 @@ const TREFWOORDEN = [
   ["trui", "trui"], ["ster", "ster"], ["plank", "plank"]
 ];
 
+/* Past geen woord uit de naam, dan kiest de site een icoon bij de (eerste) categorie. */
+const CATEGORIE_ICONEN = [
+  ["wonen", "huis"], ["huis", "huis"], ["cadeau", "cadeau"], ["geboorte", "geboorte"],
+  ["baby", "geboorte"], ["feest", "vlaggenlijn"], ["verjaardag", "vlaggenlijn"], ["kerst", "ster"]
+];
+
 function kiesTekening(stuk) {
   if (stuk.tekening && TEKENINGEN[stuk.tekening]) return stuk.tekening;
   const titel = (stuk.titel || "").toLowerCase();
-  const gevonden = TREFWOORDEN.find(([woord]) => titel.includes(woord));
-  return gevonden ? gevonden[1] : "blanco";
+  const opNaam = TREFWOORDEN.find(([woord]) => titel.includes(woord));
+  if (opNaam) return opNaam[1];
+  for (const soort of soortenVan(stuk)) {
+    const opSoort = CATEGORIE_ICONEN.find(([woord]) => soort.toLowerCase().includes(woord));
+    if (opSoort) return opSoort[1];
+  }
+  return "blanco";
 }
 
 function tekening(naam) {
@@ -372,18 +440,9 @@ function tekening(naam) {
   return `<svg viewBox="0 0 200 150" aria-hidden="true">${inhoud}</svg>`;
 }
 
+/* Producten tonen altijd een icoon; foto's staan in de galerij bij Inspiratie. */
 function vulBeeld(el, stuk) {
-  el.innerHTML = "";
-  if (stuk.foto) {
-    const img = document.createElement("img");
-    img.src = stuk.foto.replace(/^\//, "");   // zonder schuine streep vooraan werkt het ook in een submap
-    img.alt = stuk.titel;
-    img.loading = "lazy";
-    img.onerror = () => { el.innerHTML = tekening(kiesTekening(stuk)); };
-    el.append(img);
-  } else {
-    el.innerHTML = tekening(kiesTekening(stuk));
-  }
+  el.innerHTML = tekening(kiesTekening(stuk));
 }
 
 const lijst = document.getElementById("werklijst");
@@ -463,6 +522,94 @@ document.getElementById("groot-sluit").addEventListener("click", () => groot.clo
 groot.addEventListener("click", e => { if (e.target === groot) groot.close(); });
 document.getElementById("groot-vraag").addEventListener("click", () => groot.close());
 
+/* ---------- Inspiratie-galerij ---------- */
+const spoor = document.getElementById("spoor");
+const lichtbak = document.getElementById("lichtbak");
+let huidig = 0;
+
+function fotoPad(pad) { return String(pad || "").replace(/^\//, ""); }
+
+function toonGalerij() {
+  const sectie = document.getElementById("inspiratie");
+  const menu = document.querySelector('.kop nav a[href="#inspiratie"]');
+  sectie.hidden = !GALERIJ.length;
+  if (menu) menu.hidden = !GALERIJ.length;
+  spoor.innerHTML = "";
+  GALERIJ.forEach((item, i) => {
+    const li = document.createElement("li");
+    const knop = document.createElement("button");
+    knop.type = "button";
+    const kader = document.createElement("span");
+    kader.className = "foto";
+    const img = document.createElement("img");
+    img.src = fotoPad(item.foto);
+    img.alt = item.onderschrift || "Werk van " + (SITE.naam || "Bosgoed");
+    img.loading = i < 3 ? "eager" : "lazy";
+    img.onerror = () => li.remove();
+    kader.append(img);
+    knop.append(kader);
+    if (item.onderschrift) {
+      const tekst = document.createElement("span");
+      tekst.className = "onderschrift";
+      tekst.textContent = item.onderschrift;
+      knop.append(tekst);
+    }
+    knop.addEventListener("click", () => openLichtbak(i));
+    li.append(knop);
+    spoor.append(li);
+  });
+  werkPijlenBij();
+}
+
+function stapGrootte() {
+  const eerste = spoor.querySelector("li");
+  return eerste ? eerste.getBoundingClientRect().width + 20 : spoor.clientWidth;
+}
+function werkPijlenBij() {
+  const max = spoor.scrollWidth - spoor.clientWidth - 2;
+  document.getElementById("terug").disabled = spoor.scrollLeft <= 2;
+  document.getElementById("verder").disabled = spoor.scrollLeft >= max;
+}
+document.getElementById("terug").addEventListener("click", () => spoor.scrollBy({ left: -stapGrootte() }));
+document.getElementById("verder").addEventListener("click", () => spoor.scrollBy({ left: stapGrootte() }));
+spoor.addEventListener("scroll", () => requestAnimationFrame(werkPijlenBij), { passive: true });
+window.addEventListener("resize", werkPijlenBij);
+
+function openLichtbak(i) {
+  huidig = (i + GALERIJ.length) % GALERIJ.length;
+  const item = GALERIJ[huidig];
+  const img = document.getElementById("lichtbak-foto");
+  img.src = fotoPad(item.foto);
+  img.alt = item.onderschrift || "Werk van " + (SITE.naam || "Bosgoed");
+  document.getElementById("lichtbak-tekst").textContent = item.onderschrift || "";
+  const vraag = document.getElementById("lichtbak-vraag");
+  const bericht = "Hoi Nienke, ik zag dit op je site en heb een vraag" + (item.onderschrift ? ": " + item.onderschrift : ".");
+  if (SITE.whatsapp) vraag.href = "https://wa.me/" + SITE.whatsapp + "?text=" + encodeURIComponent(bericht);
+  else if (SITE.instagram) vraag.href = "https://www.instagram.com/" + SITE.instagram + "/";
+  else vraag.href = "#contact";
+  const meer = GALERIJ.length > 1;
+  document.getElementById("lichtbak-terug").hidden = !meer;
+  document.getElementById("lichtbak-verder").hidden = !meer;
+  if (!lichtbak.open) { if (lichtbak.showModal) lichtbak.showModal(); else lichtbak.setAttribute("open", ""); }
+}
+document.getElementById("lichtbak-terug").addEventListener("click", () => openLichtbak(huidig - 1));
+document.getElementById("lichtbak-verder").addEventListener("click", () => openLichtbak(huidig + 1));
+document.getElementById("lichtbak-sluit").addEventListener("click", () => lichtbak.close());
+document.getElementById("lichtbak-vraag").addEventListener("click", () => lichtbak.close());
+lichtbak.addEventListener("click", e => { if (e.target === lichtbak) lichtbak.close(); });
+lichtbak.addEventListener("keydown", e => {
+  if (e.key === "ArrowLeft") openLichtbak(huidig - 1);
+  if (e.key === "ArrowRight") openLichtbak(huidig + 1);
+});
+let veegStart = null;
+lichtbak.addEventListener("touchstart", e => { veegStart = e.touches[0].clientX; }, { passive: true });
+lichtbak.addEventListener("touchend", e => {
+  if (veegStart === null) return;
+  const verschil = e.changedTouches[0].clientX - veegStart;
+  if (Math.abs(verschil) > 50) openLichtbak(huidig + (verschil < 0 ? 1 : -1));
+  veegStart = null;
+});
+
 function toonContact() {
   const knoppen = document.getElementById("contactknoppen");
   const knop = (tekst, href, stil) => {
@@ -535,6 +682,13 @@ async function start() {
   toonWerk();
   toonContact();
   toonOver();
+  try {
+    const g = await laad("data/galerij.json");
+    GALERIJ = (Array.isArray(g) ? g : (g.fotos || [])).filter(x => x && x.foto);
+  } catch (fout) {
+    GALERIJ = [];
+  }
+  toonGalerij();
 }
 start();
 </script>
