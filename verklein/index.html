@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Bosgoed – foto's verkleinen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --grond: #edf0e4; --blad: #b4c3a0; --blad-diep: #8fa27c; --bos: #2c3a2a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Karla", system-ui, sans-serif; font-size: 1.0625rem; line-height: 1.6; color: var(--bos); background: var(--grond); }
+  main { width: min(860px, 100% - 2.5rem); margin-inline: auto; padding-block: 2.5rem 4rem; }
+  h1 { font-family: "Josefin Sans", system-ui, sans-serif; font-weight: 300; font-size: clamp(2rem, 6vw, 2.8rem); line-height: 1.1; margin: 0 0 1rem; }
+  p { max-width: 38rem; margin: 0 0 1rem; }
+  ol { padding-left: 1.2rem; margin: 0 0 1.75rem; max-width: 38rem; }
+  :focus-visible { outline: 3px solid #e5392f; outline-offset: 3px; }
+  .kies { display: inline-block; padding: .85rem 1.5rem; font-weight: 600; color: var(--grond); background: var(--bos); border-radius: 999px; cursor: pointer; }
+  .kies:hover { background: #3d4f3a; }
+  input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  input[type=file]:focus-visible + .kies { outline: 3px solid #e5392f; outline-offset: 3px; }
+  .melding { margin-top: 1.25rem; font-weight: 500; }
+  .lijst { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.5rem; list-style: none; padding: 0; margin: 2rem 0 0; }
+  .lijst li { background: #fff8; border: 2px solid var(--blad); border-radius: 10px; padding: .75rem; }
+  .lijst img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px; display: block; background: var(--blad); }
+  .naam { display: block; margin-top: .5rem; font-weight: 600; overflow-wrap: anywhere; }
+  .maat { display: block; font-size: .92rem; opacity: .8; }
+  .acties { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .6rem; }
+  .acties a, .acties button { font: inherit; font-weight: 600; font-size: .95rem; padding: .45rem 1rem; color: var(--bos); background: var(--blad); border: 0; border-radius: 999px; text-decoration: none; cursor: pointer; }
+  .fout { color: #9b2c1f; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Foto's verkleinen</h1>
+  <p>Foto's van een telefoon zijn vaak te groot om in het beheer te uploaden. Hier maak je ze kleiner, zodat ze wel passen. De foto's blijven op je eigen telefoon of computer; er wordt niets verstuurd.</p>
+  <ol>
+    <li>Kies een of meer foto's.</li>
+    <li>Bewaar de verkleinde versies met de knop onder elke foto.</li>
+    <li>Upload die versies in het beheer bij "Inspiratie (foto's)".</li>
+  </ol>
+
+  <input type="file" id="invoer" accept="image/*" multiple>
+  <label class="kies" for="invoer">Kies foto's</label>
+  <p class="melding" id="melding" role="status"></p>
+  <ul class="lijst" id="lijst"></ul>
+</main>
+
+<script>
+const MAX = 1600;        // langste zijde in pixels
+const KWALITEIT = 0.82;  // jpg-kwaliteit
+
+const lijst = document.getElementById("lijst");
+const melding = document.getElementById("melding");
+
+function kb(bytes) {
+  return bytes > 1024 * 1024 ? (bytes / 1024 / 1024).toFixed(1).replace(".", ",") + " MB" : Math.round(bytes / 1024) + " KB";
+}
+
+function nieuweNaam(naam) {
+  const basis = naam.replace(/\.[^.]+$/, "").toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "foto";
+  return basis + ".jpg";
+}
+
+async function verklein(bestand) {
+  const beeld = await createImageBitmap(bestand, { imageOrientation: "from-image" });
+  const schaal = Math.min(1, MAX / Math.max(beeld.width, beeld.height));
+  const b = Math.round(beeld.width * schaal), h = Math.round(beeld.height * schaal);
+  const doek = document.createElement("canvas");
+  doek.width = b; doek.height = h;
+  const ctx = doek.getContext("2d");
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, b, h);
+  ctx.drawImage(beeld, 0, 0, b, h);
+  beeld.close && beeld.close();
+  const blob = await new Promise(klaar => doek.toBlob(klaar, "image/jpeg", KWALITEIT));
+  return { blob, b, h };
+}
+
+document.getElementById("invoer").addEventListener("change", async e => {
+  const bestanden = [...e.target.files];
+  if (!bestanden.length) return;
+  melding.textContent = "Bezig met verkleinen…";
+  let gelukt = 0;
+  for (const bestand of bestanden) {
+    const li = document.createElement("li");
+    try {
+      const { blob, b, h } = await verklein(bestand);
+      const naam = nieuweNaam(bestand.name);
+      const url = URL.createObjectURL(blob);
+      const img = document.createElement("img");
+      img.src = url; img.alt = "";
+      const titel = document.createElement("span");
+      titel.className = "naam"; titel.textContent = naam;
+      const maat = document.createElement("span");
+      maat.className = "maat"; maat.textContent = kb(bestand.size) + " → " + kb(blob.size) + " · " + b + " × " + h;
+      const acties = document.createElement("div");
+      acties.className = "acties";
+      const bewaar = document.createElement("a");
+      bewaar.href = url; bewaar.download = naam; bewaar.textContent = "Bewaar";
+      acties.append(bewaar);
+      const alsBestand = new File([blob], naam, { type: "image/jpeg" });
+      if (navigator.canShare && navigator.canShare({ files: [alsBestand] })) {
+        const deel = document.createElement("button");
+        deel.type = "button"; deel.textContent = "Bewaar in Foto's";
+        deel.addEventListener("click", () => navigator.share({ files: [alsBestand] }).catch(() => {}));
+        acties.append(deel);
+      }
+      li.append(img, titel, maat, acties);
+      gelukt++;
+    } catch (fout) {
+      li.innerHTML = '<span class="naam"></span><span class="fout">Deze foto kon niet worden geopend. Probeer een jpg- of png-bestand.</span>';
+      li.querySelector(".naam").textContent = bestand.name;
+    }
+    lijst.prepend(li);
+  }
+  melding.textContent = gelukt === bestanden.length
+    ? (gelukt === 1 ? "Klaar: 1 foto verkleind." : "Klaar: " + gelukt + " foto's verkleind.")
+    : gelukt + " van de " + bestanden.length + " foto's verkleind.";
+  e.target.value = "";
+});
+</script>
+</body>
+</html>

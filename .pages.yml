@@ -48,7 +48,7 @@ content:
     fields:
       - name: fotos
         label: Foto's
-        description: "Deze foto's staan in de galerij bij Inspiratie, in deze volgorde. Sleep om te verplaatsen. Liggende foto's van 1600 × 1200 pixels werken het best."
+        description: "Deze foto's staan in de galerij bij Inspiratie, in deze volgorde. Sleep om te verplaatsen. Liggende foto's van 1600 × 1200 pixels werken het best. Foutmelding 413 bij uploaden? Dan is de foto te groot: verklein hem eerst op bos-goed.nl/verklein."
         type: object
         list:
           collapsible:
