@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bosgoed – houtwerk uit de lasersnijder</title>
+<title>Bosgoed – unieke houten producten</title>
 <meta name="description" content="Bosgoed uit Zeerijp maakt naamhangers, gegraveerde planken en cadeaus met de lasersnijder. Bekijk wat er kan.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -176,7 +176,7 @@
 <header class="wrap kop">
   <a class="merk" href="#top" data-naam>Bosgoed</a>
   <nav aria-label="Hoofdmenu">
-    <a href="#werk">Werk</a>
+    <a href="#werk">Producten</a>
     <a href="#inspiratie">Inspiratie</a>
     <a href="#zo-werkt-het">Zo werkt het</a>
     <a href="#over">Over mij</a>
@@ -188,10 +188,10 @@
 <main id="top">
   <div class="wrap hero">
     <div>
-      <h1>Hout met een naam, een tekst of een eigen idee</h1>
+      <h1>Unieke houten producten, gemaakt voor jou</h1>
       <p>Ik ben Nienke en ik maak in Zeerijp gegraveerde planken, dienbladen en cadeaus van hout. Elk stuk is uniek en maak ik voor iemand: met jullie naam, een datum of een tekst die je zelf bedenkt.</p>
       <div class="knoppen">
-        <a class="knop" href="#werk">Bekijk het werk</a>
+        <a class="knop" href="#werk">Bekijk de producten</a>
         <a class="knop stil" href="#contact">Stuur een bericht</a>
       </div>
     </div>
@@ -215,7 +215,7 @@
 
   <section id="werk">
     <div class="wrap">
-      <h2>Werk</h2>
+      <h2>Producten</h2>
       <p class="intro">Een greep uit wat ik gemaakt heb. Alles kan ook met een andere naam, tekst of maat. Klik op een werkstuk voor meer uitleg.</p>
       <div class="filter" id="filter" role="group" aria-label="Filter op soort werk"></div>
       <ul class="werk" id="werklijst"></ul>
@@ -259,7 +259,7 @@
 
   <section id="mogelijkheden">
     <div class="wrap">
-      <h2>Wat kan er</h2>
+      <h2>Mogelijkheden</h2>
       <p class="intro">De laser snijdt en graveert heel precies. Daardoor kan bijna elke naam, tekst of tekening op of uit het hout.</p>
       <div class="kan">
         <div>
@@ -683,7 +683,7 @@ async function start() {
   SITE.whatsappTekst = SITE.whatsapp || "";
   SITE.whatsapp = whatsappNummer(SITE.whatsapp);
   document.querySelectorAll("[data-naam]").forEach(el => el.textContent = SITE.naam);
-  document.title = SITE.naam + " – houtwerk uit de lasersnijder";
+  document.title = SITE.naam + " – unieke houten producten";
   document.getElementById("voet").textContent = "© " + new Date().getFullYear() + " " + SITE.naam + ", " + SITE.plaats
     + (SITE.kvk ? " · KVK " + String(SITE.kvk).trim() : "");
   toonFilter();
