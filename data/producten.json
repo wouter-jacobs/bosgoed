@@ -3,7 +3,9 @@
     {
       "titel": "Gegraveerde plank",
       "soort": [
-        "Wonen"
+        "Wonen",
+        "Cadeaus",
+        "Kerst"
       ],
       "prijs": "vanaf € 15,-",
       "tekst": "Plank met jullie naam, een datum of een eigen tekst. Ook met een logo, bijvoorbeeld voor een dorpshuis of vereniging."
@@ -11,7 +13,8 @@
     {
       "titel": "Dienblad",
       "soort": [
-        "Wonen"
+        "Wonen",
+        "Cadeaus"
       ],
       "prijs": "vanaf € 7,50",
       "tekst": "Houten dienblad met een naam, tekst of tekening erin gegraveerd. Kan ook als cadeaupakket worden geleverd met theeglas, mok of iets lekkers."
@@ -53,7 +56,8 @@
       "titel": "Naambord voor de voordeur",
       "soort": [
         "Wonen",
-        "Cadeaus"
+        "Cadeaus",
+        "Geboorte"
       ],
       "prijs": "vanaf € 20,-",
       "tekst": "Bord met jullie naam voor bij de voordeur. Elke naam en elk lettertype is mogelijk."
