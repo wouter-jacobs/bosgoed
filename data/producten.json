@@ -87,6 +87,16 @@
       ],
       "prijs": "vanaf € 20,-",
       "tekst": "Familieopstelling in standaard"
+    },
+    {
+      "titel": "Houten kaarten",
+      "soort": [
+        "Feest",
+        "Cadeaus",
+        "Geboorte"
+      ],
+      "prijs": "vanaf €2,-",
+      "tekst": "Houten kaarten met verschillende afbeeldingen of teksten verkrijgbaar."
     }
   ]
 }
