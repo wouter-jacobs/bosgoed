@@ -733,8 +733,10 @@ function bedrijfsgegevens() {
   const fotoUrl = pad => new URL(encodeURI(String(pad).replace(/^\//, "")), SITE_URL).href;
   const producten = WERK.map(p => {
     const naam = p.titel.toLowerCase();
-    const foto = GALERIJ.find(g => String(g.onderschrift || "").toLowerCase().includes(naam))
-      || GALERIJ.find(g => naam.includes(String(g.onderschrift || "").toLowerCase().trim() || "\u0000"));
+    const bij = g => String(g.onderschrift || "").toLowerCase();
+    const stukjes = naam.split(/\s+/).filter(w => w.length >= 5).map(w => w.slice(0, 7));
+    const foto = GALERIJ.find(g => bij(g).includes(naam))
+      || GALERIJ.find(g => stukjes.some(s => bij(g).includes(s)));
     const item = {
       name: p.titel,
       description: String(p.tekst || "").trim() || p.titel + " van hout, op maat gemaakt met de laser.",
@@ -743,7 +745,7 @@ function bedrijfsgegevens() {
     const prijs = vanafPrijs(p.prijs);
     if (prijs === null) return Object.assign({ "@type": "Service", provider: { "@id": id } }, item);
     return Object.assign({ "@type": "Product", material: "Hout", brand: { "@type": "Brand", name: SITE.naam } }, item,
-      foto ? { image: fotoUrl(foto.foto) } : {},
+      { image: foto ? fotoUrl(foto.foto) : SITE_URL + "beeld/delen.jpg" },
       { offers: {
           "@type": "Offer",
           price: prijs,
