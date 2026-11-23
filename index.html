@@ -730,29 +730,35 @@ function bedrijfsgegevens() {
   const plaatsen = [SITE.plaats, "Loppersum", "Westeremden", "Eemsdelta", "Groningen"];
   const bezorging = ["http://purl.org/goodrelations/v1#DeliveryModePickUp", "http://purl.org/goodrelations/v1#DeliveryModeMail"];
 
+  const fotoUrl = pad => new URL(encodeURI(String(pad).replace(/^\//, "")), SITE_URL).href;
   const producten = WERK.map(p => {
-    const aanbod = {
-      "@type": "Offer",
-      availability: "https://schema.org/PreOrder",
-      availableDeliveryMethod: bezorging,
-      itemOffered: {
-        "@type": "Product",
-        name: p.titel,
-        description: String(p.tekst || "").trim() || p.titel + " van hout, op maat gemaakt met de laser.",
-        category: (p.soort || []).join(", "),
-        material: "Hout",
-        brand: { "@id": id }
-      }
+    const naam = p.titel.toLowerCase();
+    const foto = GALERIJ.find(g => String(g.onderschrift || "").toLowerCase().includes(naam))
+      || GALERIJ.find(g => naam.includes(String(g.onderschrift || "").toLowerCase().trim() || "\u0000"));
+    const item = {
+      name: p.titel,
+      description: String(p.tekst || "").trim() || p.titel + " van hout, op maat gemaakt met de laser.",
+      category: (p.soort || []).join(", ")
     };
     const prijs = vanafPrijs(p.prijs);
-    if (prijs !== null) aanbod.priceSpecification = { "@type": "PriceSpecification", minPrice: prijs, priceCurrency: "EUR" };
-    return aanbod;
+    if (prijs === null) return Object.assign({ "@type": "Service", provider: { "@id": id } }, item);
+    return Object.assign({ "@type": "Product", material: "Hout", brand: { "@type": "Brand", name: SITE.naam } }, item,
+      foto ? { image: fotoUrl(foto.foto) } : {},
+      { offers: {
+          "@type": "Offer",
+          price: prijs,
+          priceCurrency: "EUR",
+          priceSpecification: { "@type": "PriceSpecification", minPrice: prijs, priceCurrency: "EUR" },
+          availability: "https://schema.org/PreOrder",
+          availableDeliveryMethod: bezorging,
+          seller: { "@id": id }
+      } });
   });
-  const prijzen = producten.map(o => o.priceSpecification && o.priceSpecification.minPrice).filter(x => x != null);
+  const prijzen = producten.map(p => p.offers && p.offers.price).filter(x => x != null);
 
   const fotos = GALERIJ.map(g => ({
     "@type": "ImageObject",
-    contentUrl: new URL(encodeURI(g.foto.replace(/^\//, "")), SITE_URL).href,
+    contentUrl: fotoUrl(g.foto),
     caption: String(g.onderschrift || "").trim() || undefined
   }));
 
