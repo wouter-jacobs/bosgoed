@@ -111,4 +111,12 @@ content:
         label: Instagram-naam
         description: "Zonder @"
         type: string
+      - name: zakelijk_kop
+        label: Zakelijk blok – kop
+        description: "Het houtkleurige blok onder de producten"
+        type: string
+      - name: zakelijk_tekst
+        label: Zakelijk blok – tekst
+        description: "Leeg laten = blok niet tonen"
+        type: text
 

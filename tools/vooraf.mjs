@@ -95,11 +95,12 @@ const ld = ldBlok.textContent.replace(/</g, "\\u003c");
 
 // --- invullen in index.html ---
 function vul(id, inhoud) {
-  const open = new RegExp(`(<([a-z]+)[^>]*\\bid="${id}"[^>]*>)`);
+  const open = new RegExp(`(<([a-z][a-z0-9]*)\\b[^>]*\\bid="${id}"[^>]*>)`);
   const m = html.match(open);
   if (!m) throw new Error("Element niet gevonden: #" + id);
   const start = m.index + m[0].length;
   const einde = html.indexOf(`</${m[2]}>`, start);
+  if (einde < 0) throw new Error("Geen sluittag voor #" + id);
   html = html.slice(0, start) + inhoud + html.slice(einde);
 }
 vul("filter", filterHtml);
@@ -109,6 +110,12 @@ vul("over-tekst", overTekst);
 vul("contactknoppen", knoppen.join(""));
 vul("contactlijst", regels.join(""));
 vul("voet", voet);
+
+const zakelijkTekst = String(s.zakelijk_tekst || "").trim();
+vul("zakelijk-kop", esc(String(s.zakelijk_kop || "Voor je bedrijf, club of vereniging").trim()));
+vul("zakelijk-inhoud", esc(zakelijkTekst));
+html = html.replace(/<div class="zakelijk" id="zakelijk"( hidden)?>/, `<div class="zakelijk" id="zakelijk"${zakelijkTekst ? "" : " hidden"}>`);
+html = html.replace(/(<a class="knop" id="zakelijk-offerte" href=")[^"]*(")/, (_, a, b) => a + esc(omgeving.zakelijkLink(s)) + b);
 html = html.replace(/(<[a-z]+[^>]*\bdata-naam\b[^>]*>)[^<]*(<\/)/g, (_, a, b) => a + esc(s.naam) + b);
 html = html.replace(/<section id="inspiratie"( hidden)?>/, `<section id="inspiratie"${GALERIJ.length ? "" : " hidden"}>`);
 html = html.replace(/<title>[^<]*<\/title>/, `<title>${esc(titel)}</title>`);
