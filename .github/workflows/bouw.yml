@@ -1,0 +1,59 @@
+# Na elke wijziging (ook vanuit /beheer):
+# - lichte versies van de foto's maken (tools/fotos.py)
+# - de inhoud alvast in index.html zetten voor zoekmachines (tools/vooraf.mjs)
+# Aan het uiterlijk van de site verandert niets.
+name: Bouw
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "fotos/**"
+      - "beeld/**"
+      - "index.html"
+      - "tools/**"
+      - ".github/workflows/bouw.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bouw
+  cancel-in-progress: false
+
+jobs:
+  bouw:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Foto's lichter maken
+        run: |
+          pip install --quiet pillow
+          python tools/fotos.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Inhoud vooraf invullen
+        run: node tools/vooraf.mjs
+
+      - name: Opslaan als er iets veranderd is
+        run: |
+          git add -A klein fotos beeld index.html
+          if git diff --cached --quiet; then
+            echo "Niets veranderd."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Automatisch bijgewerkt: foto's en inhoud voor zoekmachines"
+          git pull --rebase origin main
+          git push
