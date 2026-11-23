@@ -3,8 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bosgoed – unieke houten producten</title>
-<meta name="description" content="Bosgoed uit Zeerijp maakt naamhangers, gegraveerde planken en cadeaus met de lasersnijder. Bekijk wat er kan.">
+<title>Bosgoed Zeerijp – gegraveerde planken, naamborden en houten cadeaus</title>
+<meta name="description" content="Bosgoed uit Zeerijp (Groningen) maakt gegraveerde planken, naamborden, geboortekisten en houten cadeaus op maat met de lasersnijder. Ophalen in Zeerijp of verzenden.">
+<link rel="canonical" href="https://bos-goed.nl/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:site_name" content="Bosgoed">
+<meta property="og:url" content="https://bos-goed.nl/">
+<meta property="og:title" content="Bosgoed Zeerijp – houten producten op maat">
+<meta property="og:description" content="Gegraveerde planken, naamborden, geboortekisten en cadeaus van hout, persoonlijk gemaakt in Zeerijp.">
+<meta property="og:image" content="https://bos-goed.nl/beeld/delen.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Gegraveerde plank, houten naambord en geboortekist van Bosgoed">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="64x64" href="/beeld/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png">
@@ -689,6 +701,31 @@ function whatsappNummer(invoer) {
   return n;
 }
 
+/* Bedrijfsgegevens voor Google (schema.org). Komt uit data/site.json,
+   dus een nieuw telefoonnummer of e-mailadres pas je alleen daar aan. */
+function bedrijfsgegevens() {
+  const info = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://bos-goed.nl/#bedrijf",
+    name: SITE.naam,
+    url: "https://bos-goed.nl/",
+    logo: "https://bos-goed.nl/beeld/logo.png",
+    image: "https://bos-goed.nl/beeld/delen.jpg",
+    description: "Gegraveerde planken, naamborden, geboortekisten en houten cadeaus op maat, gemaakt met de lasersnijder in " + SITE.plaats + ".",
+    address: { "@type": "PostalAddress", addressLocality: SITE.plaats, addressRegion: "Groningen", addressCountry: "NL" },
+    areaServed: [SITE.plaats, "Loppersum", "Eemsdelta", "Groningen"].map(n => ({ "@type": "Place", name: n })),
+    founder: { "@type": "Person", name: "Nienke" }
+  };
+  if (SITE.whatsapp) info.telephone = "+" + SITE.whatsapp;
+  if (SITE.email) info.email = SITE.email;
+  if (SITE.instagram) info.sameAs = ["https://www.instagram.com/" + SITE.instagram + "/"];
+  const blok = document.createElement("script");
+  blok.type = "application/ld+json";
+  blok.textContent = JSON.stringify(info);
+  document.head.appendChild(blok);
+}
+
 async function laad(pad) {
   const antwoord = await fetch(pad, { cache: "no-cache" });
   if (!antwoord.ok) throw new Error(pad);
@@ -707,7 +744,8 @@ async function start() {
   SITE.whatsappTekst = SITE.whatsapp || "";
   SITE.whatsapp = whatsappNummer(SITE.whatsapp);
   document.querySelectorAll("[data-naam]").forEach(el => el.textContent = SITE.naam);
-  document.title = SITE.naam + " – unieke houten producten";
+  document.title = SITE.naam + " " + SITE.plaats + " – gegraveerde planken, naamborden en houten cadeaus";
+  bedrijfsgegevens();
   document.getElementById("voet").textContent = "© " + new Date().getFullYear() + " " + SITE.naam + ", " + SITE.plaats
     + (SITE.kvk ? " · KVK " + String(SITE.kvk).trim() : "");
   toonFilter();

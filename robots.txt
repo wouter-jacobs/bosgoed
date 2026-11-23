@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /beheer/
+Disallow: /verklein/
+
+Sitemap: https://bos-goed.nl/sitemap.xml
