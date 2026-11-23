@@ -701,29 +701,126 @@ function whatsappNummer(invoer) {
   return n;
 }
 
-/* Bedrijfsgegevens voor Google (schema.org). Komt uit data/site.json,
-   dus een nieuw telefoonnummer of e-mailadres pas je alleen daar aan. */
+/* Bedrijfsgegevens voor Google (schema.org).
+   Wordt opgebouwd uit data/site.json, data/producten.json en data/galerij.json.
+   Een nieuw telefoonnummer, product of foto komt hier dus vanzelf in mee.
+   Bekijken: https://search.google.com/test/rich-results?url=https://bos-goed.nl/ */
+const SITE_URL = "https://bos-goed.nl/";
+const DIENSTEN = [
+  ["Lasergraveren in hout", "Namen, datums, teksten, tekeningen en logo's met de laser in hout graveren."],
+  ["Lasersnijden van hout", "Vormen, letters, hangers en figuren met de laser strak uit hout snijden, ook met fijne details."],
+  ["Plank graveren", "Borrelplank, snijplank, broodplank of ontbijtplank laten graveren met naam of tekst."],
+  ["Naambord laten maken", "Houten naambord voor de voordeur, een bedrijf, winkel, dorpshuis of vereniging."],
+  ["Logo graveren", "Logo van een bedrijf, dorpshuis, vereniging of sportclub in hout gegraveerd."],
+  ["Skyline graveren", "Skyline van Zeerijp, Loppersum, Westeremden of Eemsdelta op een plank of dienblad."],
+  ["Gepersonaliseerde cadeaus", "Houten cadeaus met naam voor geboorte, verjaardag, bruiloft, Sinterklaas, kerst of als bedankje."],
+  ["Kraamcadeau met naam", "Geboortekist, ontbijtplankje, vlaggenlijn en naambord met naam en geboortedatum."]
+];
+const ONDERWERPEN = ["Lasergraveren", "Lasersnijden", "Laseren", "Hout graveren", "Hout laseren",
+  "Graveren met naam", "Borrelplank graveren", "Snijplank graveren", "Houten cadeaus",
+  "Gepersonaliseerde cadeaus", "Kraamcadeaus", "Naamborden", "Houten kerstversiering", "Sinterklaascadeaus"];
+
+function vanafPrijs(tekst) {
+  const m = String(tekst || "").match(/(\d+)(?:[,.](\d{1,2}))?/);
+  return m ? Number(m[1] + "." + (m[2] || "0").padEnd(2, "0")) : null;
+}
+
 function bedrijfsgegevens() {
-  const info = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "@id": "https://bos-goed.nl/#bedrijf",
+  const id = SITE_URL + "#bedrijf";
+  const plaatsen = [SITE.plaats, "Loppersum", "Westeremden", "Eemsdelta", "Groningen"];
+  const bezorging = ["http://purl.org/goodrelations/v1#DeliveryModePickUp", "http://purl.org/goodrelations/v1#DeliveryModeMail"];
+
+  const producten = WERK.map(p => {
+    const aanbod = {
+      "@type": "Offer",
+      availability: "https://schema.org/PreOrder",
+      availableDeliveryMethod: bezorging,
+      itemOffered: {
+        "@type": "Product",
+        name: p.titel,
+        description: String(p.tekst || "").trim() || p.titel + " van hout, op maat gemaakt met de laser.",
+        category: (p.soort || []).join(", "),
+        material: "Hout",
+        brand: { "@id": id }
+      }
+    };
+    const prijs = vanafPrijs(p.prijs);
+    if (prijs !== null) aanbod.priceSpecification = { "@type": "PriceSpecification", minPrice: prijs, priceCurrency: "EUR" };
+    return aanbod;
+  });
+  const prijzen = producten.map(o => o.priceSpecification && o.priceSpecification.minPrice).filter(x => x != null);
+
+  const fotos = GALERIJ.map(g => ({
+    "@type": "ImageObject",
+    contentUrl: new URL(encodeURI(g.foto.replace(/^\//, "")), SITE_URL).href,
+    caption: String(g.onderschrift || "").trim() || undefined
+  }));
+
+  const kraampje = [...document.querySelectorAll('#kraampje li')].map(li => li.textContent.trim()).filter(Boolean);
+
+  const bedrijf = {
+    "@type": ["LocalBusiness", "Store"],
+    "@id": id,
     name: SITE.naam,
-    url: "https://bos-goed.nl/",
-    logo: "https://bos-goed.nl/beeld/logo.png",
-    image: "https://bos-goed.nl/beeld/delen.jpg",
-    description: "Gegraveerde planken, naamborden, geboortekisten en houten cadeaus op maat, gemaakt met de lasersnijder in " + SITE.plaats + ".",
+    alternateName: ["Bos goed", SITE.instagram].filter(Boolean),
+    slogan: "Unieke houten producten, gemaakt voor jou",
+    description: SITE.naam + " uit " + SITE.plaats + " (Groningen) maakt gegraveerde planken, dienblaadjes, naamborden, geboortekisten, vlaggenlijnen, sleutelhangers, kersthangers en andere houten cadeaus op maat. Alles wordt met de lasersnijder gegraveerd of gesneden, met jouw naam, datum, tekst, tekening of logo. Geen webshop: je stemt het samen af via WhatsApp of Instagram. Ophalen in " + SITE.plaats + " of verzenden.",
+    url: SITE_URL,
+    logo: SITE_URL + "beeld/logo.png",
+    image: [SITE_URL + "beeld/delen.jpg"].concat(fotos.slice(0, 10).map(f => f.contentUrl)),
     address: { "@type": "PostalAddress", addressLocality: SITE.plaats, addressRegion: "Groningen", addressCountry: "NL" },
-    areaServed: [SITE.plaats, "Loppersum", "Eemsdelta", "Groningen"].map(n => ({ "@type": "Place", name: n })),
-    founder: { "@type": "Person", name: "Nienke" }
+    areaServed: plaatsen.map(n => ({ "@type": "Place", name: n })).concat([{ "@type": "Country", name: "Nederland" }]),
+    knowsAbout: ONDERWERPEN,
+    founder: { "@type": "Person", name: "Nienke", jobTitle: "Maker en eigenaar" },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Houten producten en lasergraveren op maat",
+      itemListElement: [
+        { "@type": "OfferCatalog", name: "Producten", itemListElement: producten },
+        { "@type": "OfferCatalog", name: "Diensten", itemListElement: DIENSTEN.map(([naam, uitleg]) => ({
+            "@type": "Offer",
+            itemOffered: { "@type": "Service", name: naam, description: uitleg, provider: { "@id": id }, areaServed: plaatsen }
+          })) }
+      ]
+    },
+    makesOffer: { "@type": "Offer", description: "Alles op aanvraag en op maat: je krijgt eerst een voorstel met tekst, maat en prijs.", availableDeliveryMethod: bezorging },
+    department: {
+      "@type": "Store",
+      name: "Kraampje " + SITE.naam,
+      description: "Kraampje langs de weg in " + SITE.plaats + ", van de lente tot de herfst, met " + kraampje.join(", ").toLowerCase() + ".",
+      address: { "@type": "PostalAddress", addressLocality: SITE.plaats, addressRegion: "Groningen", addressCountry: "NL" }
+    },
+    sameAs: []
   };
-  if (SITE.whatsapp) info.telephone = "+" + SITE.whatsapp;
-  if (SITE.email) info.email = SITE.email;
-  if (SITE.instagram) info.sameAs = ["https://www.instagram.com/" + SITE.instagram + "/"];
-  const blok = document.createElement("script");
-  blok.type = "application/ld+json";
-  blok.textContent = JSON.stringify(info);
-  document.head.appendChild(blok);
+  if (prijzen.length) bedrijf.priceRange = "vanaf €" + Math.min(...prijzen).toFixed(2).replace(".", ",");
+  if (SITE.kvk) bedrijf.identifier = { "@type": "PropertyValue", propertyID: "KVK", value: String(SITE.kvk).trim() };
+  if (SITE.whatsapp) bedrijf.telephone = "+" + SITE.whatsapp;
+  if (SITE.email) bedrijf.email = SITE.email;
+  if (SITE.instagram) bedrijf.sameAs.push("https://www.instagram.com/" + SITE.instagram + "/");
+  const contact = { "@type": "ContactPoint", contactType: "klantenservice", availableLanguage: "nl" };
+  if (bedrijf.telephone) contact.telephone = bedrijf.telephone;
+  if (bedrijf.email) contact.email = bedrijf.email;
+  bedrijf.contactPoint = contact;
+
+  const website = {
+    "@type": "WebSite", "@id": SITE_URL + "#website", url: SITE_URL, name: SITE.naam,
+    inLanguage: "nl-NL", publisher: { "@id": id }
+  };
+  const pagina = {
+    "@type": "WebPage", "@id": SITE_URL + "#pagina", url: SITE_URL, name: document.title,
+    inLanguage: "nl-NL", isPartOf: { "@id": SITE_URL + "#website" }, about: { "@id": id },
+    primaryImageOfPage: SITE_URL + "beeld/delen.jpg"
+  };
+  if (fotos.length) pagina.image = fotos;
+
+  let blok = document.getElementById("bedrijfsgegevens");
+  if (!blok) {
+    blok = document.createElement("script");
+    blok.type = "application/ld+json";
+    blok.id = "bedrijfsgegevens";
+    document.head.appendChild(blok);
+  }
+  blok.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": [bedrijf, website, pagina] });
 }
 
 async function laad(pad) {
@@ -745,7 +842,6 @@ async function start() {
   SITE.whatsapp = whatsappNummer(SITE.whatsapp);
   document.querySelectorAll("[data-naam]").forEach(el => el.textContent = SITE.naam);
   document.title = SITE.naam + " " + SITE.plaats + " – gegraveerde planken, naamborden en houten cadeaus";
-  bedrijfsgegevens();
   document.getElementById("voet").textContent = "© " + new Date().getFullYear() + " " + SITE.naam + ", " + SITE.plaats
     + (SITE.kvk ? " · KVK " + String(SITE.kvk).trim() : "");
   toonFilter();
@@ -759,6 +855,7 @@ async function start() {
     GALERIJ = [];
   }
   toonGalerij();
+  bedrijfsgegevens();
   if (location.hash) {
     const doel = document.getElementById(location.hash.slice(1));
     if (doel) doel.scrollIntoView();
