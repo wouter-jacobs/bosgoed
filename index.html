@@ -24,6 +24,8 @@
 <meta name="theme-color" content="#edf0e4">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/josefinsans/v34/Qw3aZQNVED7rKGKxtqIqX5EUDXx4.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/karla/v33/qkB9XvYC6trAT55ZBi1ueQVIjQTD-JrIH2G7nytkHRyQ8p4wUje6bg.woff2">
 <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -639,7 +641,10 @@ function toonGalerij() {
       img.dataset.origineel = "1";
       img.src = fotoPad(item.foto);
     };
-    img.onload = werkPijlenBij;
+    img.onload = () => {
+      if (img.naturalWidth) item.verhouding = img.naturalWidth + " / " + img.naturalHeight;
+      werkPijlenBij();
+    };
     kader.append(img);
     knop.append(kader);
     if (item.onderschrift) {
@@ -673,6 +678,9 @@ function openLichtbak(i) {
   huidig = (i + GALERIJ.length) % GALERIJ.length;
   const item = GALERIJ[huidig];
   const img = document.getElementById("lichtbak-foto");
+  /* Zelfde verhouding als het kleine plaatje, zodat het venster niet verspringt
+     als de grote foto binnenkomt. */
+  img.style.aspectRatio = item.verhouding || "";
   img.src = fotoPad(item.foto);
   img.alt = item.onderschrift || "Werk van " + (SITE.naam || "Bosgoed");
   document.getElementById("lichtbak-tekst").textContent = item.onderschrift || "";
