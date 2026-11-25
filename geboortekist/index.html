@@ -220,7 +220,7 @@
     .pp-fotos { order: -1; }
   }
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Product","@id":"https://bos-goed.nl/geboortekist/#product","name":"Geboortekist","description":"Houten kist met de naam en geboortedatum, om de eerste herinneringen in te bewaren. Kan ook met de afbeelingen van een geboortekaartje.","url":"https://bos-goed.nl/geboortekist/","image":["https://bos-goed.nl/fotos/geboortekist-2.jpg","https://bos-goed.nl/fotos/WhatsApp%20Image%202026-11-18%20at%2020.26.47%20(13).jpeg"],"brand":{"@type":"Brand","name":"Bosgoed"},"material":"Hout","category":"Geboorte","offers":{"@type":"Offer","price":30,"priceCurrency":"EUR","availability":"https://schema.org/PreOrder","priceSpecification":{"@type":"PriceSpecification","minPrice":30,"priceCurrency":"EUR"},"seller":{"@id":"https://bos-goed.nl/#bedrijf"}}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Bosgoed","item":"https://bos-goed.nl/"},{"@type":"ListItem","position":2,"name":"Producten","item":"https://bos-goed.nl/#werk"},{"@type":"ListItem","position":3,"name":"Geboortekist","item":"https://bos-goed.nl/geboortekist/"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Product","@id":"https://bos-goed.nl/geboortekist/#product","name":"Geboortekist","description":"Houten kist met de naam en geboortedatum, om de eerste herinneringen in te bewaren. Kan ook met de afbeelingen van een geboortekaartje.","url":"https://bos-goed.nl/geboortekist/","image":["https://bos-goed.nl/fotos/geboortekist-2.jpg"],"brand":{"@type":"Brand","name":"Bosgoed"},"material":"Hout","category":"Geboorte","offers":{"@type":"Offer","price":30,"priceCurrency":"EUR","availability":"https://schema.org/PreOrder","priceSpecification":{"@type":"PriceSpecification","minPrice":30,"priceCurrency":"EUR"},"seller":{"@id":"https://bos-goed.nl/#bedrijf"}}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Bosgoed","item":"https://bos-goed.nl/"},{"@type":"ListItem","position":2,"name":"Producten","item":"https://bos-goed.nl/#werk"},{"@type":"ListItem","position":3,"name":"Geboortekist","item":"https://bos-goed.nl/geboortekist/"}]}]}</script>
 </head>
 <body>
 
@@ -251,18 +251,7 @@
     </div>
   </div>
 
-  <section id="fotos">
-    <div class="wrap">
-      <h2>Foto's</h2>
-      <div class="galerij">
-        <ul class="spoor" id="spoor" aria-label="Foto's van Geboortekist"><li><button type="button" data-i="1"><span class="foto"><img src="/klein/WhatsApp Image 2026-11-18 at 20.26.47 (13).jpeg.webp" alt="Houten speelgoed met naam en of geboortedatum" loading="eager" onerror="this.onerror=null;this.src='/fotos/WhatsApp Image 2026-11-18 at 20.26.47 (13).jpeg'"></span><span class="onderschrift">Houten speelgoed met naam en of geboortedatum</span></button></li></ul>
-        <div class="pijlen">
-          <button class="pijl" type="button" id="terug" aria-label="Vorige foto's">&#8592;</button>
-          <button class="pijl" type="button" id="verder" aria-label="Volgende foto's">&#8594;</button>
-        </div>
-      </div>
-    </div>
-  </section>
+  
 
   <section id="zo-werkt-het">
     <div class="wrap">
@@ -301,15 +290,15 @@
   <img id="lichtbak-foto" alt="">
   <div class="balk">
     <p id="lichtbak-tekst"></p>
-    <button class="pijl" type="button" id="lichtbak-terug" aria-label="Vorige foto">&#8592;</button>
-    <button class="pijl" type="button" id="lichtbak-verder" aria-label="Volgende foto">&#8594;</button>
+    <button class="pijl" type="button" id="lichtbak-terug" aria-label="Vorige foto" hidden>&#8592;</button>
+    <button class="pijl" type="button" id="lichtbak-verder" aria-label="Volgende foto" hidden>&#8594;</button>
     <a class="vraag" id="lichtbak-vraag" href="https://wa.me/31633053246?text=Hoi%20Nienke%2C%20ik%20heb%20een%20vraag%20over%3A%20Geboortekist.%20">Vraag hiernaar</a>
     <button class="sluit" type="button" id="lichtbak-sluit">Sluiten</button>
   </div>
 </dialog>
 <script>
 (function () {
-  var FOTOS = [{"src":"/fotos/geboortekist-2.jpg","tekst":"Geboortekist"},{"src":"/fotos/WhatsApp Image 2026-11-18 at 20.26.47 (13).jpeg","tekst":"Houten speelgoed met naam en of geboortedatum"}];
+  var FOTOS = [{"src":"/fotos/geboortekist-2.jpg","tekst":"Geboortekist"}];
   var bak = document.getElementById("lichtbak"), img = document.getElementById("lichtbak-foto"), huidig = 0;
   function open(i) {
     huidig = (i + FOTOS.length) % FOTOS.length;
