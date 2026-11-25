@@ -40,6 +40,7 @@
   body { margin: 0; font-family: var(--tekst); font-size: 1.0625rem; line-height: 1.6; color: var(--bos); background: var(--grond); }
   a { color: inherit; }
   :focus-visible { outline: 3px solid var(--laser); outline-offset: 3px; }
+  dialog:focus, dialog:focus-visible { outline: none; }
   .wrap { width: min(1120px, 100% - 2.5rem); margin-inline: auto; }
 
   .kop { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-block: 1.5rem; flex-wrap: wrap; }
@@ -294,7 +295,7 @@
 <footer class="wrap">
   <span>© 2026 Bosgoed, Zeerijp · KVK 74460978</span>
 </footer>
-<dialog id="lichtbak" aria-label="Foto vergroot">
+<dialog id="lichtbak" aria-label="Foto vergroot" tabindex="-1">
   <img id="lichtbak-foto" alt="">
   <div class="balk">
     <p id="lichtbak-tekst"></p>
@@ -312,7 +313,7 @@
     huidig = (i + FOTOS.length) % FOTOS.length;
     img.src = FOTOS[huidig].src; img.alt = FOTOS[huidig].tekst;
     document.getElementById("lichtbak-tekst").textContent = FOTOS[huidig].tekst;
-    if (!bak.open) { if (bak.showModal) bak.showModal(); else bak.setAttribute("open", ""); }
+    if (!bak.open) { if (bak.showModal) bak.showModal(); else bak.setAttribute("open", ""); bak.focus({ preventScroll: true }); }
   }
   document.querySelectorAll("[data-i]").forEach(function (k) { k.addEventListener("click", function () { open(+k.dataset.i); }); });
   document.getElementById("lichtbak-terug").addEventListener("click", function () { open(huidig - 1); });

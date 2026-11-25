@@ -46,6 +46,7 @@
   body { margin: 0; font-family: var(--tekst); font-size: 1.0625rem; line-height: 1.6; color: var(--bos); background: var(--grond); }
   a { color: inherit; }
   :focus-visible { outline: 3px solid var(--laser); outline-offset: 3px; }
+  dialog:focus, dialog:focus-visible { outline: none; }
   .wrap { width: min(1120px, 100% - 2.5rem); margin-inline: auto; }
 
   .kop { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-block: 1.5rem; flex-wrap: wrap; }
@@ -414,7 +415,7 @@ Je komt mijn werk ook tegen in het dorp: in mijn kraampje langs de weg en in dor
   <span id="voet">© 2026 Bosgoed, Zeerijp · KVK 74460978</span>
 </footer>
 
-<dialog id="groot" aria-labelledby="groot-titel">
+<dialog id="groot" aria-labelledby="groot-titel" tabindex="-1">
   <span class="beeld" id="groot-beeld"></span>
   <div class="tekst">
     <h3 id="groot-titel"></h3>
@@ -429,7 +430,7 @@ Je komt mijn werk ook tegen in het dorp: in mijn kraampje langs de weg en in dor
   </div>
 </dialog>
 
-<dialog id="lichtbak" aria-label="Foto vergroot">
+<dialog id="lichtbak" aria-label="Foto vergroot" tabindex="-1">
   <img id="lichtbak-foto" alt="">
   <div class="balk">
     <p id="lichtbak-tekst"></p>
@@ -640,6 +641,7 @@ function openGroot(stuk) {
   else if (SITE.instagram) vraag.href = "https://www.instagram.com/" + SITE.instagram + "/";
   else vraag.href = "#contact";
   if (groot.showModal) groot.showModal(); else groot.setAttribute("open", "");
+  groot.focus({ preventScroll: true });
 }
 document.getElementById("groot-sluit").addEventListener("click", () => groot.close());
 groot.addEventListener("click", e => { if (e.target === groot) groot.close(); });
@@ -727,7 +729,7 @@ function openLichtbak(i) {
   const meer = GALERIJ.length > 1;
   document.getElementById("lichtbak-terug").hidden = !meer;
   document.getElementById("lichtbak-verder").hidden = !meer;
-  if (!lichtbak.open) { if (lichtbak.showModal) lichtbak.showModal(); else lichtbak.setAttribute("open", ""); }
+  if (!lichtbak.open) { if (lichtbak.showModal) lichtbak.showModal(); else lichtbak.setAttribute("open", ""); lichtbak.focus({ preventScroll: true }); }
 }
 document.getElementById("lichtbak-terug").addEventListener("click", () => openLichtbak(huidig - 1));
 document.getElementById("lichtbak-verder").addEventListener("click", () => openLichtbak(huidig + 1));

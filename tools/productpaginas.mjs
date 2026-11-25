@@ -105,7 +105,7 @@ function pagina(stuk, alle, basis) {
   </section>`
     : "";
   const lichtbak = fotos.length
-    ? `<dialog id="lichtbak" aria-label="Foto vergroot">
+    ? `<dialog id="lichtbak" aria-label="Foto vergroot" tabindex="-1">
   <img id="lichtbak-foto" alt="">
   <div class="balk">
     <p id="lichtbak-tekst"></p>
@@ -123,7 +123,7 @@ function pagina(stuk, alle, basis) {
     huidig = (i + FOTOS.length) % FOTOS.length;
     img.src = FOTOS[huidig].src; img.alt = FOTOS[huidig].tekst;
     document.getElementById("lichtbak-tekst").textContent = FOTOS[huidig].tekst;
-    if (!bak.open) { if (bak.showModal) bak.showModal(); else bak.setAttribute("open", ""); }
+    if (!bak.open) { if (bak.showModal) bak.showModal(); else bak.setAttribute("open", ""); bak.focus({ preventScroll: true }); }
   }
   document.querySelectorAll("[data-i]").forEach(function (k) { k.addEventListener("click", function () { open(+k.dataset.i); }); });
   document.getElementById("lichtbak-terug").addEventListener("click", function () { open(huidig - 1); });
