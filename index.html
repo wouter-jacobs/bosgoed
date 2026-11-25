@@ -163,6 +163,7 @@
   dialog .tekst { padding: 1.25rem 1.5rem 1.5rem; }
   dialog h3 { font-family: var(--display); font-weight: 400; font-size: 1.8rem; line-height: 1.1; margin: 0 0 .25rem; }
   dialog p { margin: .5rem 0 0; }
+  dialog .meer { display: inline-block; margin-top: .4rem; font-weight: 600; color: var(--schroei); }
   dialog .acties { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-top: 1.25rem; }
   dialog .vraag { font-weight: 600; padding: .55rem 1.2rem; color: var(--berken); background: var(--schroei); border-radius: 999px; text-decoration: none; }
   dialog .acties .sluit { margin-top: 0; color: var(--schroei); background: transparent; border: 2px solid var(--schroei); }
@@ -420,6 +421,7 @@ Je komt mijn werk ook tegen in het dorp: in mijn kraampje langs de weg en in dor
     <span class="mat" id="groot-mat"></span>
     <span class="prijs" id="groot-prijs" hidden></span>
     <p id="groot-tekst"></p>
+    <a class="meer" id="groot-meer" href="/" hidden></a>
     <div class="acties">
       <a class="vraag" id="groot-vraag" href="#contact">Vraag hiernaar</a>
       <button class="sluit" type="button" id="groot-sluit">Sluiten</button>
@@ -614,6 +616,12 @@ function toonFilter() {
   }
 }
 
+/* Adres van de losse productpagina (gemaakt door tools/productpaginas.mjs). */
+function slugVan(titel) {
+  return String(titel).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "product";
+}
+
 function openGroot(stuk) {
   vulBeeld(document.getElementById("groot-beeld"), stuk);
   document.getElementById("groot-titel").textContent = stuk.titel;
@@ -622,6 +630,10 @@ function openGroot(stuk) {
   const prijs = document.getElementById("groot-prijs");
   prijs.textContent = stuk.prijs || "";
   prijs.hidden = !stuk.prijs;
+  const meer = document.getElementById("groot-meer");
+  meer.href = "/" + slugVan(stuk.titel) + "/";
+  meer.textContent = "Meer over " + stuk.titel.charAt(0).toLowerCase() + stuk.titel.slice(1) + " →";
+  meer.hidden = false;
   const vraag = document.getElementById("groot-vraag");
   const bericht = "Hoi Nienke, ik heb een vraag over: " + stuk.titel;
   if (SITE.whatsapp) vraag.href = "https://wa.me/" + SITE.whatsapp + "?text=" + encodeURIComponent(bericht);

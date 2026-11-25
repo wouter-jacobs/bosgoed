@@ -39,6 +39,15 @@ content:
           - name: tekst
             label: Omschrijving
             type: text
+          - name: uitgebreid
+            label: Uitgebreide tekst voor de productpagina
+            description: "Optioneel. Staat alleen op de losse productpagina (bijv. bos-goed.nl/sleutelhangers). Leeg laten = de omschrijving hierboven wordt gebruikt."
+            type: text
+          - name: fotos
+            label: Extra foto's voor de productpagina
+            description: "Optioneel. Deze foto's komen alleen op de losse productpagina, niet in de galerij. Foto's uit de galerij met deze productnaam in het onderschrift komen er automatisch bij."
+            type: image
+            list: true
 
   - name: galerij
     label: Inspiratie (foto's)

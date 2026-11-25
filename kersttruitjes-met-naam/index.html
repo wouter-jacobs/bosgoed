@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kersttruitjes met naam laten maken – Bosgoed Zeerijp</title>
+<meta name="description" content="Hangers in de vorm van een kersttrui, met een eigen naam erin… Met de laser gemaakt in Zeerijp (Groningen). Vanaf € 5. Ophalen in Zeerijp of verzenden.">
+<link rel="canonical" href="https://bos-goed.nl/kersttruitjes-met-naam/">
+<meta property="og:type" content="product">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:site_name" content="Bosgoed">
+<meta property="og:url" content="https://bos-goed.nl/kersttruitjes-met-naam/">
+<meta property="og:title" content="Kersttruitjes met naam laten maken – Bosgoed Zeerijp">
+<meta property="og:description" content="Hangers in de vorm van een kersttrui, met een eigen naam erin… Met de laser gemaakt in Zeerijp (Groningen). Vanaf € 5. Ophalen in Zeerijp of verzenden.">
+<meta property="og:image" content="https://bos-goed.nl/fotos/kersttrui%201.jpg">
+<link rel="icon" type="image/png" sizes="64x64" href="/beeld/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#edf0e4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/josefinsans/v34/Qw3aZQNVED7rKGKxtqIqX5EUDXx4.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/karla/v33/qkB9XvYC6trAT55ZBi1ueQVIjQTD-JrIH2G7nytkHRyQ8p4wUje6bg.woff2">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Karla:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --grond: #edf0e4;      /* licht, groenig wit */
+    --blad: #b4c3a0;       /* het groen uit het logo */
+    --blad-diep: #8fa27c;
+    --band: #dbe4cb;       /* afwisselende achtergrond per hoofdstuk */
+    --bos: #2c3a2a;        /* tekst */
+    --berken: #e8cfa0;
+    --berken-licht: #f3e3c2;
+    --schroei: #4a2c17;    /* geschroeide snijrand */
+    --laser: #e5392f;
+    --display: "Josefin Sans", system-ui, sans-serif;
+    --tekst: "Karla", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: var(--tekst); font-size: 1.0625rem; line-height: 1.6; color: var(--bos); background: var(--grond); }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--laser); outline-offset: 3px; }
+  .wrap { width: min(1120px, 100% - 2.5rem); margin-inline: auto; }
+
+  .kop { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-block: 1.5rem; flex-wrap: wrap; }
+  .merk { display: block; line-height: 0; }
+  .merk img { height: 76px; width: auto; display: block; }
+  .kop nav { display: flex; gap: 1.5rem; }
+  .kop nav a { text-decoration: none; border-bottom: 2px solid transparent; padding-block: .2rem; }
+  .kop nav a:hover { border-color: var(--blad-diep); }
+
+  .hero { display: grid; grid-template-columns: 1.05fr .95fr; gap: 3rem; align-items: center; padding-block: 2.5rem 5rem; }
+  .hero h1 { font-family: var(--display); font-weight: 300; font-size: clamp(2.5rem, 6vw, 4.6rem); line-height: 1.05; letter-spacing: -.01em; margin: 0 0 1.5rem; }
+  .hero p { max-width: 33rem; margin: 0 0 2rem; font-size: 1.15rem; }
+  .knoppen { display: flex; gap: .9rem; flex-wrap: wrap; }
+  .knop { display: inline-block; padding: .8rem 1.4rem; font-weight: 600; text-decoration: none; background: var(--bos); color: var(--grond); border: 2px solid var(--bos); border-radius: 999px; }
+  .knop:hover { background: #3d4f3a; }
+  .knop.stil { background: transparent; color: var(--bos); }
+  .knop.stil:hover { background: rgba(44,58,42,.08); }
+  .vlek { background: var(--blad); padding: clamp(1.5rem, 5vw, 3.5rem); border-radius: 58% 42% 47% 53% / 50% 46% 54% 50%; }
+  .plaat { width: 100%; height: auto; display: block; transform: rotate(-2deg); filter: drop-shadow(5px 7px 0 rgba(44,58,42,.2)); }
+  .snijlijn { stroke-dasharray: 1; stroke-dashoffset: 1; animation: snij 9s .5s linear forwards; }
+  .punt { offset-rotate: 0deg; offset-distance: 0%; filter: drop-shadow(0 0 3px #ff3b30) drop-shadow(0 0 6px rgba(255,120,60,.7)); animation: loop 9s .5s linear forwards, doof .5s 9.5s forwards; }
+  @keyframes snij { to { stroke-dashoffset: 0; } }
+  @keyframes loop { to { offset-distance: 100%; } }
+  @keyframes doof { to { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .snijlijn { animation: none; stroke-dashoffset: 0; }
+    .punt { animation: none; opacity: 0; }
+    .stuk { transition: none !important; }
+  }
+
+  section { padding-block: 4rem; }
+  h2 { font-family: var(--display); font-weight: 300; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; margin: 0 0 .75rem; }
+  .intro { max-width: 40rem; margin: 0 0 2rem; }
+
+  .filter { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2.25rem; }
+  .filter button { font: inherit; font-weight: 500; cursor: pointer; padding: .4rem 1rem; color: var(--bos); background: transparent; border: 2px solid var(--blad-diep); border-radius: 999px; }
+  .filter button:hover { background: var(--blad); }
+  .filter button[aria-pressed="true"] { background: var(--bos); color: var(--grond); border-color: var(--bos); }
+
+  .werk { display: grid; grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)); gap: 2rem 1.75rem; list-style: none; padding: 0; margin: 0; }
+  .stuk {
+    display: block; width: 100%; padding: .7rem .7rem 1rem; text-align: left; font: inherit; cursor: pointer; color: var(--schroei);
+    background: var(--berken) repeating-linear-gradient(92deg, transparent 0 13px, rgba(120,80,30,.07) 13px 15px, transparent 15px 31px, rgba(120,80,30,.05) 31px 32px);
+    border: 3px solid var(--schroei); border-radius: 8px; box-shadow: 4px 5px 0 rgba(44,58,42,.2); transition: transform .18s ease;
+  }
+  .werk li:nth-child(3n+1) .stuk { transform: rotate(-1.1deg); }
+  .werk li:nth-child(3n+2) .stuk { transform: rotate(.8deg); }
+  .werk li:nth-child(3n) .stuk { transform: rotate(-.4deg); }
+  .werk li .stuk:hover, .werk li .stuk:focus-visible { transform: rotate(0) translateY(-4px); }
+  .beeld { aspect-ratio: 4 / 3; background: var(--blad); border-radius: 4px; overflow: hidden; display: block; }
+  .beeld img, .beeld svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .stuk strong { display: block; margin-top: .75rem; font-size: 1.15rem; font-weight: 600; line-height: 1.25; }
+  .stuk span.mat { display: block; font-size: .95rem; opacity: .8; }
+  .leeg { padding: 2rem; border: 2px dashed var(--blad-diep); border-radius: 8px; }
+
+  .galerij { position: relative; }
+  .spoor { display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding: .25rem .25rem 1.25rem; margin: 0 -.25rem; list-style: none; scrollbar-width: thin; scrollbar-color: var(--blad-diep) transparent; }
+  .spoor li { flex: 0 0 min(440px, 82%); scroll-snap-align: start; }
+  .spoor button { display: block; width: 100%; padding: 0; font: inherit; text-align: left; cursor: zoom-in; color: inherit; background: none; border: 0; }
+  .spoor .foto { display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 10px; background: var(--blad); box-shadow: 4px 5px 0 rgba(44,58,42,.18); }
+  .spoor img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s ease; }
+  .spoor button:hover img, .spoor button:focus-visible img { transform: scale(1.03); }
+  .spoor .onderschrift { display: block; margin-top: .6rem; font-weight: 500; }
+  .pijlen { display: flex; gap: .6rem; justify-content: flex-end; margin-top: -.25rem; }
+  .pijl { width: 2.9rem; height: 2.9rem; display: grid; place-items: center; font: inherit; font-size: 1.3rem; line-height: 1; cursor: pointer; color: var(--grond); background: var(--bos); border: 0; border-radius: 50%; }
+  .pijl:disabled { opacity: .3; cursor: default; }
+
+  #lichtbak { width: min(1000px, 100% - 1.5rem); background: var(--bos); color: var(--grond); border-color: var(--bos); }
+  #lichtbak img { display: block; width: 100%; max-height: 72vh; object-fit: contain; background: #1f2a1e; }
+  #lichtbak .balk { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1rem; padding: 1rem 1.25rem; }
+  #lichtbak .balk p { margin: 0 auto 0 0; font-weight: 500; }
+  #lichtbak .pijl { color: var(--bos); background: var(--grond); }
+  #lichtbak .vraag { color: var(--bos); background: var(--blad); }
+  #lichtbak .sluit { margin-top: 0; color: var(--grond); background: transparent; border: 2px solid var(--grond); }
+
+  .prijs { display: inline-block; margin-top: .5rem; padding: .1rem .6rem; font-size: .95rem; font-weight: 600; color: var(--berken-licht); background: var(--schroei); border-radius: 999px; }
+
+  .stappen { list-style: none; counter-reset: stap; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 2.5rem; }
+  .stappen li { counter-increment: stap; }
+  .stappen li::before { content: counter(stap); display: grid; place-items: center; width: 2.6rem; height: 2.6rem; margin-bottom: .9rem; font-family: var(--display); font-size: 1.4rem; line-height: 1; padding-top: .15em; background: var(--blad); border-radius: 55% 45% 50% 50% / 50% 55% 45% 50%; }
+  .stappen h3 { font-size: 1.3rem; font-weight: 600; margin: 0 0 .4rem; }
+  .stappen p { margin: 0; }
+
+  .over { display: grid; grid-template-columns: .8fr 1.2fr; gap: 3rem; align-items: center; }
+  .over .portret { aspect-ratio: 1; background: var(--blad); border-radius: 58% 42% 47% 53% / 50% 46% 54% 50%; overflow: hidden; display: grid; place-items: center; max-width: 380px; width: 100%; }
+  .over .portret img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .over .portret svg { width: 45%; height: auto; }
+  .over p { max-width: 36rem; margin: 0 0 1rem; white-space: pre-line; }
+
+  .erf { display: grid; grid-template-columns: .7fr 1.3fr; gap: 2rem 3.5rem; align-items: center; }
+  .erf img { width: 100%; max-width: 340px; height: auto; display: block; justify-self: center; mix-blend-mode: multiply; }
+  .erf p { margin: 0 0 1.5rem; max-width: 34rem; }
+  .erf ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+  .erf li { padding: .35rem 1rem; background: var(--blad); border-radius: 999px; font-weight: 500; }
+
+  main > section:nth-of-type(odd) { background: var(--band); }
+  .kan { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2.5rem; }
+  .kan h3 { font-size: 1.3rem; font-weight: 600; margin: 0 0 .4rem; }
+  .kan p { margin: 0; }
+
+  .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem 3rem; align-items: start; }
+  .contact .intro { margin-bottom: 0; }
+  .contact .knoppen { margin: .5rem 0 1.5rem; }
+  .contact dl { display: grid; grid-template-columns: max-content 1fr; gap: .6rem 1.5rem; margin: .5rem 0 0; font-size: 1.15rem; }
+  .contact dt { font-weight: 600; }
+  .contact dd { margin: 0; overflow-wrap: anywhere; }
+  .contact a { text-decoration-color: var(--blad-diep); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+  footer { padding-block: 2.5rem; font-size: .95rem; border-top: 1px solid var(--blad); }
+
+  dialog { width: min(760px, 100% - 2rem); padding: 0; color: var(--schroei); background: var(--berken); border: 3px solid var(--schroei); border-radius: 10px; }
+  dialog::backdrop { background: rgba(44,58,42,.75); }
+  dialog .beeld { border-radius: 0; }
+  dialog .tekst { padding: 1.25rem 1.5rem 1.5rem; }
+  dialog h3 { font-family: var(--display); font-weight: 400; font-size: 1.8rem; line-height: 1.1; margin: 0 0 .25rem; }
+  dialog p { margin: .5rem 0 0; }
+  dialog .meer { display: inline-block; margin-top: .4rem; font-weight: 600; color: var(--schroei); }
+  dialog .acties { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-top: 1.25rem; }
+  dialog .vraag { font-weight: 600; padding: .55rem 1.2rem; color: var(--berken); background: var(--schroei); border-radius: 999px; text-decoration: none; }
+  dialog .acties .sluit { margin-top: 0; color: var(--schroei); background: transparent; border: 2px solid var(--schroei); }
+  dialog .sluit { margin-top: 1.25rem; font: inherit; font-weight: 600; cursor: pointer; padding: .55rem 1.2rem; color: var(--berken); background: var(--schroei); border: 0; border-radius: 999px; }
+
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; gap: 2rem; padding-block: 1rem 3rem; }
+    section { padding-block: 3rem; }
+    .contact { grid-template-columns: 1fr; }
+    .over, .erf { grid-template-columns: 1fr; gap: 1.5rem; }
+    .over .portret { max-width: 240px; }
+    .erf img { max-width: 240px; }
+    .kop { padding-block: 1rem .5rem; gap: .5rem; }
+    .kop nav { width: 100%; flex-wrap: wrap; justify-content: space-between; gap: .1rem .7rem; white-space: nowrap; font-size: clamp(.8rem, 3.7vw, .98rem); }
+    .hero h1 { font-size: clamp(2.1rem, 9.5vw, 2.8rem); }
+    .hero p { font-size: 1.05rem; }
+    .vlek { max-width: 300px; margin-inline: auto; }
+    .werk { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem .9rem; }
+    .stuk { padding: .4rem .4rem .7rem; border-width: 2px; box-shadow: 3px 4px 0 rgba(44,58,42,.2); }
+    .stuk strong { font-size: 1rem; margin-top: .5rem; }
+    .prijs { font-size: .85rem; }
+    .knoppen .knop { padding: .7rem 1.1rem; }
+    .contact dl { grid-template-columns: 1fr; gap: 0; }
+    .contact dd { margin-bottom: .9rem; }
+    .merk img { height: 58px; }
+  }
+  .zakelijk { margin-top: 2.5rem; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.5rem; align-items: center;
+    background: var(--berken-licht); border: 2px dashed var(--schroei); border-radius: 16px; padding: 1.75rem 2rem; }
+  .zakelijk[hidden] { display: none; }
+  .zakelijk-label { margin: 0 0 .35rem; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--schroei); }
+  .zakelijk h3 { font-family: var(--display); font-weight: 300; font-size: clamp(1.6rem, 3vw, 2.1rem); line-height: 1.1; margin: 0 0 .6rem; }
+  .zakelijk-tekst p:last-child { margin: 0; max-width: 36rem; }
+  .zakelijk-knoppen { display: flex; flex-direction: column; gap: .6rem; }
+  .zakelijk-knoppen .knop { text-align: center; white-space: nowrap; }
+  @media (max-width: 700px) {
+    .zakelijk { grid-template-columns: 1fr; padding: 1.4rem 1.25rem; }
+    .zakelijk-knoppen { flex-direction: row; flex-wrap: wrap; }
+  }
+
+  .pp-pad { padding-block: 1rem 3.5rem; }
+  .pp-kruimel { font-size: .9rem; margin: 0 0 1.5rem; color: #5c6b58; }
+  .pp-kruimel a { color: inherit; }
+  .pp-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 3rem; align-items: start; }
+  .pp-grid h1 { font-family: var(--display); font-weight: 300; font-size: clamp(2.4rem, 5.5vw, 4rem); line-height: 1.05; margin: 0 0 .4rem; }
+  .pp-regel { margin: 0 0 .9rem; color: #5c6b58; }
+  .pp-tekst { margin: 1.25rem 0 1.75rem; max-width: 34rem; white-space: pre-line; }
+  .pp-fotos { display: grid; grid-template-columns: 2fr 1fr; gap: .75rem; }
+  .pp-fotos.pp-een { grid-template-columns: 1fr; }
+  .pp-foto { display: block; width: 100%; padding: 0; border: 0; cursor: zoom-in; border-radius: 10px; overflow: hidden; aspect-ratio: 1; background: var(--blad); box-shadow: 4px 5px 0 rgba(44,58,42,.18); }
+  .pp-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pp-groot { grid-row: span 3; aspect-ratio: 4 / 5; }
+  .pp-een .pp-groot { aspect-ratio: 4 / 3; grid-row: auto; }
+  .pp-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 2rem; }
+  .pp-chip { text-decoration: none; background: var(--grond); border: 1px solid var(--blad); border-radius: 999px; padding: .35rem .9rem; font-size: .95rem; }
+  .pp-chip:hover { background: var(--blad); }
+  @media (max-width: 800px) {
+    .pp-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .pp-fotos { order: -1; }
+  }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Product","@id":"https://bos-goed.nl/kersttruitjes-met-naam/#product","name":"Kersttruitjes met naam","description":"Hangers in de vorm van een kersttrui, met een eigen naam erin gegraveerd. Voor in de boom of aan een cadeau. Kan helemaal gepersonaliseerd worden met verschillende afbeeldingen die goed bij iemand passen.","url":"https://bos-goed.nl/kersttruitjes-met-naam/","image":["https://bos-goed.nl/fotos/kersttrui%201.jpg"],"brand":{"@type":"Brand","name":"Bosgoed"},"material":"Hout","category":"Kerst","offers":{"@type":"Offer","price":5,"priceCurrency":"EUR","availability":"https://schema.org/PreOrder","priceSpecification":{"@type":"PriceSpecification","minPrice":5,"priceCurrency":"EUR"},"seller":{"@id":"https://bos-goed.nl/#bedrijf"}}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Bosgoed","item":"https://bos-goed.nl/"},{"@type":"ListItem","position":2,"name":"Producten","item":"https://bos-goed.nl/#werk"},{"@type":"ListItem","position":3,"name":"Kersttruitjes met naam","item":"https://bos-goed.nl/kersttruitjes-met-naam/"}]}]}</script>
+</head>
+<body>
+
+<header class="wrap kop">
+  <a class="merk" href="/"><img src="/beeld/logo.png" alt="Bosgoed" width="240" height="229"></a>
+  <nav aria-label="Menu">
+    <a href="/#werk">Alle producten</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+</header>
+
+<main id="top">
+  <div class="wrap pp-pad">
+    <p class="pp-kruimel"><a href="/">Bosgoed</a> › <a href="/#werk">Producten</a> › Kersttruitjes met naam</p>
+    <div class="pp-grid">
+      <div>
+        <h1>Kersttruitjes met naam</h1>
+        <p class="pp-regel">Met de laser gemaakt in Zeerijp</p>
+        <span class="prijs">vanaf € 5,-</span>
+        <p class="pp-tekst">Hangers in de vorm van een kersttrui, met een eigen naam erin gegraveerd. Voor in de boom of aan een cadeau. Kan helemaal gepersonaliseerd worden met verschillende afbeeldingen die goed bij iemand passen.</p>
+        <div class="knoppen">
+          <a class="knop" href="https://wa.me/31633053246?text=Hoi%20Nienke%2C%20ik%20heb%20een%20vraag%20over%3A%20Kersttruitjes%20met%20naam.%20">Vraag hiernaar via WhatsApp</a>
+          <a class="knop stil" href="https://www.instagram.com/bos.goed/">Bericht via Instagram</a>
+        </div>
+      </div>
+      <div class="pp-fotos pp-een"><button type="button" class="pp-foto pp-groot" data-i="0"><img src="/klein/kersttrui 1.jpg.webp" alt="Kersttruihanger" loading="eager" onerror="this.onerror=null;this.src='/fotos/kersttrui 1.jpg'"></button></div>
+    </div>
+  </div>
+
+  
+
+  <section id="zo-werkt-het">
+    <div class="wrap">
+      <h2>Zo werkt het</h2>
+      <p class="intro">Dit is geen webshop. Alles maak ik op aanvraag, dus we stemmen het samen even af.</p>
+      <ol class="stappen">
+        <li>
+          <h3>Stuur een bericht</h3>
+          <p>Vertel via WhatsApp of Instagram wat je zoekt: iets van deze site, of een eigen idee. Een foto of schets helpt.</p>
+        </li>
+        <li>
+          <h3>Ik denk met je mee</h3>
+          <p>Je krijgt van mij een voorstel met de tekst, de maat en de prijs. Pas als jij het goed vindt, ga ik aan de slag.</p>
+        </li>
+        <li>
+          <h3>Binnen een paar dagen klaar</h3>
+          <p>Je haalt het op in Zeerijp, of ik stuur het naar je op tegen verzendkosten.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Meer van Bosgoed</h2>
+      <div class="pp-chips"><a class="pp-chip" href="/gegraveerde-plank/">Gegraveerde plank</a><a class="pp-chip" href="/dienblad/">Dienblad</a><a class="pp-chip" href="/geboortekist/">Geboortekist</a><a class="pp-chip" href="/flesopener/">Flesopener</a><a class="pp-chip" href="/vlaggenlijn/">Vlaggenlijn</a><a class="pp-chip" href="/sleutelhangers/">Sleutelhangers</a><a class="pp-chip" href="/naambord-voor-de-voordeur/">Naambord voor de voordeur</a><a class="pp-chip" href="/ontbijtplankjes/">Ontbijtplankjes</a><a class="pp-chip" href="/familiebord/">Familiebord</a><a class="pp-chip" href="/houten-kaarten/">Houten kaarten</a></div>
+      <a class="knop stil" href="/">Bekijk alles van Bosgoed</a>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Bosgoed, Zeerijp · KVK 74460978</span>
+</footer>
+<dialog id="lichtbak" aria-label="Foto vergroot">
+  <img id="lichtbak-foto" alt="">
+  <div class="balk">
+    <p id="lichtbak-tekst"></p>
+    <button class="pijl" type="button" id="lichtbak-terug" aria-label="Vorige foto" hidden>&#8592;</button>
+    <button class="pijl" type="button" id="lichtbak-verder" aria-label="Volgende foto" hidden>&#8594;</button>
+    <a class="vraag" id="lichtbak-vraag" href="https://wa.me/31633053246?text=Hoi%20Nienke%2C%20ik%20heb%20een%20vraag%20over%3A%20Kersttruitjes%20met%20naam.%20">Vraag hiernaar</a>
+    <button class="sluit" type="button" id="lichtbak-sluit">Sluiten</button>
+  </div>
+</dialog>
+<script>
+(function () {
+  var FOTOS = [{"src":"/fotos/kersttrui 1.jpg","tekst":"Kersttruihanger"}];
+  var bak = document.getElementById("lichtbak"), img = document.getElementById("lichtbak-foto"), huidig = 0;
+  function open(i) {
+    huidig = (i + FOTOS.length) % FOTOS.length;
+    img.src = FOTOS[huidig].src; img.alt = FOTOS[huidig].tekst;
+    document.getElementById("lichtbak-tekst").textContent = FOTOS[huidig].tekst;
+    if (!bak.open) { if (bak.showModal) bak.showModal(); else bak.setAttribute("open", ""); }
+  }
+  document.querySelectorAll("[data-i]").forEach(function (k) { k.addEventListener("click", function () { open(+k.dataset.i); }); });
+  document.getElementById("lichtbak-terug").addEventListener("click", function () { open(huidig - 1); });
+  document.getElementById("lichtbak-verder").addEventListener("click", function () { open(huidig + 1); });
+  document.getElementById("lichtbak-sluit").addEventListener("click", function () { bak.close(); });
+  bak.addEventListener("click", function (e) { if (e.target === bak) bak.close(); });
+  bak.addEventListener("keydown", function (e) { if (e.key === "ArrowLeft") open(huidig - 1); if (e.key === "ArrowRight") open(huidig + 1); });
+  var start = null;
+  bak.addEventListener("touchstart", function (e) { start = e.touches[0].clientX; }, { passive: true });
+  bak.addEventListener("touchend", function (e) { if (start === null) return; var d = e.changedTouches[0].clientX - start; if (Math.abs(d) > 50) open(huidig + (d < 0 ? 1 : -1)); start = null; });
+  var spoor = document.getElementById("spoor");
+  if (!spoor) return;
+  function stap() { var li = spoor.querySelector("li"); return li ? li.getBoundingClientRect().width + 20 : spoor.clientWidth; }
+  function pijlen() {
+    document.getElementById("terug").disabled = spoor.scrollLeft <= 2;
+    document.getElementById("verder").disabled = spoor.scrollLeft >= spoor.scrollWidth - spoor.clientWidth - 2;
+  }
+  document.getElementById("terug").addEventListener("click", function () { spoor.scrollBy({ left: -stap() }); });
+  document.getElementById("verder").addEventListener("click", function () { spoor.scrollBy({ left: stap() }); });
+  spoor.addEventListener("scroll", function () { requestAnimationFrame(pijlen); }, { passive: true });
+  window.addEventListener("resize", pijlen);
+  window.addEventListener("load", pijlen);
+  pijlen();
+})();
+</script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "58a035e8debc41be9842bd7cfde0aceb"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

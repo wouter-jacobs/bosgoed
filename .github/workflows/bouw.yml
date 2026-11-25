@@ -1,6 +1,7 @@
 # Na elke wijziging (ook vanuit /beheer):
 # - lichte versies van de foto's maken (tools/fotos.py)
 # - de inhoud alvast in index.html zetten voor zoekmachines (tools/vooraf.mjs)
+# - een losse pagina per product maken, plus sitemap.xml (tools/productpaginas.mjs)
 # Aan het uiterlijk van de site verandert niets.
 name: Bouw
 
@@ -45,9 +46,12 @@ jobs:
       - name: Inhoud vooraf invullen
         run: node tools/vooraf.mjs
 
+      - name: Productpagina's maken
+        run: node tools/productpaginas.mjs
+
       - name: Opslaan als er iets veranderd is
         run: |
-          git add -A klein fotos beeld index.html
+          git add -A .
           if git diff --cached --quiet; then
             echo "Niets veranderd."
             exit 0
