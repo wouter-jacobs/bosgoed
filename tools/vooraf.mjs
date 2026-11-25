@@ -116,6 +116,7 @@ vul("zakelijk-kop", esc(String(s.zakelijk_kop || "Voor je bedrijf, club of veren
 vul("zakelijk-inhoud", esc(zakelijkTekst));
 html = html.replace(/<div class="zakelijk" id="zakelijk"( hidden)?>/, `<div class="zakelijk" id="zakelijk"${zakelijkTekst ? "" : " hidden"}>`);
 html = html.replace(/(<a class="knop" id="zakelijk-offerte" href=")[^"]*(")/, (_, a, b) => a + esc(omgeving.zakelijkLink(s)) + b);
+html = html.replace(/<a class="knop stil" id="zakelijk-meer"( hidden)? href=/, `<a class="knop stil" id="zakelijk-meer"${String(s.zakelijk_pagina_tekst || "").trim() ? "" : " hidden"} href=`);
 html = html.replace(/(<[a-z]+[^>]*\bdata-naam\b[^>]*>)[^<]*(<\/)/g, (_, a, b) => a + esc(s.naam) + b);
 html = html.replace(/<section id="inspiratie"( hidden)?>/, `<section id="inspiratie"${GALERIJ.length ? "" : " hidden"}>`);
 html = html.replace(/<title>[^<]*<\/title>/, `<title>${esc(titel)}</title>`);

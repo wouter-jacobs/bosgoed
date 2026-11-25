@@ -199,6 +199,7 @@
   .zakelijk-tekst p:last-child { margin: 0; max-width: 36rem; }
   .zakelijk-knoppen { display: flex; flex-direction: column; gap: .6rem; }
   .zakelijk-knoppen .knop { text-align: center; white-space: nowrap; }
+  .zakelijk-knoppen .knop[hidden] { display: none; }
   @media (max-width: 700px) {
     .zakelijk { grid-template-columns: 1fr; padding: 1.4rem 1.25rem; }
     .zakelijk-knoppen { flex-direction: row; flex-wrap: wrap; }
@@ -302,6 +303,7 @@
         </div>
         <div class="zakelijk-knoppen">
           <a class="knop" id="zakelijk-offerte" href="https://wa.me/31633053246?text=Hoi%20Nienke%2C%20ik%20heb%20een%20vraag%20over%20een%20zakelijke%20bestelling%3A%20">Vraag een offerte</a>
+          <a class="knop stil" id="zakelijk-meer" href="/zakelijk/">Meer over zakelijk</a>
           <a class="knop stil" href="#inspiratie">Bekijk voorbeelden</a>
         </div>
       </div>
@@ -766,6 +768,8 @@ function toonZakelijk() {
   document.getElementById("zakelijk-kop").textContent = String(SITE.zakelijk_kop || "Voor je bedrijf, club of vereniging").trim();
   document.getElementById("zakelijk-inhoud").textContent = tekst;
   document.getElementById("zakelijk-offerte").href = zakelijkLink(SITE);
+  /* Knop naar de losse pagina /zakelijk/, alleen als daar tekst voor is. */
+  document.getElementById("zakelijk-meer").hidden = !String(SITE.zakelijk_pagina_tekst || "").trim();
 }
 
 function toonContact() {

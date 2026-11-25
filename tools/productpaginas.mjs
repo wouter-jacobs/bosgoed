@@ -15,7 +15,7 @@ import { fileURLToPath } from "node:url";
 const BASIS = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SITE_URL = "https://bos-goed.nl/";
 const LOGBOEK = path.join(BASIS, "data", "productpaginas.json"); // welke mappen dit script beheert
-const GERESERVEERD = new Set(["beheer", "verklein", "klein", "data", "fotos", "beeld", "tools", "admin", ".github"]);
+const GERESERVEERD = new Set(["zakelijk", "beheer", "verklein", "klein", "data", "fotos", "beeld", "tools", "admin", ".github"]);
 const VASTE_REGEL = "Met de laser gemaakt in Zeerijp";
 
 const lees = f => JSON.parse(fs.readFileSync(path.join(BASIS, f), "utf8"));
@@ -76,15 +76,16 @@ function beschrijving(stuk) {
   return (t + rest).trim();
 }
 
-function pagina(stuk, alle, basis) {
-  const slug = slugVan(stuk.titel);
+function pagina(stuk, alle, basis, o = {}) {
+  const slug = o.slug || slugVan(stuk.titel);
   const url = SITE_URL + slug + "/";
   const a = p => basis + p.replace(/^\//, "");          // pad naar een bestand op de site
-  const fotos = fotosVoor(stuk);
+  const fotos = o.fotos || fotosVoor(stuk);
   const tekst = String(stuk.uitgebreid || stuk.tekst || "").trim();
-  const titel = `${stuk.titel} laten maken – ${SITE.naam} ${SITE.plaats}`;
+  const titel = o.titel || `${stuk.titel} laten maken – ${SITE.naam} ${SITE.plaats}`;
+  const omschrijving = o.beschrijving || beschrijving(stuk);
   const deelbeeld = fotos.length ? SITE_URL + encodeURI(fotos[0].foto.replace(/^\//, "")) : SITE_URL + "beeld/delen.jpg";
-  const bericht = `Hoi Nienke, ik heb een vraag over: ${stuk.titel}. `;
+  const bericht = o.bericht || `Hoi Nienke, ik heb een vraag over: ${stuk.titel}. `;
 
   // Grote foto bovenaan; klikken opent dezelfde lichtbak als op de homepage.
   const kleinImg = (f, i) =>
@@ -155,11 +156,11 @@ function pagina(stuk, alle, basis) {
 </script>`
     : "";
 
-  const meer = alle.filter(s => s !== stuk).map(s =>
+  const meer = (o.meer || alle.filter(s => s !== stuk)).map(s =>
     `<a class="pp-chip" href="${esc(basis === "/" ? "/" + slugVan(s.titel) + "/" : SITE_URL + slugVan(s.titel) + "/")}">${esc(s.titel)}</a>`).join("");
 
   const prijs = vanafPrijs(stuk.prijs);
-  const ld = {
+  const ld = o.ld ? o.ld(url, fotos) : {
     "@context": "https://schema.org",
     "@graph": [
       { "@type": "Product", "@id": url + "#product", name: stuk.titel, description: tekst || stuk.titel, url,
@@ -180,14 +181,14 @@ function pagina(stuk, alle, basis) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(titel)}</title>
-<meta name="description" content="${esc(beschrijving(stuk))}">
+<meta name="description" content="${esc(omschrijving)}">
 <link rel="canonical" href="${url}">
-<meta property="og:type" content="product">
+<meta property="og:type" content="${o.ld ? "website" : "product"}">
 <meta property="og:locale" content="nl_NL">
 <meta property="og:site_name" content="${esc(SITE.naam)}">
 <meta property="og:url" content="${url}">
 <meta property="og:title" content="${esc(titel)}">
-<meta property="og:description" content="${esc(beschrijving(stuk))}">
+<meta property="og:description" content="${esc(omschrijving)}">
 <meta property="og:image" content="${esc(deelbeeld)}">
 <link rel="icon" type="image/png" sizes="64x64" href="${a("/beeld/favicon.png")}">
 <link rel="apple-touch-icon" href="${a("/apple-touch-icon.png")}">
@@ -229,15 +230,16 @@ ${LETTERS}
 
 <main id="top">
   <div class="wrap pp-pad">
-    <p class="pp-kruimel"><a href="${a("/")}">${esc(SITE.naam)}</a> › <a href="${a("/#werk")}">Producten</a> › ${esc(stuk.titel)}</p>
+    <p class="pp-kruimel"><a href="${a("/")}">${esc(SITE.naam)}</a> › ${o.ld ? "" : `<a href="${a("/#werk")}">Producten</a> › `}${esc(o.kruimel || stuk.titel)}</p>
     <div class="pp-grid">
       <div>
-        <h1>${esc(stuk.titel)}</h1>
+        ${o.label ? `<p class="zakelijk-label">${esc(o.label)}</p>` : ""}
+        <h1>${esc(o.h1 || stuk.titel)}</h1>
         <p class="pp-regel">${esc(VASTE_REGEL)}</p>
         ${stuk.prijs ? `<span class="prijs">${esc(stuk.prijs)}</span>` : ""}
         ${tekst ? `<p class="pp-tekst">${esc(tekst)}</p>` : ""}
         <div class="knoppen">
-          ${WHATSAPP ? `<a class="knop" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(bericht)}">Vraag hiernaar via WhatsApp</a>` : ""}
+          ${WHATSAPP ? `<a class="knop" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(bericht)}">${esc(o.knop || "Vraag hiernaar via WhatsApp")}</a>` : ""}
           ${SITE.instagram ? `<a class="knop stil" href="https://www.instagram.com/${esc(SITE.instagram)}/">Bericht via Instagram</a>` : ""}
         </div>
       </div>
@@ -247,11 +249,11 @@ ${LETTERS}
 
   ${meerFotos}
 
-  ${ZO_WERKT_HET}
+  ${o.stappen || ZO_WERKT_HET}
 
   <section>
     <div class="wrap">
-      <h2>Meer van ${esc(SITE.naam)}</h2>
+      <h2>${esc(o.meerKop || "Meer van " + SITE.naam)}</h2>
       <div class="pp-chips">${meer}</div>
       <a class="knop stil" href="${a("/")}">Bekijk alles van ${esc(SITE.naam)}</a>
     </div>
@@ -268,9 +270,77 @@ ${BAKEN}
 `;
 }
 
+// --- pagina voor bedrijven, clubs en verenigingen (/zakelijk/) ---
+// Tekst en foto's komen uit data/site.json (in /beheer onder Naam en contact).
+// Zonder zakelijk_pagina_tekst wordt er geen pagina gemaakt.
+const ZAKELIJK_WOORDEN = ["logo", "bedrijf", "vereniging", "club", "sleutelhanger", "flesopener", "kersthanger", "dienbla"];
+const ZAKELIJK_PRODUCTEN = ["sleutelhang", "flesopener", "gegraveerde plank", "dienblad", "naambord"];
+function zakelijkePagina(basis) {
+  const tekst = String(SITE.zakelijk_pagina_tekst || "").trim();
+  if (!tekst) return null;
+  const bij = g => String(g.onderschrift || "").toLowerCase();
+  const eigen = (Array.isArray(SITE.zakelijk_fotos) ? SITE.zakelijk_fotos : []).filter(Boolean)
+    .map(f => ({ foto: typeof f === "string" ? f : f.foto, onderschrift: "Zakelijk werk van " + SITE.naam })).filter(f => f.foto);
+  const gezien = new Set();
+  const fotos = [...eigen, ...GALERIJ.filter(g => ZAKELIJK_WOORDEN.some(w => bij(g).includes(w)))]
+    .filter(f => !gezien.has(f.foto) && gezien.add(f.foto)).slice(0, 12);
+  const meer = WERK.filter(s => ZAKELIJK_PRODUCTEN.some(w => s.titel.toLowerCase().includes(w)));
+  const kop = String(SITE.zakelijk_kop || "Voor je bedrijf, club of vereniging").trim();
+  const omschrijving = `Sleutelhangers, flesopeners, planken en kerstcadeaus met het logo van je bedrijf of club. Met de laser gemaakt in ${SITE.plaats} (Groningen). Vraag een voorstel.`;
+  return pagina({ titel: kop, tekst, soort: [] }, WERK, basis, {
+    slug: "zakelijk",
+    titel: `Relatiegeschenken en bedankjes met logo – ${SITE.naam} ${SITE.plaats}`,
+    beschrijving: omschrijving,
+    label: "Zakelijk",
+    h1: kop,
+    kruimel: "Zakelijk",
+    bericht: "Hoi Nienke, ik heb een vraag over een zakelijke bestelling: ",
+    knop: "Vraag een voorstel via WhatsApp",
+    fotos,
+    meer,
+    meerKop: "Populair bij bedrijven en clubs",
+    stappen: `<section id="zo-werkt-het">
+    <div class="wrap">
+      <h2>Zo werkt een zakelijke bestelling</h2>
+      <ol class="stappen">
+        <li>
+          <h3>Stuur je logo en je wens</h3>
+          <p>Vertel wat je zoekt en voor hoeveel mensen. Elk soort logobestand is goed.</p>
+        </li>
+        <li>
+          <h3>Ontwerp en voorstel</h3>
+          <p>Je krijgt van mij een voorstel met het ontwerp en de prijs per stuk.</p>
+        </li>
+        <li>
+          <h3>Na jouw akkoord aan de slag</h3>
+          <p>Ben je tevreden, dan ga ik in productie. Ophalen in ${esc(SITE.plaats)} of verzenden kan allebei.</p>
+        </li>
+      </ol>
+    </div>
+  </section>`,
+    ld: (url, f) => ({
+      "@context": "https://schema.org",
+      "@graph": [
+        { "@type": "Service", "@id": url + "#dienst", name: "Relatiegeschenken en bedankjes met logo", serviceType: "Lasergraveren met logo",
+          description: tekst, url, provider: { "@id": SITE_URL + "#bedrijf" },
+          areaServed: [SITE.plaats, "Loppersum", "Eemsdelta", "Het Hogeland", "Groningen", "Nederland"],
+          ...(f.length ? { image: f.map(x => SITE_URL + encodeURI(x.foto.replace(/^\//, ""))) } : {}) },
+        { "@type": "BreadcrumbList", itemListElement: [
+          { "@type": "ListItem", position: 1, name: SITE.naam, item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: "Zakelijk", item: url } ] }
+      ]
+    })
+  });
+}
+
 // --- uitvoeren ---
 const args = process.argv.slice(2);
-if (args[0] === "--voorbeeld") {
+if (args[0] === "--voorbeeld" && args[1] === "zakelijk") {
+  const inhoud = zakelijkePagina(SITE_URL);
+  if (!inhoud) throw new Error("Geen zakelijk_pagina_tekst in data/site.json");
+  fs.writeFileSync(args[2], inhoud);
+  console.log("Voorbeeld geschreven:", args[2]);
+} else if (args[0] === "--voorbeeld") {
   const stuk = WERK.find(s => slugVan(s.titel) === args[1]);
   if (!stuk) throw new Error("Geen product met slug " + args[1] + ". Beschikbaar: " + WERK.map(s => slugVan(s.titel)).join(", "));
   fs.writeFileSync(args[2], pagina(stuk, WERK, SITE_URL));
@@ -285,7 +355,13 @@ if (args[0] === "--voorbeeld") {
     fs.writeFileSync(path.join(BASIS, slug, "index.html"), pagina(stuk, WERK, "/"));
     nieuw.push(slug);
   }
-  for (const slug of oud) if (!nieuw.includes(slug) && !GERESERVEERD.has(slug)) fs.rmSync(path.join(BASIS, slug), { recursive: true, force: true });
+  const zakelijk = zakelijkePagina("/");
+  if (zakelijk) {
+    fs.mkdirSync(path.join(BASIS, "zakelijk"), { recursive: true });
+    fs.writeFileSync(path.join(BASIS, "zakelijk", "index.html"), zakelijk);
+    nieuw.push("zakelijk");
+  }
+  for (const slug of oud) if (!nieuw.includes(slug) && (slug === "zakelijk" || !GERESERVEERD.has(slug))) fs.rmSync(path.join(BASIS, slug), { recursive: true, force: true });
   fs.writeFileSync(LOGBOEK, JSON.stringify(nieuw, null, 1) + "\n");
   const urls = [SITE_URL, ...nieuw.map(s => SITE_URL + s + "/")];
   fs.writeFileSync(path.join(BASIS, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>

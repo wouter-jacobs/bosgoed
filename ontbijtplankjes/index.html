@@ -193,6 +193,7 @@
   .zakelijk-tekst p:last-child { margin: 0; max-width: 36rem; }
   .zakelijk-knoppen { display: flex; flex-direction: column; gap: .6rem; }
   .zakelijk-knoppen .knop { text-align: center; white-space: nowrap; }
+  .zakelijk-knoppen .knop[hidden] { display: none; }
   @media (max-width: 700px) {
     .zakelijk { grid-template-columns: 1fr; padding: 1.4rem 1.25rem; }
     .zakelijk-knoppen { flex-direction: row; flex-wrap: wrap; }
@@ -236,6 +237,7 @@
     <p class="pp-kruimel"><a href="/">Bosgoed</a> › <a href="/#werk">Producten</a> › Ontbijtplankjes</p>
     <div class="pp-grid">
       <div>
+        
         <h1>Ontbijtplankjes</h1>
         <p class="pp-regel">Met de laser gemaakt in Zeerijp</p>
         <span class="prijs">vanaf € 15,-</span>

@@ -128,4 +128,13 @@ content:
         label: Zakelijk blok – tekst
         description: "Leeg laten = blok niet tonen"
         type: text
+      - name: zakelijk_pagina_tekst
+        label: Zakelijke pagina – tekst
+        description: "De tekst op bos-goed.nl/zakelijk/. Leeg laten = geen zakelijke pagina"
+        type: text
+      - name: zakelijk_fotos
+        label: Zakelijke foto's
+        description: "Foto's voor bos-goed.nl/zakelijk/. De eerste wordt de grote foto bovenaan. Daarna volgen passende foto's uit de galerij."
+        type: image
+        list: true
 
