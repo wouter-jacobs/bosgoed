@@ -54,7 +54,11 @@ function fotosVoor(stuk) {
   const bij = g => String(g.onderschrift || "").toLowerCase();
   const eigen = (Array.isArray(stuk.fotos) ? stuk.fotos : []).filter(Boolean)
     .map(f => ({ foto: typeof f === "string" ? f : f.foto, onderschrift: stuk.titel })).filter(f => f.foto);
-  const uitGalerij = GALERIJ.filter(g => bij(g).includes(naam) || stukjes.some(s => bij(g).includes(s)));
+  // Eerst foto's met de volledige productnaam in het onderschrift, daarna gedeeltelijke treffers.
+  const uitGalerij = [
+    ...GALERIJ.filter(g => bij(g).includes(naam)),
+    ...GALERIJ.filter(g => !bij(g).includes(naam) && stukjes.some(s => bij(g).includes(s))),
+  ];
   const gezien = new Set();
   return [...eigen, ...uitGalerij].filter(f => !gezien.has(f.foto) && gezien.add(f.foto)).slice(0, 12);
 }
