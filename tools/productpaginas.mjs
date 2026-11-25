@@ -50,7 +50,10 @@ const slugVan = titel => omgeving.slugVan(titel);
 
 function fotosVoor(stuk) {
   const naam = stuk.titel.toLowerCase();
-  const stukjes = naam.split(/\s+/).filter(w => w.length >= 5).map(w => w.slice(0, 7));
+  // Woorddelen om op te zoeken; algemene woorden als "houten" tellen niet mee,
+  // anders komt bijvoorbeeld houten speelgoed bij de houten kaarten terecht.
+  const algemeen = ["houten", "gegraveerde", "gegraveerd", "voordeur", "naam"];
+  const stukjes = naam.split(/\s+/).filter(w => w.length >= 5 && !algemeen.includes(w)).map(w => w.slice(0, Math.min(7, Math.max(5, w.length - 2))));
   const bij = g => String(g.onderschrift || "").toLowerCase();
   const eigen = (Array.isArray(stuk.fotos) ? stuk.fotos : []).filter(Boolean)
     .map(f => ({ foto: typeof f === "string" ? f : f.foto, onderschrift: stuk.titel })).filter(f => f.foto);
