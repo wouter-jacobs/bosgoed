@@ -170,7 +170,9 @@ function pagina(stuk, alle, basis, o = {}) {
         image: fotos.length ? fotos.map(f => SITE_URL + encodeURI(f.foto.replace(/^\//, ""))) : [SITE_URL + "beeld/delen.jpg"],
         brand: { "@type": "Brand", name: SITE.naam }, material: "Hout", category: (stuk.soort || []).join(", "),
         ...(prijs !== null ? { offers: { "@type": "Offer", price: prijs, priceCurrency: "EUR", availability: "https://schema.org/PreOrder",
-          priceSpecification: { "@type": "PriceSpecification", minPrice: prijs, priceCurrency: "EUR" }, seller: { "@id": SITE_URL + "#bedrijf" } } } : {}) },
+          priceSpecification: { "@type": "PriceSpecification", minPrice: prijs, priceCurrency: "EUR" }, seller: { "@id": SITE_URL + "#bedrijf" },
+          // Alles wordt op maat gemaakt na overleg en akkoord van de klant: niet retourneerbaar.
+          hasMerchantReturnPolicy: { "@type": "MerchantReturnPolicy", applicableCountry: "NL", returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted" } } } : {}) },
       { "@type": "BreadcrumbList", itemListElement: [
         { "@type": "ListItem", position: 1, name: SITE.naam, item: SITE_URL },
         { "@type": "ListItem", position: 2, name: "Producten", item: SITE_URL + "#werk" },
