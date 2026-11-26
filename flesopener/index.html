@@ -151,6 +151,7 @@
   .contact a { text-decoration-color: var(--blad-diep); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 
   footer { padding-block: 2.5rem; font-size: .95rem; border-top: 1px solid var(--blad); }
+  footer .voet-link { margin-left: 1rem; color: inherit; }
 
   dialog { width: min(760px, 100% - 2rem); padding: 0; color: var(--schroei); background: var(--berken); border: 3px solid var(--schroei); border-radius: 10px; }
   dialog::backdrop { background: rgba(44,58,42,.75); }
@@ -208,6 +209,22 @@
   .pp-tekst { margin: 1.25rem 0 1.75rem; max-width: 34rem; white-space: pre-line; }
   .pp-fotos { display: grid; grid-template-columns: 2fr 1fr; gap: .75rem; }
   .pp-fotos.pp-een { grid-template-columns: 1fr; }
+  .pp-kort { align-self: start; background: var(--blad); border-radius: 10px; padding: 1.4rem 1.6rem; box-shadow: 4px 5px 0 rgba(44,58,42,.18); }
+  .pp-kort h2 { font-size: 1.3rem; margin: 0 0 .8rem; }
+  .pp-kort dl { margin: 0; display: grid; gap: .7rem; }
+  .pp-kort dt { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
+  .pp-kort dd { margin: 0; font-weight: 600; }
+  .pp-vragen { max-width: 46rem; border-top: 1px solid rgba(44,58,42,.25); }
+  .pp-vragen details { border-bottom: 1px solid rgba(44,58,42,.25); }
+  .pp-vragen summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 0; }
+  .pp-vragen summary::-webkit-details-marker { display: none; }
+  .pp-vragen summary::after { content: "+"; flex: none; display: grid; place-items: center; width: 2rem; height: 2rem; font-size: 1.4rem; line-height: 1; background: var(--blad); border-radius: 55% 45% 50% 50% / 50% 55% 45% 50%; transition: transform .2s; }
+  .pp-vragen details[open] summary::after { transform: rotate(45deg); }
+  .pp-vragen summary:hover h3 { text-decoration: underline; text-underline-offset: .2em; }
+  .pp-vragen h3 { font-size: 1.15rem; font-weight: 600; margin: 0; }
+  .pp-antwoord { padding: 0 3rem 1.2rem 0; }
+  .pp-antwoord p { margin: 0 0 .6rem; }
+  footer .voet-link { margin-left: 1rem; color: inherit; }
   .pp-foto { display: block; width: 100%; padding: 0; border: 0; cursor: zoom-in; border-radius: 10px; overflow: hidden; aspect-ratio: 1; background: var(--blad); box-shadow: 4px 5px 0 rgba(44,58,42,.18); }
   .pp-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .pp-groot { grid-row: span 3; aspect-ratio: 4 / 5; }
@@ -285,6 +302,7 @@
 
 <footer class="wrap">
   <span>© 2026 Bosgoed, Zeerijp · KVK 74460978</span>
+  <a class="voet-link" href="/ophalen-en-verzenden/">Ophalen en verzenden</a>
 </footer>
 <dialog id="lichtbak" aria-label="Foto vergroot" tabindex="-1">
   <img id="lichtbak-foto" alt="">

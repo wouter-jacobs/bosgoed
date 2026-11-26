@@ -15,7 +15,7 @@ import { fileURLToPath } from "node:url";
 const BASIS = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SITE_URL = "https://bos-goed.nl/";
 const LOGBOEK = path.join(BASIS, "data", "productpaginas.json"); // welke mappen dit script beheert
-const GERESERVEERD = new Set(["zakelijk", "beheer", "verklein", "klein", "data", "fotos", "beeld", "tools", "admin", ".github"]);
+const GERESERVEERD = new Set(["zakelijk", "ophalen-en-verzenden", "beheer", "verklein", "klein", "data", "fotos", "beeld", "tools", "admin", ".github"]);
 const VASTE_REGEL = "Met de laser gemaakt in Zeerijp";
 
 const lees = f => JSON.parse(fs.readFileSync(path.join(BASIS, f), "utf8"));
@@ -39,6 +39,7 @@ vm.runInContext(scripts[scripts.length - 1].replace(/\nstart\(\);\s*$/, "\n"), o
 
 // --- gegevens ---
 const SITE = lees("data/site.json");
+const VERZENDING = fs.existsSync(path.join(BASIS, "data/verzending.json")) ? lees("data/verzending.json") : null;
 const WHATSAPP = omgeving.whatsappNummer(SITE.whatsapp);
 let WERK = lees("data/producten.json");
 WERK = (Array.isArray(WERK) ? WERK : WERK.producten || []).filter(s => s && s.titel);
@@ -93,7 +94,7 @@ function pagina(stuk, alle, basis, o = {}) {
   // Grote foto bovenaan; klikken opent dezelfde lichtbak als op de homepage.
   const kleinImg = (f, i) =>
     `<img src="${esc(a(omgeving.kleinPad(f.foto)))}" alt="${esc(f.onderschrift || stuk.titel)}" loading="${i < 2 ? "eager" : "lazy"}" onerror="this.onerror=null;this.src='${esc(a(f.foto))}'">`;
-  const beeld = fotos.length
+  const beeld = o.beeld !== undefined ? o.beeld : fotos.length
     ? `<div class="pp-fotos pp-een"><button type="button" class="pp-foto pp-groot" data-i="0">${kleinImg(fotos[0], 0)}</button></div>`
     : `<div class="pp-fotos pp-een"><span class="beeld pp-groot">${omgeving.tekening(omgeving.kiesTekening(stuk))}</span></div>`;
   // Overige foto's in dezelfde schuifbalk als het blok Inspiratie op de homepage.
@@ -209,6 +210,22 @@ ${LETTERS}
   .pp-tekst { margin: 1.25rem 0 1.75rem; max-width: 34rem; white-space: pre-line; }
   .pp-fotos { display: grid; grid-template-columns: 2fr 1fr; gap: .75rem; }
   .pp-fotos.pp-een { grid-template-columns: 1fr; }
+  .pp-kort { align-self: start; background: var(--blad); border-radius: 10px; padding: 1.4rem 1.6rem; box-shadow: 4px 5px 0 rgba(44,58,42,.18); }
+  .pp-kort h2 { font-size: 1.3rem; margin: 0 0 .8rem; }
+  .pp-kort dl { margin: 0; display: grid; gap: .7rem; }
+  .pp-kort dt { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
+  .pp-kort dd { margin: 0; font-weight: 600; }
+  .pp-vragen { max-width: 46rem; border-top: 1px solid rgba(44,58,42,.25); }
+  .pp-vragen details { border-bottom: 1px solid rgba(44,58,42,.25); }
+  .pp-vragen summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 0; }
+  .pp-vragen summary::-webkit-details-marker { display: none; }
+  .pp-vragen summary::after { content: "+"; flex: none; display: grid; place-items: center; width: 2rem; height: 2rem; font-size: 1.4rem; line-height: 1; background: var(--blad); border-radius: 55% 45% 50% 50% / 50% 55% 45% 50%; transition: transform .2s; }
+  .pp-vragen details[open] summary::after { transform: rotate(45deg); }
+  .pp-vragen summary:hover h3 { text-decoration: underline; text-underline-offset: .2em; }
+  .pp-vragen h3 { font-size: 1.15rem; font-weight: 600; margin: 0; }
+  .pp-antwoord { padding: 0 3rem 1.2rem 0; }
+  .pp-antwoord p { margin: 0 0 .6rem; }
+  footer .voet-link { margin-left: 1rem; color: inherit; }
   .pp-foto { display: block; width: 100%; padding: 0; border: 0; cursor: zoom-in; border-radius: 10px; overflow: hidden; aspect-ratio: 1; background: var(--blad); box-shadow: 4px 5px 0 rgba(44,58,42,.18); }
   .pp-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .pp-groot { grid-row: span 3; aspect-ratio: 4 / 5; }
@@ -240,7 +257,7 @@ ${LETTERS}
       <div>
         ${o.label ? `<p class="zakelijk-label">${esc(o.label)}</p>` : ""}
         <h1>${esc(o.h1 || stuk.titel)}</h1>
-        <p class="pp-regel">${esc(VASTE_REGEL)}</p>
+        ${o.regel === null ? "" : `<p class="pp-regel">${esc(o.regel || VASTE_REGEL)}</p>`}
         ${stuk.prijs ? `<span class="prijs">${esc(stuk.prijs)}</span>` : ""}
         ${tekst ? `<p class="pp-tekst">${esc(tekst)}</p>` : ""}
         <div class="knoppen">
@@ -267,6 +284,7 @@ ${LETTERS}
 
 <footer class="wrap">
   <span>© ${new Date().getFullYear()} ${esc(SITE.naam)}, ${esc(SITE.plaats)}${SITE.kvk ? " · KVK " + esc(String(SITE.kvk).trim()) : ""}</span>
+  ${VERZENDING ? `<a class="voet-link" href="${a("/ophalen-en-verzenden/")}">${esc(VERZENDING.titel || "Ophalen en verzenden")}</a>` : ""}
 </footer>
 ${lichtbak}
 ${BAKEN}
@@ -338,9 +356,61 @@ function zakelijkePagina(basis) {
   });
 }
 
+// --- pagina ophalen en verzenden (/ophalen-en-verzenden/), tekst uit data/verzending.json ---
+function verzendPagina(basis) {
+  if (!VERZENDING || !Array.isArray(VERZENDING.vragen) || !VERZENDING.vragen.length) return null;
+  const titelV = String(VERZENDING.titel || "Ophalen en verzenden").trim();
+  const kort = (VERZENDING.kort || []).filter(k => k && k.label && k.waarde);
+  const vragen = VERZENDING.vragen.filter(v => v && v.vraag && v.antwoord);
+  const zin = s => String(s).split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join("");
+  const kader = kort.length ? `<aside class="pp-kort" aria-label="In het kort">
+        <h2>In het kort</h2>
+        <dl>${kort.map(k => `<div><dt>${esc(k.label)}</dt><dd>${esc(k.waarde)}</dd></div>`).join("")}</dl>
+      </aside>` : "";
+  const sectie = `<section id="vragen">
+    <div class="wrap">
+      <h2>Veelgestelde vragen</h2>
+      <div class="pp-vragen">${vragen.map(v => `
+        <details>
+          <summary><h3>${esc(v.vraag)}</h3></summary>
+          <div class="pp-antwoord">${zin(v.antwoord)}</div>
+        </details>`).join("")}
+      </div>
+    </div>
+  </section>`;
+  return pagina({ titel: titelV, tekst: String(VERZENDING.intro || "").trim(), soort: [] }, WERK, basis, {
+    slug: "ophalen-en-verzenden",
+    titel: `${titelV} – ${SITE.naam} ${SITE.plaats}`,
+    beschrijving: `Levertijd, gratis ophalen in ${SITE.plaats}, verzenden met PostNL of DHL en betalen bij ${SITE.naam}. Alles op maat gemaakt, na overleg en akkoord.`.slice(0, 160),
+    h1: titelV,
+    regel: null,
+    kruimel: titelV,
+    bericht: "Hoi Nienke, ik heb een vraag over verzenden of ophalen: ",
+    knop: "Stel je vraag via WhatsApp",
+    fotos: [],
+    beeld: kader,
+    stappen: sectie,
+    meerKop: "Bekijk de producten",
+    ld: url => ({
+      "@context": "https://schema.org",
+      "@graph": [
+        { "@type": "WebPage", "@id": url, url, name: titelV, inLanguage: "nl-NL", about: { "@id": SITE_URL + "#bedrijf" },
+          isPartOf: { "@id": SITE_URL + "#website" } },
+        { "@type": "FAQPage", mainEntity: vragen.map(v => ({ "@type": "Question", name: v.vraag, acceptedAnswer: { "@type": "Answer", text: v.antwoord } })) },
+        { "@type": "BreadcrumbList", itemListElement: [
+          { "@type": "ListItem", position: 1, name: SITE.naam, item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: titelV, item: url } ] }
+      ]
+    })
+  });
+}
+
 // --- uitvoeren ---
 const args = process.argv.slice(2);
-if (args[0] === "--voorbeeld" && args[1] === "zakelijk") {
+if (args[0] === "--voorbeeld" && args[1] === "verzending") {
+  fs.writeFileSync(args[2], verzendPagina(SITE_URL));
+  console.log("Voorbeeld geschreven:", args[2]);
+} else if (args[0] === "--voorbeeld" && args[1] === "zakelijk") {
   const inhoud = zakelijkePagina(SITE_URL);
   if (!inhoud) throw new Error("Geen zakelijk_pagina_tekst in data/site.json");
   fs.writeFileSync(args[2], inhoud);
@@ -360,13 +430,19 @@ if (args[0] === "--voorbeeld" && args[1] === "zakelijk") {
     fs.writeFileSync(path.join(BASIS, slug, "index.html"), pagina(stuk, WERK, "/"));
     nieuw.push(slug);
   }
+  const verzending = verzendPagina("/");
+  if (verzending) {
+    fs.mkdirSync(path.join(BASIS, "ophalen-en-verzenden"), { recursive: true });
+    fs.writeFileSync(path.join(BASIS, "ophalen-en-verzenden", "index.html"), verzending);
+    nieuw.push("ophalen-en-verzenden");
+  }
   const zakelijk = zakelijkePagina("/");
   if (zakelijk) {
     fs.mkdirSync(path.join(BASIS, "zakelijk"), { recursive: true });
     fs.writeFileSync(path.join(BASIS, "zakelijk", "index.html"), zakelijk);
     nieuw.push("zakelijk");
   }
-  for (const slug of oud) if (!nieuw.includes(slug) && (slug === "zakelijk" || !GERESERVEERD.has(slug))) fs.rmSync(path.join(BASIS, slug), { recursive: true, force: true });
+  for (const slug of oud) if (!nieuw.includes(slug) && (slug === "zakelijk" || slug === "ophalen-en-verzenden" || !GERESERVEERD.has(slug))) fs.rmSync(path.join(BASIS, slug), { recursive: true, force: true });
   fs.writeFileSync(LOGBOEK, JSON.stringify(nieuw, null, 1) + "\n");
   const urls = [SITE_URL, ...nieuw.map(s => SITE_URL + s + "/")];
   fs.writeFileSync(path.join(BASIS, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>

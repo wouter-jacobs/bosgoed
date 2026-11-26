@@ -138,3 +138,46 @@ content:
         type: image
         list: true
 
+  - name: verzending
+    label: Ophalen en verzenden
+    type: file
+    path: data/verzending.json
+    format: json
+    fields:
+      - name: titel
+        label: Titel van de pagina
+        description: "Staat bovenaan de pagina en in het linkje onderaan de site"
+        type: string
+      - name: intro
+        label: Inleiding
+        type: text
+      - name: kort
+        label: In het kort
+        description: "Het groene blok rechtsboven"
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{label}: {waarde}"
+        fields:
+          - name: label
+            label: Onderwerp
+            type: string
+          - name: waarde
+            label: Tekst
+            type: string
+      - name: vragen
+        label: Veelgestelde vragen
+        description: "Bezoekers zien eerst alleen de vraag en klikken om het antwoord te openen"
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{vraag}"
+        fields:
+          - name: vraag
+            label: Vraag
+            type: string
+          - name: antwoord
+            label: Antwoord
+            type: text

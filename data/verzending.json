@@ -1,0 +1,52 @@
+{
+  "titel": "Ophalen en verzenden",
+  "intro": "Alles bij Bosgoed wordt op maat gemaakt, na overleg met jou. Hier lees je hoe het daarna verder gaat: hoe lang het duurt, hoe ophalen en verzenden werkt en hoe je betaalt.",
+  "kort": [
+    {
+      "label": "Levertijd",
+      "waarde": "2 tot 7 werkdagen na akkoord"
+    },
+    {
+      "label": "Ophalen",
+      "waarde": "Gratis in Zeerijp"
+    },
+    {
+      "label": "Verzenden",
+      "waarde": "Met PostNL of DHL, vanaf € 3,95"
+    },
+    {
+      "label": "Betalen",
+      "waarde": "Betaalverzoek, of contant bij ophalen"
+    }
+  ],
+  "vragen": [
+    {
+      "vraag": "Wat is de levertijd?",
+      "antwoord": "Ik begin pas aan je bestelling als jij akkoord bent met het ontwerp. Daarna is je bestelling meestal binnen 2 tot 7 werkdagen klaar om op te halen of te verzenden. Heb je iets nodig voor een bepaalde datum, zoals een verjaardag of kerst? Laat het me weten, dan kijk ik wat er kan."
+    },
+    {
+      "vraag": "Kan ik mijn bestelling ophalen?",
+      "antwoord": "Ja, en dat heeft onze voorkeur. Ophalen in Zeerijp is gratis. We spreken samen een moment af."
+    },
+    {
+      "vraag": "Kan mijn bestelling ook verzonden worden?",
+      "antwoord": "Ja, dat kan ook. Ik verstuur met PostNL of DHL. Kleine dingen, zoals sleutelhangers of kaarten, gaan als brievenbuspakje. Grotere producten, zoals een plank of geboortekist, gaan als pakket."
+    },
+    {
+      "vraag": "Wat zijn de verzendkosten?",
+      "antwoord": "Dat hangt af van het formaat en het gewicht. Ik reken het tarief van de vervoerder: een brievenbuspakje vanaf € 3,95 en een pakket vanaf € 6,05. De precieze verzendkosten hoor je altijd vooraf, in het voorstel met de prijs."
+    },
+    {
+      "vraag": "Hoe betaal ik?",
+      "antwoord": "Je krijgt van mij een betaalverzoek. Haal je je bestelling op, dan kun je ook contant betalen."
+    },
+    {
+      "vraag": "Kan ik een product retourneren?",
+      "antwoord": "Omdat alles speciaal voor jou wordt gemaakt, met jouw naam, tekst of logo, kun je een product niet retourneren. Daarom zie je vooraf altijd eerst het ontwerp."
+    },
+    {
+      "vraag": "Er is iets mis, wat nu?",
+      "antwoord": "Is er toch iets niet goed, zoals een fout in de tekst of schade door het verzenden? Stuur me dan zo snel mogelijk een berichtje met een foto via WhatsApp. Dan zoeken we samen naar een oplossing."
+    }
+  ]
+}
