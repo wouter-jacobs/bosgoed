@@ -328,7 +328,7 @@ function zakelijkePagina(basis) {
       "@graph": [
         { "@type": "Service", "@id": url + "#dienst", name: "Relatiegeschenken en bedankjes met logo", serviceType: "Lasergraveren met logo",
           description: tekst, url, provider: { "@id": SITE_URL + "#bedrijf" },
-          areaServed: [SITE.plaats, "Loppersum", "Eemsdelta", "Het Hogeland", "Groningen", "Nederland"],
+          areaServed: [SITE.plaats, "Loppersum", "Appingedam", "Delfzijl", "Eemsdelta", "Het Hogeland", "Midden-Groningen", "Groningen", "Nederland"],
           ...(f.length ? { image: f.map(x => SITE_URL + encodeURI(x.foto.replace(/^\//, ""))) } : {}) },
         { "@type": "BreadcrumbList", itemListElement: [
           { "@type": "ListItem", position: 1, name: SITE.naam, item: SITE_URL },
