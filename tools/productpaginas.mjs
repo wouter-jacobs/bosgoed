@@ -422,12 +422,30 @@ function verzendPagina(basis) {
 }
 
 // --- pagina algemene voorwaarden (/voorwaarden/), tekst uit data/voorwaarden.json ---
+// Maakt e-mailadressen, webadressen, 'algemene voorwaarden' en het WhatsApp-nummer in (al ge-escapete) tekst klikbaar.
+// Links naar bos-goed.nl blijven op de eigen site; andere sites openen in een nieuw tabblad.
+function linkjes(html) {
+  return html
+    .replace(/\b([a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,})\b/gi, '<a href="mailto:$1">$1</a>')
+    .replace(/(^|[\s(])((?:www\.)?([a-z0-9-]+\.(?:nl|com|org|eu))(\/[a-z0-9\/._-]*)?)(?=[\s).,;:!?]|$)/gi, (m, voor, tekst, domein, pad) => {
+      const staart = (tekst.match(/[.,;:]+$/) || [""])[0];
+      const schoon = tekst.slice(0, tekst.length - staart.length);
+      const pad2 = (pad || "").slice(0, (pad || "").length - staart.length);
+      const eigen = /^bos-goed\.nl$/i.test(domein);
+      const href = eigen ? (pad2 || "/") + (pad2 && !pad2.endsWith("/") ? "/" : "") : "https://" + schoon;
+      return `${voor}<a href="${href}"${eigen ? "" : ' target="_blank" rel="noopener"'}>${schoon}</a>${staart}`;
+    })
+    .replace(/\b(algemene voorwaarden)\b(?![^<]*<\/a>)/gi, '<a href="/voorwaarden/">$1</a>')
+    // 06-nummer = WhatsApp (Bosgoed is niet telefonisch bereikbaar)
+    .replace(/\b06[ -]?(\d{8})\b/g, (m, n) => `<a href="https://wa.me/316${n}" target="_blank" rel="noopener">${m}</a>`);
+}
+
 // Algemene pagina met inklapbare onderdelen (voorwaarden, privacy).
 function artikelPagina(basis, data, o) {
   if (!data || !Array.isArray(data.artikelen) || !data.artikelen.length) return null;
   const titelW = String(data.titel || o.standaardTitel).trim();
   const artikelen = data.artikelen.filter(x => x && x.kop && x.tekst);
-  const alineas = t => String(t).split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join("");
+  const alineas = t => String(t).split(/\n\s*\n/).map(p => `<p>${linkjes(esc(p.trim()))}</p>`).join("");
   const sectie = `<section id="artikelen">
     <div class="wrap">
       <p class="pp-alles"><button type="button" class="knop stil" id="alles-open">Alles uitklappen</button></p>
