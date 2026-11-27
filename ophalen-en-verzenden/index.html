@@ -225,6 +225,17 @@
   .pp-antwoord { padding: 0 3rem 1.2rem 0; }
   .pp-antwoord p { margin: 0 0 .6rem; }
   footer .voet-link { margin-left: 1rem; color: inherit; }
+  .pp-artikelen { max-width: 46rem; counter-reset: artikel; padding: 0; margin: 0; list-style: none; }
+  .pp-artikelen.pp-vragen { border-top: 0; }
+  .pp-artikelen li { counter-increment: artikel; }
+  .pp-artikelen li:first-child details { border-top: 1px solid rgba(44,58,42,.25); }
+  .pp-artikelen h3 { font-size: 1.15rem; font-weight: 600; margin: 0; }
+  .pp-alles { margin: 0 0 1rem; }
+  .pp-alles .knop { padding: .5rem 1.1rem; font-size: .95rem; }
+  .pp-artikelen h3::before { content: "Artikel " counter(artikel) " – "; font-weight: 400; opacity: .7; }
+  .pp-artikelen p { margin: 0 0 .6rem; white-space: pre-line; }
+  .pp-grid.pp-enkel { grid-template-columns: 1fr; max-width: 46rem; }
+  .pp-bijgewerkt { margin-top: 1.5rem; font-size: .9rem; opacity: .75; }
   .pp-foto { display: block; width: 100%; padding: 0; border: 0; cursor: zoom-in; border-radius: 10px; overflow: hidden; aspect-ratio: 1; background: var(--blad); box-shadow: 4px 5px 0 rgba(44,58,42,.18); }
   .pp-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .pp-groot { grid-row: span 3; aspect-ratio: 4 / 5; }
@@ -321,6 +332,7 @@
 <footer class="wrap">
   <span>© 2026 Bosgoed, Zeerijp · KVK 74460978</span>
   <a class="voet-link" href="/ophalen-en-verzenden/">Ophalen en verzenden</a>
+  <a class="voet-link" href="/voorwaarden/">Algemene voorwaarden</a>
 </footer>
 
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "58a035e8debc41be9842bd7cfde0aceb"}'></script><!-- End Cloudflare Web Analytics -->

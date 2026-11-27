@@ -15,7 +15,7 @@ import { fileURLToPath } from "node:url";
 const BASIS = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SITE_URL = "https://bos-goed.nl/";
 const LOGBOEK = path.join(BASIS, "data", "productpaginas.json"); // welke mappen dit script beheert
-const GERESERVEERD = new Set(["zakelijk", "ophalen-en-verzenden", "beheer", "verklein", "klein", "data", "fotos", "beeld", "tools", "admin", ".github"]);
+const GERESERVEERD = new Set(["zakelijk", "ophalen-en-verzenden", "voorwaarden", "beheer", "verklein", "klein", "data", "fotos", "beeld", "tools", "admin", ".github"]);
 const VASTE_REGEL = "Met de laser gemaakt in Zeerijp";
 
 const lees = f => JSON.parse(fs.readFileSync(path.join(BASIS, f), "utf8"));
@@ -40,6 +40,7 @@ vm.runInContext(scripts[scripts.length - 1].replace(/\nstart\(\);\s*$/, "\n"), o
 // --- gegevens ---
 const SITE = lees("data/site.json");
 const VERZENDING = fs.existsSync(path.join(BASIS, "data/verzending.json")) ? lees("data/verzending.json") : null;
+const VOORWAARDEN = fs.existsSync(path.join(BASIS, "data/voorwaarden.json")) ? lees("data/voorwaarden.json") : null;
 const WHATSAPP = omgeving.whatsappNummer(SITE.whatsapp);
 let WERK = lees("data/producten.json");
 WERK = (Array.isArray(WERK) ? WERK : WERK.producten || []).filter(s => s && s.titel);
@@ -188,7 +189,7 @@ function pagina(stuk, alle, basis, o = {}) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(titel)}</title>
 <meta name="description" content="${esc(omschrijving)}">
-<link rel="canonical" href="${url}">
+<link rel="canonical" href="${url}">${o.noindex ? '\n<meta name="robots" content="noindex, follow">' : ""}
 <meta property="og:type" content="${o.ld ? "website" : "product"}">
 <meta property="og:locale" content="nl_NL">
 <meta property="og:site_name" content="${esc(SITE.naam)}">
@@ -226,6 +227,17 @@ ${LETTERS}
   .pp-antwoord { padding: 0 3rem 1.2rem 0; }
   .pp-antwoord p { margin: 0 0 .6rem; }
   footer .voet-link { margin-left: 1rem; color: inherit; }
+  .pp-artikelen { max-width: 46rem; counter-reset: artikel; padding: 0; margin: 0; list-style: none; }
+  .pp-artikelen.pp-vragen { border-top: 0; }
+  .pp-artikelen li { counter-increment: artikel; }
+  .pp-artikelen li:first-child details { border-top: 1px solid rgba(44,58,42,.25); }
+  .pp-artikelen h3 { font-size: 1.15rem; font-weight: 600; margin: 0; }
+  .pp-alles { margin: 0 0 1rem; }
+  .pp-alles .knop { padding: .5rem 1.1rem; font-size: .95rem; }
+  .pp-artikelen h3::before { content: "Artikel " counter(artikel) " – "; font-weight: 400; opacity: .7; }
+  .pp-artikelen p { margin: 0 0 .6rem; white-space: pre-line; }
+  .pp-grid.pp-enkel { grid-template-columns: 1fr; max-width: 46rem; }
+  .pp-bijgewerkt { margin-top: 1.5rem; font-size: .9rem; opacity: .75; }
   .pp-foto { display: block; width: 100%; padding: 0; border: 0; cursor: zoom-in; border-radius: 10px; overflow: hidden; aspect-ratio: 1; background: var(--blad); box-shadow: 4px 5px 0 rgba(44,58,42,.18); }
   .pp-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .pp-groot { grid-row: span 3; aspect-ratio: 4 / 5; }
@@ -253,7 +265,7 @@ ${LETTERS}
 <main id="top">
   <div class="wrap pp-pad">
     <p class="pp-kruimel"><a href="${a("/")}">${esc(SITE.naam)}</a> › ${o.ld ? "" : `<a href="${a("/#werk")}">Producten</a> › `}${esc(o.kruimel || stuk.titel)}</p>
-    <div class="pp-grid">
+    <div class="pp-grid${beeld === "" ? " pp-enkel" : ""}">
       <div>
         ${o.label ? `<p class="zakelijk-label">${esc(o.label)}</p>` : ""}
         <h1>${esc(o.h1 || stuk.titel)}</h1>
@@ -285,6 +297,7 @@ ${LETTERS}
 <footer class="wrap">
   <span>© ${new Date().getFullYear()} ${esc(SITE.naam)}, ${esc(SITE.plaats)}${SITE.kvk ? " · KVK " + esc(String(SITE.kvk).trim()) : ""}</span>
   ${VERZENDING ? `<a class="voet-link" href="${a("/ophalen-en-verzenden/")}">${esc(VERZENDING.titel || "Ophalen en verzenden")}</a>` : ""}
+  ${VOORWAARDEN ? `<a class="voet-link" href="${a("/voorwaarden/")}">${esc(VOORWAARDEN.titel || "Algemene voorwaarden")}</a>` : ""}
 </footer>
 ${lichtbak}
 ${BAKEN}
@@ -405,9 +418,68 @@ function verzendPagina(basis) {
   });
 }
 
+// --- pagina algemene voorwaarden (/voorwaarden/), tekst uit data/voorwaarden.json ---
+function voorwaardenPagina(basis) {
+  if (!VOORWAARDEN || !Array.isArray(VOORWAARDEN.artikelen) || !VOORWAARDEN.artikelen.length) return null;
+  const titelW = String(VOORWAARDEN.titel || "Algemene voorwaarden").trim();
+  const artikelen = VOORWAARDEN.artikelen.filter(x => x && x.kop && x.tekst);
+  const alineas = t => String(t).split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join("");
+  const sectie = `<section id="artikelen">
+    <div class="wrap">
+      <p class="pp-alles"><button type="button" class="knop stil" id="alles-open">Alles uitklappen</button></p>
+      <ol class="pp-artikelen pp-vragen">${artikelen.map(x => `
+        <li>
+          <details>
+            <summary><h3>${esc(x.kop)}</h3></summary>
+            <div class="pp-antwoord">${alineas(x.tekst)}</div>
+          </details>
+        </li>`).join("")}
+      </ol>
+      <script>
+      (function () {
+        var knop = document.getElementById("alles-open"), alle = document.querySelectorAll(".pp-artikelen details");
+        function zet(open) { alle.forEach(function (d) { d.open = open; }); knop.textContent = open ? "Alles inklappen" : "Alles uitklappen"; }
+        knop.addEventListener("click", function () { zet(knop.textContent === "Alles uitklappen"); });
+        window.addEventListener("beforeprint", function () { zet(true); });
+      })();
+      </script>
+      ${VOORWAARDEN.bijgewerkt ? `<p class="pp-bijgewerkt">Laatst bijgewerkt: ${esc(VOORWAARDEN.bijgewerkt)}</p>` : ""}
+    </div>
+  </section>`;
+  return pagina({ titel: titelW, tekst: String(VOORWAARDEN.intro || "").trim(), soort: [] }, WERK, basis, {
+    slug: "voorwaarden",
+    // Niet in Google: het adres staat alleen hier, voor klanten die de link krijgen.
+    noindex: true,
+    titel: `${titelW} – ${SITE.naam} ${SITE.plaats}`,
+    beschrijving: `De algemene voorwaarden van ${SITE.naam} uit ${SITE.plaats}: voorstel en bestelling, betalen, levering, maatwerk zonder bedenktijd en wat te doen als er iets niet klopt.`.slice(0, 160),
+    h1: titelW,
+    regel: null,
+    kruimel: titelW,
+    bericht: "Hoi Nienke, ik heb een vraag over de voorwaarden: ",
+    knop: "Stel je vraag via WhatsApp",
+    fotos: [],
+    beeld: "",
+    stappen: sectie,
+    meerKop: "Bekijk de producten",
+    ld: url => ({
+      "@context": "https://schema.org",
+      "@graph": [
+        { "@type": "WebPage", "@id": url, url, name: titelW, inLanguage: "nl-NL", about: { "@id": SITE_URL + "#bedrijf" },
+          isPartOf: { "@id": SITE_URL + "#website" } },
+        { "@type": "BreadcrumbList", itemListElement: [
+          { "@type": "ListItem", position: 1, name: SITE.naam, item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: titelW, item: url } ] }
+      ]
+    })
+  });
+}
+
 // --- uitvoeren ---
 const args = process.argv.slice(2);
-if (args[0] === "--voorbeeld" && args[1] === "verzending") {
+if (args[0] === "--voorbeeld" && args[1] === "voorwaarden") {
+  fs.writeFileSync(args[2], voorwaardenPagina(SITE_URL));
+  console.log("Voorbeeld geschreven:", args[2]);
+} else if (args[0] === "--voorbeeld" && args[1] === "verzending") {
   fs.writeFileSync(args[2], verzendPagina(SITE_URL));
   console.log("Voorbeeld geschreven:", args[2]);
 } else if (args[0] === "--voorbeeld" && args[1] === "zakelijk") {
@@ -430,6 +502,12 @@ if (args[0] === "--voorbeeld" && args[1] === "verzending") {
     fs.writeFileSync(path.join(BASIS, slug, "index.html"), pagina(stuk, WERK, "/"));
     nieuw.push(slug);
   }
+  const voorwaarden = voorwaardenPagina("/");
+  if (voorwaarden) {
+    fs.mkdirSync(path.join(BASIS, "voorwaarden"), { recursive: true });
+    fs.writeFileSync(path.join(BASIS, "voorwaarden", "index.html"), voorwaarden);
+    nieuw.push("voorwaarden");
+  }
   const verzending = verzendPagina("/");
   if (verzending) {
     fs.mkdirSync(path.join(BASIS, "ophalen-en-verzenden"), { recursive: true });
@@ -442,9 +520,9 @@ if (args[0] === "--voorbeeld" && args[1] === "verzending") {
     fs.writeFileSync(path.join(BASIS, "zakelijk", "index.html"), zakelijk);
     nieuw.push("zakelijk");
   }
-  for (const slug of oud) if (!nieuw.includes(slug) && (slug === "zakelijk" || slug === "ophalen-en-verzenden" || !GERESERVEERD.has(slug))) fs.rmSync(path.join(BASIS, slug), { recursive: true, force: true });
+  for (const slug of oud) if (!nieuw.includes(slug) && (slug === "zakelijk" || slug === "ophalen-en-verzenden" || slug === "voorwaarden" || !GERESERVEERD.has(slug))) fs.rmSync(path.join(BASIS, slug), { recursive: true, force: true });
   fs.writeFileSync(LOGBOEK, JSON.stringify(nieuw, null, 1) + "\n");
-  const urls = [SITE_URL, ...nieuw.map(s => SITE_URL + s + "/")];
+  const urls = [SITE_URL, ...nieuw.filter(s => s !== "voorwaarden").map(s => SITE_URL + s + "/")];
   fs.writeFileSync(path.join(BASIS, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url><loc>${u}</loc></url>`).join("\n")}

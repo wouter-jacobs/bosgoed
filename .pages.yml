@@ -181,3 +181,36 @@ content:
           - name: antwoord
             label: Antwoord
             type: text
+
+  - name: voorwaarden
+    label: Algemene voorwaarden
+    type: file
+    path: data/voorwaarden.json
+    format: json
+    fields:
+      - name: titel
+        label: Titel van de pagina
+        type: string
+      - name: intro
+        label: Inleiding
+        type: text
+      - name: bijgewerkt
+        label: Laatst bijgewerkt
+        description: "Bijvoorbeeld: november 2026. Pas dit aan als je de voorwaarden wijzigt."
+        type: string
+      - name: artikelen
+        label: Artikelen
+        description: "De nummers (Artikel 1, 2, …) worden automatisch toegevoegd"
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{kop}"
+        fields:
+          - name: kop
+            label: Kop
+            type: string
+          - name: tekst
+            label: Tekst
+            description: "Een lege regel = nieuwe alinea"
+            type: text
