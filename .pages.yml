@@ -214,3 +214,35 @@ content:
             label: Tekst
             description: "Een lege regel = nieuwe alinea"
             type: text
+
+  - name: privacy
+    label: Privacyverklaring
+    type: file
+    path: data/privacy.json
+    format: json
+    fields:
+      - name: titel
+        label: Titel van de pagina
+        type: string
+      - name: intro
+        label: Inleiding
+        type: text
+      - name: bijgewerkt
+        label: Laatst bijgewerkt
+        description: "Bijvoorbeeld: november 2026. Pas dit aan als je de privacyverklaring wijzigt."
+        type: string
+      - name: artikelen
+        label: Onderdelen
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{kop}"
+        fields:
+          - name: kop
+            label: Vraag of kop
+            type: string
+          - name: tekst
+            label: Tekst
+            description: "Een lege regel = nieuwe alinea"
+            type: text

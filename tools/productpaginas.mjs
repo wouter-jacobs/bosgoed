@@ -15,7 +15,7 @@ import { fileURLToPath } from "node:url";
 const BASIS = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SITE_URL = "https://bos-goed.nl/";
 const LOGBOEK = path.join(BASIS, "data", "productpaginas.json"); // welke mappen dit script beheert
-const GERESERVEERD = new Set(["zakelijk", "ophalen-en-verzenden", "voorwaarden", "beheer", "verklein", "klein", "data", "fotos", "beeld", "tools", "admin", ".github"]);
+const GERESERVEERD = new Set(["zakelijk", "ophalen-en-verzenden", "voorwaarden", "privacy", "beheer", "verklein", "klein", "data", "fotos", "beeld", "tools", "admin", ".github"]);
 const VASTE_REGEL = "Met de laser gemaakt in Zeerijp";
 
 const lees = f => JSON.parse(fs.readFileSync(path.join(BASIS, f), "utf8"));
@@ -41,6 +41,7 @@ vm.runInContext(scripts[scripts.length - 1].replace(/\nstart\(\);\s*$/, "\n"), o
 const SITE = lees("data/site.json");
 const VERZENDING = fs.existsSync(path.join(BASIS, "data/verzending.json")) ? lees("data/verzending.json") : null;
 const VOORWAARDEN = fs.existsSync(path.join(BASIS, "data/voorwaarden.json")) ? lees("data/voorwaarden.json") : null;
+const PRIVACY = fs.existsSync(path.join(BASIS, "data/privacy.json")) ? lees("data/privacy.json") : null;
 const WHATSAPP = omgeving.whatsappNummer(SITE.whatsapp);
 let WERK = lees("data/producten.json");
 WERK = (Array.isArray(WERK) ? WERK : WERK.producten || []).filter(s => s && s.titel);
@@ -235,6 +236,7 @@ ${LETTERS}
   .pp-alles { margin: 0 0 1rem; }
   .pp-alles .knop { padding: .5rem 1.1rem; font-size: .95rem; }
   .pp-artikelen h3::before { content: "Artikel " counter(artikel) " – "; font-weight: 400; opacity: .7; }
+  .pp-ongenummerd h3::before { content: none; }
   .pp-artikelen p { margin: 0 0 .6rem; white-space: pre-line; }
   .pp-grid.pp-enkel { grid-template-columns: 1fr; max-width: 46rem; }
   .pp-bijgewerkt { margin-top: 1.5rem; font-size: .9rem; opacity: .75; }
@@ -298,6 +300,7 @@ ${LETTERS}
   <span>© ${new Date().getFullYear()} ${esc(SITE.naam)}, ${esc(SITE.plaats)}${SITE.kvk ? " · KVK " + esc(String(SITE.kvk).trim()) : ""}</span>
   ${VERZENDING ? `<a class="voet-link" href="${a("/ophalen-en-verzenden/")}">${esc(VERZENDING.titel || "Ophalen en verzenden")}</a>` : ""}
   ${VOORWAARDEN ? `<a class="voet-link" href="${a("/voorwaarden/")}">${esc(VOORWAARDEN.titel || "Algemene voorwaarden")}</a>` : ""}
+  ${PRIVACY ? `<a class="voet-link" href="${a("/privacy/")}">${esc(PRIVACY.titel || "Privacyverklaring")}</a>` : ""}
 </footer>
 ${lichtbak}
 ${BAKEN}
@@ -419,15 +422,16 @@ function verzendPagina(basis) {
 }
 
 // --- pagina algemene voorwaarden (/voorwaarden/), tekst uit data/voorwaarden.json ---
-function voorwaardenPagina(basis) {
-  if (!VOORWAARDEN || !Array.isArray(VOORWAARDEN.artikelen) || !VOORWAARDEN.artikelen.length) return null;
-  const titelW = String(VOORWAARDEN.titel || "Algemene voorwaarden").trim();
-  const artikelen = VOORWAARDEN.artikelen.filter(x => x && x.kop && x.tekst);
+// Algemene pagina met inklapbare onderdelen (voorwaarden, privacy).
+function artikelPagina(basis, data, o) {
+  if (!data || !Array.isArray(data.artikelen) || !data.artikelen.length) return null;
+  const titelW = String(data.titel || o.standaardTitel).trim();
+  const artikelen = data.artikelen.filter(x => x && x.kop && x.tekst);
   const alineas = t => String(t).split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join("");
   const sectie = `<section id="artikelen">
     <div class="wrap">
       <p class="pp-alles"><button type="button" class="knop stil" id="alles-open">Alles uitklappen</button></p>
-      <ol class="pp-artikelen pp-vragen">${artikelen.map(x => `
+      <ol class="pp-artikelen pp-vragen${o.genummerd ? "" : " pp-ongenummerd"}">${artikelen.map(x => `
         <li>
           <details>
             <summary><h3>${esc(x.kop)}</h3></summary>
@@ -443,19 +447,18 @@ function voorwaardenPagina(basis) {
         window.addEventListener("beforeprint", function () { zet(true); });
       })();
       </script>
-      ${VOORWAARDEN.bijgewerkt ? `<p class="pp-bijgewerkt">Laatst bijgewerkt: ${esc(VOORWAARDEN.bijgewerkt)}</p>` : ""}
+      ${data.bijgewerkt ? `<p class="pp-bijgewerkt">Laatst bijgewerkt: ${esc(data.bijgewerkt)}</p>` : ""}
     </div>
   </section>`;
-  return pagina({ titel: titelW, tekst: String(VOORWAARDEN.intro || "").trim(), soort: [] }, WERK, basis, {
-    slug: "voorwaarden",
-    // Niet in Google: het adres staat alleen hier, voor klanten die de link krijgen.
-    noindex: true,
+  return pagina({ titel: titelW, tekst: String(data.intro || "").trim(), soort: [] }, WERK, basis, {
+    slug: o.slug,
+    noindex: o.noindex,
     titel: `${titelW} – ${SITE.naam} ${SITE.plaats}`,
-    beschrijving: `De algemene voorwaarden van ${SITE.naam} uit ${SITE.plaats}: voorstel en bestelling, betalen, levering, maatwerk zonder bedenktijd en wat te doen als er iets niet klopt.`.slice(0, 160),
+    beschrijving: o.beschrijving.slice(0, 160),
     h1: titelW,
     regel: null,
     kruimel: titelW,
-    bericht: "Hoi Nienke, ik heb een vraag over de voorwaarden: ",
+    bericht: o.bericht,
     knop: "Stel je vraag via WhatsApp",
     fotos: [],
     beeld: "",
@@ -474,9 +477,35 @@ function voorwaardenPagina(basis) {
   });
 }
 
+function voorwaardenPagina(basis) {
+  return artikelPagina(basis, VOORWAARDEN, {
+    slug: "voorwaarden",
+    standaardTitel: "Algemene voorwaarden",
+    genummerd: true,
+    // Niet in Google: het adres staat alleen hier, voor klanten die de link krijgen.
+    noindex: true,
+    beschrijving: `De algemene voorwaarden van ${SITE.naam} uit ${SITE.plaats}: voorstel en bestelling, betalen, levering, maatwerk zonder bedenktijd en wat te doen als er iets niet klopt.`,
+    bericht: "Hoi Nienke, ik heb een vraag over de voorwaarden: "
+  });
+}
+
+function privacyPagina(basis) {
+  return artikelPagina(basis, PRIVACY, {
+    slug: "privacy",
+    standaardTitel: "Privacyverklaring",
+    genummerd: false,
+    noindex: true,
+    beschrijving: `Hoe ${SITE.naam} uit ${SITE.plaats} omgaat met je gegevens: welke gegevens, waarvoor, hoe lang, en wat je rechten zijn.`,
+    bericht: "Hoi Nienke, ik heb een vraag over mijn gegevens: "
+  });
+}
+
 // --- uitvoeren ---
 const args = process.argv.slice(2);
-if (args[0] === "--voorbeeld" && args[1] === "voorwaarden") {
+if (args[0] === "--voorbeeld" && args[1] === "privacy") {
+  fs.writeFileSync(args[2], privacyPagina(SITE_URL));
+  console.log("Voorbeeld geschreven:", args[2]);
+} else if (args[0] === "--voorbeeld" && args[1] === "voorwaarden") {
   fs.writeFileSync(args[2], voorwaardenPagina(SITE_URL));
   console.log("Voorbeeld geschreven:", args[2]);
 } else if (args[0] === "--voorbeeld" && args[1] === "verzending") {
@@ -502,6 +531,12 @@ if (args[0] === "--voorbeeld" && args[1] === "voorwaarden") {
     fs.writeFileSync(path.join(BASIS, slug, "index.html"), pagina(stuk, WERK, "/"));
     nieuw.push(slug);
   }
+  const privacy = privacyPagina("/");
+  if (privacy) {
+    fs.mkdirSync(path.join(BASIS, "privacy"), { recursive: true });
+    fs.writeFileSync(path.join(BASIS, "privacy", "index.html"), privacy);
+    nieuw.push("privacy");
+  }
   const voorwaarden = voorwaardenPagina("/");
   if (voorwaarden) {
     fs.mkdirSync(path.join(BASIS, "voorwaarden"), { recursive: true });
@@ -520,9 +555,9 @@ if (args[0] === "--voorbeeld" && args[1] === "voorwaarden") {
     fs.writeFileSync(path.join(BASIS, "zakelijk", "index.html"), zakelijk);
     nieuw.push("zakelijk");
   }
-  for (const slug of oud) if (!nieuw.includes(slug) && (slug === "zakelijk" || slug === "ophalen-en-verzenden" || slug === "voorwaarden" || !GERESERVEERD.has(slug))) fs.rmSync(path.join(BASIS, slug), { recursive: true, force: true });
+  for (const slug of oud) if (!nieuw.includes(slug) && (slug === "zakelijk" || slug === "ophalen-en-verzenden" || slug === "voorwaarden" || slug === "privacy" || !GERESERVEERD.has(slug))) fs.rmSync(path.join(BASIS, slug), { recursive: true, force: true });
   fs.writeFileSync(LOGBOEK, JSON.stringify(nieuw, null, 1) + "\n");
-  const urls = [SITE_URL, ...nieuw.filter(s => s !== "voorwaarden").map(s => SITE_URL + s + "/")];
+  const urls = [SITE_URL, ...nieuw.filter(s => s !== "voorwaarden" && s !== "privacy").map(s => SITE_URL + s + "/")];
   fs.writeFileSync(path.join(BASIS, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url><loc>${u}</loc></url>`).join("\n")}
